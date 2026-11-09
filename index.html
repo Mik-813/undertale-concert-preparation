@@ -44,7 +44,7 @@
 
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
 
-  <header class="nav" id="nav">
+  <header class="nav is-hidden" id="nav">
     <a href="#top" class="nav__logo" aria-label="Na górę"><span class="px-heart"></span><b>Undertale</b></a>
     <nav class="nav__links" aria-label="Sekcje">
       <a href="#plan">Plan</a>
@@ -95,21 +95,13 @@
 
       <ol class="timeline">
         <li class="timeline__item reveal"><time>10:24</time><a class="glass" href="#wyjazd"><h3>Legnica odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 8314, peron III</p></a></li>
-        <li class="timeline__range"><p class="timeline__label reveal">Przesiadka we Wrocławiu</p><ol>
-          <li class="timeline__item reveal"><time>10:58</time><a class="glass" href="#wyjazd"><h3>Wrocław Gł. przyjazd</h3><p>peron II</p></a></li>
-          <li class="timeline__item reveal"><time>11:32</time><a class="glass" href="#wyjazd"><h3>Wrocław Gł. odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 6126, peron II</p></a></li>
-        </ol></li>
+        <li class="timeline__item timeline__item--range reveal"><span class="timeline__times"><time>10:58</time><time>11:32</time></span><a class="glass" href="#wyjazd"><h3>Przesiadka we Wrocławiu</h3><p><span class="badge badge--ic badge--sm">IC</span> 6126, peron II</p></a></li>
         <li class="timeline__item reveal"><time>15:48</time><a class="glass" href="#wyjazd"><h3>Warszawa Centralna</h3></a></li>
         <li class="timeline__item reveal"><time>16:05</time><a class="glass" href="#jedzenie"><h3>Obiad · Bar Bambino</h3><p>ul. Hoża 19</p></a></li>
         <li class="timeline__item reveal"><time>17:15</time><a class="glass" href="#leg-arena"><h3>Metro M1 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Imielin</h3><p>ze stacji Centrum</p></a></li>
         <li class="timeline__item reveal"><time>17:55</time><a class="glass" href="#leg-arena"><h3>Arena Ursynów</h3></a></li>
         <li class="timeline__item timeline__item--hot reveal"><time>18:30</time><a class="glass" href="#bilet"><h3>Koncert</h3><p>Rząd 19, miejsce 31</p></a></li>
-        <li class="timeline__range"><p class="timeline__label reveal">Pociąg powrotny</p><ol>
-          <li class="timeline__item reveal"><time>23:39</time><a class="glass" href="#powrot"><h3>Warszawa Centralna odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 16170, peron IV</p></a></li>
-          <li class="timeline__item reveal"><time>04:15</time><a class="glass" href="#powrot"><h3>Wrocław Gł. przyjazd</h3></a></li>
-          <li class="timeline__item reveal"><time>04:21</time><a class="glass" href="#powrot"><h3>Wrocław Gł. odjazd</h3><p><span class="badge badge--kd badge--sm">KD</span> 69553, peron 5</p></a></li>
-          <li class="timeline__item reveal"><time>05:16</time><a class="glass" href="#powrot"><h3>Legnica</h3><p>peron 4</p></a></li>
-        </ol></li>
+        <li class="timeline__item timeline__item--range reveal"><span class="timeline__times"><time>23:39</time><time>05:16</time></span><a class="glass" href="#powrot"><h3>Pociąg powrotny</h3><p><span class="badge badge--ic badge--sm">IC</span> 16170 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> <span class="badge badge--kd badge--sm">KD</span> 69553, peron IV</p><p>Przesiadka we Wrocławiu 04:15–04:21</p></a></li>
       </ol>
 
       <details class="unwrap reveal">
@@ -363,9 +355,9 @@
         <div class="train__route train__route--3">
           <div><time>23:39</time><b>W-wa Centralna</b><small>peron IV</small></div>
           <div class="train__line"><span>4 h 36 min</span></div>
-          <div><time>04:15</time><b>Wrocław Gł.</b><small>peron 5</small></div>
+          <div><time>04:15</time><b>Wrocław Gł.</b><small>peron V</small></div>
           <div class="train__line"><span>55 min</span></div>
-          <div><time>05:16</time><b>Legnica</b><small>peron 4</small></div>
+          <div><time>05:16</time><b>Legnica</b><small>peron IV</small></div>
         </div>
         <dl class="facts">
           <div><dt>Cena</dt><dd>98 zł</dd></div>

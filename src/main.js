@@ -137,7 +137,7 @@ const nav = $('#nav');
 const navLinks = $$('.nav__links a');
 const sections = navLinks.map((a) => $(a.getAttribute('href')));
 const arcs = $('#arcs');
-let lastY = 0;
+const plan = $('#plan');
 let ticking = false;
 
 function onFrame() {
@@ -145,8 +145,7 @@ function onFrame() {
   const y = window.scrollY;
   const max = document.documentElement.scrollHeight - innerHeight;
   progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
-  nav.classList.toggle('is-hidden', y > 400 && y > lastY);
-  lastY = y;
+  nav.classList.toggle('is-hidden', plan.getBoundingClientRect().bottom > 0);
 
   const mid = innerHeight / 2;
   let active = -1;
