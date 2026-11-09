@@ -123,8 +123,9 @@ main { position: relative; }
 }
 .hero__sub { font-size: clamp(17px, 2vw, 21px); color: var(--muted); max-width: 640px; margin: 28px auto 36px; }
 
-.countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.countdown div { min-width: 92px; padding: 14px 10px 10px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); }
+.countdown { display: grid; grid-template-columns: repeat(4, 92px); gap: 12px; justify-content: center; }
+@media (max-width: 480px) { .countdown { grid-template-columns: repeat(2, minmax(0, 132px)); } }
+.countdown div { min-width: 0; padding: 14px 10px 10px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); }
 .countdown b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 52px; line-height: 1; font-variant-numeric: tabular-nums; }
 .countdown span { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); }
 
