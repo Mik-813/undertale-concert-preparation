@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Undertale · plan wyjazdu na koncert — 14.11.2026</title>
-  <meta name="description" content="Plan podróży Legnica → Warszawa na koncert Undertale (GraMuzyka) w Arenie Ursynów, 14 listopada 2026." />
+  <meta name="description" content="Plan podróży Legnica – Warszawa na koncert Undertale (GraMuzyka) w Arenie Ursynów, 14 listopada 2026." />
   <meta name="theme-color" content="#0b0614" />
   <meta property="og:title" content="Undertale · plan wyjazdu" />
-  <meta property="og:description" content="Legnica → Warszawa → Arena Ursynów. 14.11.2026, 18:30." />
+  <meta property="og:description" content="Legnica – Warszawa – Arena Ursynów. 14.11.2026, 18:30." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +15,16 @@
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0ZM20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0ZM16 17h4M4 13h4"/></symbol>
+    <symbol id="i-tram" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16M12 3v8M8 19l-2 3M18 22l-2-3M8 15h.01M16 15h.01"/></symbol>
+    <symbol id="i-train" viewBox="0 0 24 24"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1M9 15l-1-1M15 15l1-1M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5ZM8 19l-2 3M16 19l2 3"/></symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24"><path d="M2 12h20M12 2v20M20 16l-4-4 4-4M4 8l4 4-4 4M16 4l-4 4-4-4M8 20l4-4 4 4"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83ZM22 17.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  </svg>
   <div class="bg" aria-hidden="true">
     <div class="bg__gradient"></div>
     <div class="bg__arcs" id="arcs">
@@ -29,6 +39,7 @@
       </svg>
     </div>
     <canvas class="bg__stars" id="stars"></canvas>
+    <div class="bg__spotlight"></div>
   </div>
 
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
@@ -52,7 +63,7 @@
       <h1 class="hero__title" aria-label="Undertale">
         <span class="line"><span class="split accent">UNDERTALE</span></span>
       </h1>
-      <p class="hero__sub reveal">Legnica → <b>Arena Ursynów</b> · sob. <b>14.11.2026</b> · <b>18:30</b></p>
+      <p class="hero__sub reveal">Legnica <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> <b>Arena Ursynów</b> · sob. <b>14.11.2026</b> · <b>18:30</b></p>
 
       <div class="countdown reveal" id="countdown" aria-live="polite">
         <div><b data-cd="d">--</b><span>dni</span></div>
@@ -63,7 +74,7 @@
 
       <div class="dialog reveal" role="note">
         <span class="px-heart dialog__heart" aria-hidden="true"></span>
-        <p class="dialog__text" data-type="* Plan jest gotowy. Napełnia cię to DETERMINACJĄ."></p>
+        <p class="dialog__text" data-type="* Masz plan. Napełnia cię to DETERMINACJĄ."></p>
       </div>
 
       <a href="#plan" class="scroll-hint" aria-label="Przewiń do planu"><span></span></a>
@@ -71,15 +82,14 @@
 
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
-        <span>LEGNICA 10:24</span><i>✦</i><span>CENTRALNA 15:48</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i>
-        <span>LEGNICA 10:24</span><i>✦</i><span>CENTRALNA 15:48</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i>
+        <span>LEGNICA 10:24</span><i class="px-heart"></i><span>CENTRALNA 15:48</span><i class="px-heart"></i><span>METRO M1</span><i class="px-heart"></i><span>ARENA 18:30</span><i class="px-heart"></i><span>RZĄD 19 · MIEJSCE 31</span><i class="px-heart"></i>
+        <span>LEGNICA 10:24</span><i class="px-heart"></i><span>CENTRALNA 15:48</span><i class="px-heart"></i><span>METRO M1</span><i class="px-heart"></i><span>ARENA 18:30</span><i class="px-heart"></i><span>RZĄD 19 · MIEJSCE 31</span><i class="px-heart"></i>
       </div>
     </div>
 
     <!-- PLAN -->
     <section class="section" id="plan">
       <header class="section__head">
-        <span class="section__num">01</span>
         <h2 class="section__title reveal">Plan</h2>
       </header>
 
@@ -88,7 +98,7 @@
         <li class="timeline__item reveal"><time>10:58</time><div class="glass"><h3>Przesiadka we Wrocławiu</h3><p>IC 6126 o 11:32, peron II</p></div></li>
         <li class="timeline__item reveal"><time>15:48</time><div class="glass"><h3>Warszawa Centralna</h3></div></li>
         <li class="timeline__item reveal"><time>16:05</time><div class="glass"><h3>Obiad · Zapiecek</h3><p>Al. Jerozolimskie 28</p></div></li>
-        <li class="timeline__item reveal"><time>17:15</time><div class="glass"><h3>Metro M1 → Imielin</h3><p>ze stacji Centrum</p></div></li>
+        <li class="timeline__item reveal"><time>17:15</time><div class="glass"><h3>Metro M1 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Imielin</h3><p>ze stacji Centrum</p></div></li>
         <li class="timeline__item reveal"><time>17:55</time><div class="glass"><h3>Arena Ursynów</h3></div></li>
         <li class="timeline__item timeline__item--hot reveal"><time>18:30</time><div class="glass"><h3>Koncert</h3><p>Rząd 19, miejsce 31</p></div></li>
         <li class="timeline__item reveal"><time>23:39</time><div class="glass"><h3>Pociąg powrotny</h3><p>Legnica 05:16</p></div></li>
@@ -109,13 +119,12 @@
     <!-- TRAIN -->
     <section class="section" id="pociag">
       <header class="section__head">
-        <span class="section__num">02</span>
         <h2 class="section__title reveal">Pociąg</h2>
       </header>
 
       <div class="train">
-        <article class="glass card train__card reveal">
-          <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 8314 „Matejko”</b> → <b>IC 6126 „Leśmian”</b></div>
+        <article class="glass card tilt train__card reveal">
+          <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 8314 „Matejko”</b> <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> <b>IC 6126 „Leśmian”</b></div>
           <div class="train__route train__route--3">
             <div><time>10:24</time><b>Legnica</b><small>peron III</small></div>
             <div class="train__line"><span>34 min</span></div>
@@ -129,14 +138,14 @@
             <div><dt>Czas</dt><dd>5 h 24 min</dd></div>
           </dl>
           <div class="btns">
-            <a class="btn btn--primary" href="https://koleo.pl/connection/6714665607" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
+            <a class="btn btn--primary" href="https://koleo.pl/connection/6714665607" target="_blank" rel="noopener">Otwórz w Koleo <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
             <a class="btn" href="https://koleo.pl/rozklad-pkp/legnica/warszawa-centralna/14-11-2026_10:24/all/all" target="_blank" rel="noopener">Wszystkie połączenia</a>
           </div>
         </article>
 
         <div class="stops glass reveal" id="stops">
           <h3>Trasa</h3>
-          <div class="stops__rail"><span class="stops__fill" id="stopsFill"></span><span class="stops__train" id="stopsTrain">🚆</span></div>
+          <div class="stops__rail"><span class="stops__fill" id="stopsFill"></span><span class="stops__train" id="stopsTrain"><svg class="ic" aria-hidden="true"><use href="#i-train"/></svg></span></div>
           <ol>
             <li class="major"><time>10:24</time>Legnica</li>
             <li class="major"><time>10:58 · 11:32</time>Wrocław Główny</li>
@@ -168,7 +177,7 @@
           <table class="tbl">
             <thead><tr><th>Odjazd</th><th>Połączenie</th><th>Przyjazd</th></tr></thead>
             <tbody>
-              <tr><td>11:07</td><td>KD → Wrocław → IC 6102 „Ślęża”</td><td>16:16</td></tr>
+              <tr><td>11:07</td><td>KD <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Wrocław <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> IC 6102 „Ślęża”</td><td>16:16</td></tr>
             </tbody>
           </table>
           <p>Obiad skraca się do ~40 min, ale wciąż zdążysz.</p>
@@ -179,11 +188,10 @@
     <!-- FOOD -->
     <section class="section" id="jedzenie">
       <header class="section__head">
-        <span class="section__num">03</span>
         <h2 class="section__title reveal">Obiad</h2>
       </header>
 
-      <article class="glass card food reveal">
+      <article class="glass card tilt food reveal">
         <div class="food__main">
           <span class="chip">Wybór</span>
           <h3>Zapiecek</h3>
@@ -194,7 +202,7 @@
             <div><dt>Czas</dt><dd>~1 h</dd></div>
           </dl>
           <div class="btns">
-            <a class="btn btn--primary" href="https://www.google.com/maps/search/?api=1&query=Zapiecek+Aleje+Jerozolimskie+28+Warszawa" target="_blank" rel="noopener">Google Maps ↗</a>
+            <a class="btn btn--primary" href="https://www.google.com/maps/search/?api=1&query=Zapiecek+Aleje+Jerozolimskie+28+Warszawa" target="_blank" rel="noopener">Google Maps <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
           </div>
         </div>
         <div class="food__menu">
@@ -216,41 +224,29 @@
           </ul>
         </div></div>
       </details>
-
-      <details class="unwrap reveal">
-        <summary><span>Dlaczego Zapiecek?</span><i></i></summary>
-        <div class="unwrap__body"><div>
-          <ul>
-            <li>Blisko dworca i metra Centrum.</li>
-            <li>Przy Arenie są głównie fastfoody i tłumy.</li>
-            <li>Bary mleczne są tańsze, ale to samoobsługa.</li>
-          </ul>
-        </div></div>
-      </details>
     </section>
 
     <!-- ROUTES -->
     <section class="section" id="dojazd">
       <header class="section__head">
-        <span class="section__num">04</span>
         <h2 class="section__title reveal">Dojazd</h2>
       </header>
 
       <div class="leg reveal">
         <div class="leg__head">
           <span class="leg__tag">A</span>
-          <h3>Centralna → Zapiecek</h3>
+          <h3>Centralna <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Zapiecek</h3>
           <span class="leg__time">15 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Warszawa Centralna do Zapiecek" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Warszawa+Centralna,+Aleje+Jerozolimskie+54,+Warszawa&daddr=Zapiecek,+Aleje+Jerozolimskie+28,+Warszawa&dirflg=w&output=embed"></iframe>
-            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Warszawa+Centralna&destination=Zapiecek+Aleje+Jerozolimskie+28+Warszawa&travelmode=walking">Otwórz ↗</a>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Warszawa+Centralna&destination=Zapiecek+Aleje+Jerozolimskie+28+Warszawa&travelmode=walking">Otwórz <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo · 1,2 km · 15 min</b><p>Al. Jerozolimskie na wschód.</p></div></li>
-            <li class="step step--tram"><span class="step__icon">🚋</span><div><b>Albo tramwaj 7 / 9 / 22 / 24</b><p>Dworzec Centralny → Muzeum Narodowe · 2 przyst. · 4 min</p></div></li>
+            <li class="step step--walk"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg></span><div><b>Pieszo · 1,2 km · 15 min</b><p>Al. Jerozolimskie na wschód.</p></div></li>
+            <li class="step step--tram"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-tram"/></svg></span><div><b>Albo tramwaj 7 / 9 / 22 / 24</b><p>Dworzec Centralny <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Muzeum Narodowe · 2 przyst. · 4 min</p></div></li>
           </ol>
         </div>
       </div>
@@ -258,25 +254,25 @@
       <div class="leg reveal">
         <div class="leg__head">
           <span class="leg__tag">B</span>
-          <h3>Zapiecek → Arena</h3>
+          <h3>Zapiecek <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Arena</h3>
           <span class="leg__time">40 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Zapiecek do Areny Ursynów" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Aleje+Jerozolimskie+28,+Warszawa&daddr=Arena+Ursyn%C3%B3w,+Rotmistrza+Witolda+Pileckiego+122,+Warszawa&dirflg=r&output=embed"></iframe>
-            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Aleje+Jerozolimskie+28+Warszawa&destination=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&travelmode=transit">Otwórz ↗</a>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Aleje+Jerozolimskie+28+Warszawa&destination=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&travelmode=transit">Otwórz <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Centrum · 9 min</b></div></li>
-            <li class="step step--metro"><span class="step__icon">Ⓜ</span><div>
+            <li class="step step--walk"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg></span><div><b>Pieszo do metra Centrum · 9 min</b></div></li>
+            <li class="step step--metro"><span class="step__icon">M</span><div>
               <b>M1 kierunek <u>Kabaty</u> · 17 min</b>
-              <p>Centrum → Imielin · 9 przyst. · co 5 min</p>
+              <p>Centrum <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Imielin · 9 przyst. · co 5 min</p>
               <div class="metro-line" aria-label="Przystanki M1">
                 <span class="on">Centrum</span><span>Politechnika</span><span>Pole Mokotowskie</span><span>Racławicka</span><span>Wierzbno</span><span>Wilanowska</span><span>Służew</span><span>Ursynów</span><span>Stokłosy</span><span class="on">Imielin</span>
               </div>
             </div></li>
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do Areny · 800 m · 10 min</b></div></li>
+            <li class="step step--walk"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg></span><div><b>Pieszo do Areny · 800 m · 10 min</b></div></li>
           </ol>
         </div>
       </div>
@@ -288,7 +284,7 @@
             <thead><tr><th>Bilet</th><th>Cena</th></tr></thead>
             <tbody>
               <tr><td>75-min</td><td>4,40 zł</td></tr>
-              <tr><td><b>24h</b> ✓</td><td><b>15 zł</b></td></tr>
+              <tr><td><b>24h</b> <svg class="ic ic--ok" aria-hidden="true"><use href="#i-check"/></svg></td><td><b>15 zł</b></td></tr>
             </tbody>
           </table>
           <p>Weź 24h: kupiony ok. 16:00 starczy na powrót. Jakdojade, mobilet lub biletomat. Student −50%.</p>
@@ -309,11 +305,10 @@
     <!-- WEAR -->
     <section class="section" id="ubior">
       <header class="section__head">
-        <span class="section__num">05</span>
         <h2 class="section__title reveal">Pogoda i ubiór</h2>
       </header>
 
-      <div class="glass card wear reveal">
+      <div class="glass card tilt wear reveal">
         <div class="weather">
           <div><span>13:00</span><b>5°</b></div>
           <div><span>18:00</span><b>2°</b></div>
@@ -322,14 +317,14 @@
           <div class="weather__dry"><span>opady</span><b>~0%</b></div>
         </div>
         <ul class="wear__list">
-          <li>🧥 Zimowa kurtka, czapka, rękawiczki</li>
-          <li>👕 Warstwy · w hali jest ciepło</li>
-          <li>👟 Wygodne buty</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-snow"/></svg> Zimowa kurtka, czapka, rękawiczki</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-layers"/></svg> Warstwy · w hali jest ciepło</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg> Wygodne buty</li>
         </ul>
         <p class="note">Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.</p>
       </div>
 
-      <div class="ticket reveal" id="bilet">
+      <div class="ticket tilt reveal" id="bilet">
         <div class="ticket__main">
           <p class="eyebrow">GraMuzyka</p>
           <h3>UNDERTALE</h3>
@@ -351,31 +346,30 @@
     <!-- RETURN -->
     <section class="section" id="powrot">
       <header class="section__head">
-        <span class="section__num">06</span>
         <h2 class="section__title reveal">Powrót</h2>
       </header>
 
       <div class="leg reveal">
         <div class="leg__head">
           <span class="leg__tag">C</span>
-          <h3>Arena → Centralna</h3>
+          <h3>Arena <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Centralna</h3>
           <span class="leg__time">35 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Arena Ursynów do Warszawa Centralna" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Arena+Ursyn%C3%B3w,+Rotmistrza+Witolda+Pileckiego+122,+Warszawa&daddr=Warszawa+Centralna,+Aleje+Jerozolimskie+54,+Warszawa&dirflg=r&output=embed"></iframe>
-            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&destination=Warszawa+Centralna&travelmode=transit">Otwórz ↗</a>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&destination=Warszawa+Centralna&travelmode=transit">Otwórz <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Imielin · 10 min</b></div></li>
-            <li class="step step--metro"><span class="step__icon">Ⓜ</span><div><b>M1 kierunek <u>Młociny</u> · 17 min</b><p>Imielin → Centrum · co 7–8 min</p></div></li>
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo na Centralną · 5 min</b></div></li>
+            <li class="step step--walk"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg></span><div><b>Pieszo do metra Imielin · 10 min</b></div></li>
+            <li class="step step--metro"><span class="step__icon">M</span><div><b>M1 kierunek <u>Młociny</u> · 17 min</b><p>Imielin <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Centrum · co 7–8 min</p></div></li>
+            <li class="step step--walk"><span class="step__icon"><svg class="ic" aria-hidden="true"><use href="#i-walk"/></svg></span><div><b>Pieszo na Centralną · 5 min</b></div></li>
           </ol>
         </div>
       </div>
 
-      <article class="glass card train__card reveal">
+      <article class="glass card tilt train__card reveal">
         <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 16170 „Karkonosze”</b> + <span class="badge badge--kd">KD</span> <b>KD 69553</b></div>
         <div class="train__route train__route--3">
           <div><time>23:39</time><b>W-wa Centralna</b><small>peron IV</small></div>
@@ -389,7 +383,7 @@
           <div><dt>Czas</dt><dd>5 h 37 min</dd></div>
         </dl>
         <div class="btns">
-          <a class="btn btn--primary" href="https://koleo.pl/connection/6714666485" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
+          <a class="btn btn--primary" href="https://koleo.pl/connection/6714666485" target="_blank" rel="noopener">Otwórz w Koleo <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a>
           <a class="btn" href="https://koleo.pl/rozklad-pkp/warszawa-centralna/legnica/14-11-2026_23:00/all/all" target="_blank" rel="noopener">Wszystkie połączenia</a>
         </div>
       </article>
@@ -421,7 +415,6 @@
     <!-- CHECKLIST -->
     <section class="section" id="checklista">
       <header class="section__head">
-        <span class="section__num">07</span>
         <h2 class="section__title reveal">Checklista</h2>
       </header>
       <ul class="checklist glass reveal" id="checklist">
@@ -444,6 +437,7 @@
   <footer class="footer">
     <p>Prywatny plan · strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
     <p>Rozkłady: Koleo, ZTM. <b>Sprawdź przed wyjazdem.</b></p>
+    <p class="footer__author">Przygotował <b>Mykyta Mykulskyi</b></p>
   </footer>
 
   <script type="module" src="/src/main.js"></script>
