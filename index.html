@@ -3,69 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Witaj w Podziemiu · plan wyjazdu na koncert Undertale — 14.11.2026</title>
-  <meta name="description" content="Plan podróży Legnica → Warszawa na koncert Undertale (GraMuzyka) w Arenie Ursynów, 14 listopada 2026. Pociąg, jedzenie, dojazd, dress code i powrót." />
+  <title>Undertale · plan wyjazdu na koncert — 14.11.2026</title>
+  <meta name="description" content="Plan podróży Legnica → Warszawa na koncert Undertale (GraMuzyka) w Arenie Ursynów, 14 listopada 2026." />
   <meta name="theme-color" content="#0b0614" />
-  <meta property="og:title" content="Witaj w Podziemiu — plan wyjazdu" />
+  <meta property="og:title" content="Undertale · plan wyjazdu" />
   <meta property="og:description" content="Legnica → Warszawa → Arena Ursynów. 14.11.2026, 18:30." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
   <div class="bg" aria-hidden="true">
     <div class="bg__gradient"></div>
-    <div class="bg__arcs" data-parallax="0.25">
+    <div class="bg__arcs" id="arcs">
       <svg viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <radialGradient id="arcGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#b388ff" stop-opacity="0.9" />
-            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
-          </radialGradient>
-        </defs>
-        <g fill="none" stroke="url(#arcGlow)" stroke-linecap="round">
-          <circle cx="500" cy="500" r="120" stroke-width="2" />
-          <circle cx="500" cy="500" r="190" stroke-width="1.5" />
-          <circle cx="500" cy="500" r="270" stroke-width="1.2" />
-          <circle cx="500" cy="500" r="360" stroke-width="1" />
-          <circle cx="500" cy="500" r="460" stroke-width="0.8" />
+        <g fill="none" stroke="#a78bfa" stroke-linecap="round" stroke-dasharray="2 14 40 10">
+          <circle cx="500" cy="500" r="120" stroke-width="2" opacity=".7" />
+          <circle cx="500" cy="500" r="190" stroke-width="1.5" opacity=".55" />
+          <circle cx="500" cy="500" r="270" stroke-width="1.2" opacity=".45" />
+          <circle cx="500" cy="500" r="360" stroke-width="1" opacity=".35" />
+          <circle cx="500" cy="500" r="460" stroke-width="0.8" opacity=".25" />
         </g>
       </svg>
     </div>
     <canvas class="bg__stars" id="stars"></canvas>
-    <div class="bg__spotlight" id="spotlight"></div>
-    <div class="bg__grain"></div>
   </div>
 
   <div class="progress" aria-hidden="true"><span id="progress"></span></div>
 
   <header class="nav" id="nav">
-    <a href="#top" class="nav__logo" aria-label="Na górę">
-      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      <b>Podziemie</b>
-    </a>
+    <a href="#top" class="nav__logo" aria-label="Na górę"><span class="px-heart"></span><b>Undertale</b></a>
     <nav class="nav__links" aria-label="Sekcje">
       <a href="#plan">Plan</a>
       <a href="#pociag">Pociąg</a>
-      <a href="#jedzenie">Jedzenie</a>
+      <a href="#jedzenie">Obiad</a>
       <a href="#dojazd">Dojazd</a>
-      <a href="#dresscode">Dress code</a>
+      <a href="#ubior">Ubiór</a>
       <a href="#powrot">Powrót</a>
     </nav>
-    <a class="nav__cta magnetic" href="#bilet">Rząd 19 · 31</a>
+    <a class="nav__cta" href="#bilet">Rząd 19 · 31</a>
   </header>
 
   <main id="top">
-    <!-- HERO -->
     <section class="hero">
-      <p class="eyebrow reveal">GraMuzyka · Undertale · koncert symfoniczny</p>
-      <h1 class="hero__title" aria-label="Witaj w Podziemiu">
-        <span class="line"><span class="split">WITAJ W</span></span>
-        <span class="line"><span class="split accent">PODZIEMIU</span></span>
+      <p class="eyebrow reveal">GraMuzyka · koncert symfoniczny</p>
+      <h1 class="hero__title" aria-label="Undertale">
+        <span class="line"><span class="split accent">UNDERTALE</span></span>
       </h1>
-      <p class="hero__sub reveal">Plan wyprawy <b>Legnica → Warszawa</b> na koncert w <b>Arenie Ursynów</b>.<br />Sobota, <b>14 listopada 2026</b>, start o <b>18:30</b>.</p>
+      <p class="hero__sub reveal">Legnica → <b>Arena Ursynów</b> · sob. <b>14.11.2026</b> · <b>18:30</b></p>
 
       <div class="countdown reveal" id="countdown" aria-live="polite">
         <div><b data-cd="d">--</b><span>dni</span></div>
@@ -75,8 +62,8 @@
       </div>
 
       <div class="dialog reveal" role="note">
-        <span class="dialog__heart" aria-hidden="true">❤</span>
-        <p class="dialog__text" data-type="* Patrzysz na plan podróży. Wszystko jest rozpisane co do minuty. Napełnia cię to DETERMINACJĄ."></p>
+        <span class="px-heart dialog__heart" aria-hidden="true"></span>
+        <p class="dialog__text" data-type="* Plan jest gotowy. Napełnia cię to DETERMINACJĄ."></p>
       </div>
 
       <a href="#plan" class="scroll-hint" aria-label="Przewiń do planu"><span></span></a>
@@ -84,42 +71,37 @@
 
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
-        <span>LEGNICA 07:48</span><i>✦</i><span>WARSZAWA CENTRALNA 12:40</span><i>✦</i><span>PIEROGI</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA URSYNÓW 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i><span>KARKONOSZE 23:39</span><i>✦</i>
-        <span>LEGNICA 07:48</span><i>✦</i><span>WARSZAWA CENTRALNA 12:40</span><i>✦</i><span>PIEROGI</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA URSYNÓW 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i><span>KARKONOSZE 23:39</span><i>✦</i>
+        <span>LEGNICA 10:24</span><i>✦</i><span>CENTRALNA 15:48</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i>
+        <span>LEGNICA 10:24</span><i>✦</i><span>CENTRALNA 15:48</span><i>✦</i><span>METRO M1</span><i>✦</i><span>ARENA 18:30</span><i>✦</i><span>RZĄD 19 · MIEJSCE 31</span><i>✦</i>
       </div>
     </div>
 
-    <!-- TIMELINE -->
+    <!-- PLAN -->
     <section class="section" id="plan">
       <header class="section__head">
         <span class="section__num">01</span>
-        <h2 class="section__title reveal">Dzień w&nbsp;pigułce</h2>
-        <p class="section__lead reveal">Cały dzień w jednym rzucie oka. Szczegóły i uzasadnienia są niżej, w rozwijanych sekcjach.</p>
+        <h2 class="section__title reveal">Plan</h2>
       </header>
 
       <ol class="timeline">
-        <li class="timeline__item reveal"><time>07:48</time><div class="glass"><h3>Odjazd z Legnicy</h3><p>IC 6144 „Łużyce”, bez przesiadek, peron III.</p></div></li>
-        <li class="timeline__item reveal"><time>12:40</time><div class="glass"><h3>Warszawa Centralna</h3><p>Wysiadka (peron II), ok. 15 min spacerem do restauracji.</p></div></li>
-        <li class="timeline__item reveal"><time>13:00</time><div class="glass"><h3>Obiad w Zapiecku</h3><p>Pierogi i polska kuchnia, Al. Jerozolimskie 28.</p></div></li>
-        <li class="timeline__item reveal"><time>14:30</time><div class="glass"><h3>Wolny czas</h3><p>Nowy Świat → Krakowskie Przedmieście → Stare Miasto (opcjonalnie).</p></div></li>
-        <li class="timeline__item reveal"><time>16:45</time><div class="glass"><h3>Metro M1 → Imielin</h3><p>Ze stacji Centrum w kierunku Kabaty, 17 min jazdy.</p></div></li>
-        <li class="timeline__item reveal"><time>17:15</time><div class="glass"><h3>Arena Ursynów</h3><p>Szatnia, merch, znalezienie miejsca. Spokojnie, bez biegania.</p></div></li>
-        <li class="timeline__item timeline__item--hot reveal"><time>18:30</time><div class="glass"><h3>Koncert</h3><p>Rząd 19, miejsce 31. Telefon wyciszony.</p></div></li>
-        <li class="timeline__item reveal"><time>~21:00</time><div class="glass"><h3>Powrót do centrum</h3><p>M1 z Imielina do Centrum, potem kolacja / odpoczynek przy dworcu.</p></div></li>
-        <li class="timeline__item reveal"><time>23:39</time><div class="glass"><h3>Nocny pociąg</h3><p>IC 16170 „Karkonosze” → Wrocław → Legnica 05:16.</p></div></li>
+        <li class="timeline__item reveal"><time>10:24</time><div class="glass"><h3>Legnica</h3><p>IC 8314, peron III</p></div></li>
+        <li class="timeline__item reveal"><time>10:58</time><div class="glass"><h3>Przesiadka we Wrocławiu</h3><p>IC 6126 o 11:32, peron II</p></div></li>
+        <li class="timeline__item reveal"><time>15:48</time><div class="glass"><h3>Warszawa Centralna</h3></div></li>
+        <li class="timeline__item reveal"><time>16:05</time><div class="glass"><h3>Obiad · Zapiecek</h3><p>Al. Jerozolimskie 28</p></div></li>
+        <li class="timeline__item reveal"><time>17:15</time><div class="glass"><h3>Metro M1 → Imielin</h3><p>ze stacji Centrum</p></div></li>
+        <li class="timeline__item reveal"><time>17:55</time><div class="glass"><h3>Arena Ursynów</h3></div></li>
+        <li class="timeline__item timeline__item--hot reveal"><time>18:30</time><div class="glass"><h3>Koncert</h3><p>Rząd 19, miejsce 31</p></div></li>
+        <li class="timeline__item reveal"><time>23:39</time><div class="glass"><h3>Pociąg powrotny</h3><p>Legnica 05:16</p></div></li>
       </ol>
 
       <details class="unwrap reveal">
-        <summary><span>Dlaczego właśnie taki rozkład?</span><i></i></summary>
+        <summary><span>Dlaczego taki rozkład?</span><i></i></summary>
         <div class="unwrap__body"><div>
-          <p>Kluczowe były dwa ograniczenia: <b>koncert o 18:30</b> i to, że <b>na miejscu chcemy zjeść normalny obiad</b>, a nie coś w biegu. Liczyłem od końca:</p>
           <ul>
-            <li>Na arenie warto być ok. <b>godzinę wcześniej</b>: kolejka do wejścia, szatnia, toaleta, ewentualny merch.</li>
-            <li>Dojazd z centrum na Ursynów to ok. <b>40 min</b> od drzwi do drzwi, a do tego zapas na metro, które akurat odjechało.</li>
-            <li>Obiad z dojściem to ok. <b>1,5 h</b>.</li>
+            <li>Liczone od końca: na arenie <b>~30 min</b> przed startem, dojazd z centrum <b>~40 min</b>, obiad <b>~1 h</b>.</li>
+            <li>Czyli w Warszawie trzeba być ok. <b>16:00</b>. Pociąg o 10:24 przyjeżdża 15:48.</li>
+            <li>Bez wolnego czasu i bez porannej pobudki.</li>
           </ul>
-          <p>Wychodzi, że w Warszawie trzeba być najpóźniej ok. 14:30. Pociąg o 07:48 przyjeżdża o 12:40, więc daje <b>prawie 2 godziny zapasu</b> na opóźnienia PKP (które na trasie przez Opole i Częstochowę się zdarzają) i chwilę na spacer po mieście.</p>
-          <p>Późniejsze połączenia (np. 09:06 z przesiadką we Wrocławiu, przyjazd 14:40) też by zadziałały, ale każde opóźnienie od razu zjada obiad. A odjazd o 05:35 to przesada: byłoby się w Warszawie o 10:08 i z 8 godzinami do zagospodarowania.</p>
         </div></div>
       </details>
     </section>
@@ -128,77 +110,68 @@
     <section class="section" id="pociag">
       <header class="section__head">
         <span class="section__num">02</span>
-        <h2 class="section__title reveal">Pociąg do Warszawy</h2>
-        <p class="section__lead reveal">Jedno połączenie, zero przesiadek. Siadasz w Legnicy, wysiadasz w centrum Warszawy.</p>
+        <h2 class="section__title reveal">Pociąg</h2>
       </header>
 
       <div class="train">
-        <article class="glass card train__card reveal tilt">
-          <div class="train__brand"><span class="badge badge--ic">IC</span> PKP Intercity · <b>IC 6144 „Łużyce”</b></div>
-          <div class="train__route">
-            <div><time>07:48</time><b>Legnica</b><small>peron III</small></div>
-            <div class="train__line"><span>4 h 52 min</span></div>
-            <div><time>12:40</time><b>Warszawa Centralna</b><small>peron II</small></div>
+        <article class="glass card train__card reveal">
+          <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 8314 „Matejko”</b> → <b>IC 6126 „Leśmian”</b></div>
+          <div class="train__route train__route--3">
+            <div><time>10:24</time><b>Legnica</b><small>peron III</small></div>
+            <div class="train__line"><span>34 min</span></div>
+            <div><time>10:58</time><b>Wrocław Gł.</b><small>przesiadka 34 min</small></div>
+            <div class="train__line"><span>4 h 16 min</span></div>
+            <div><time>15:48</time><b>W-wa Centralna</b><small>peron II</small></div>
           </div>
           <dl class="facts">
-            <div><dt>Cena (bilet normalny)</dt><dd>79 zł</dd></div>
-            <div><dt>Przesiadki</dt><dd>0</dd></div>
-            <div><dt>Data</dt><dd>sob. 14.11.2026</dd></div>
+            <div><dt>Cena</dt><dd>78 zł</dd></div>
+            <div><dt>Przesiadki</dt><dd>1</dd></div>
+            <div><dt>Czas</dt><dd>5 h 24 min</dd></div>
           </dl>
           <div class="btns">
-            <a class="btn btn--primary magnetic" href="https://koleo.pl/rozklad-pkp/legnica/warszawa-centralna/14-11-2026_07:00/all/all" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
-            <a class="btn magnetic" href="https://koleo.pl/rozklad-pkp/legnica/warszawa-centralna/14-11-2026_07:00/all/all" target="_blank" rel="noopener" data-copy="https://koleo.pl/rozklad-pkp/legnica/warszawa-centralna/14-11-2026_07:00/all/all">Skopiuj link</a>
+            <a class="btn btn--primary" href="https://koleo.pl/connection/6714665607" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
+            <a class="btn" href="https://koleo.pl/rozklad-pkp/legnica/warszawa-centralna/14-11-2026_10:24/all/all" target="_blank" rel="noopener">Wszystkie połączenia</a>
           </div>
-          <p class="note">⚠ Godziny z rozkładu Koleo (stan na listopad 2026). <b>Sprawdź przed wyjazdem</b>: perony i ewentualne zmiany pojawiają się w aplikacji.</p>
         </article>
 
         <div class="stops glass reveal" id="stops">
-          <h3>Trasa pociągu <small>przewiń, a pociąg pojedzie</small></h3>
+          <h3>Trasa</h3>
           <div class="stops__rail"><span class="stops__fill" id="stopsFill"></span><span class="stops__train" id="stopsTrain">🚆</span></div>
           <ol>
-            <li class="major"><time>07:48</time>Legnica</li>
-            <li class="major"><time>08:21–08:29</time>Wrocław Główny</li>
-            <li><time>·</time>Oława</li>
-            <li><time>·</time>Brzeg</li>
-            <li class="major"><time>09:13–09:20</time>Opole Główne</li>
-            <li><time>·</time>Lubliniec</li>
-            <li><time>·</time>Częstochowa Stradom</li>
-            <li class="major"><time>10:20–10:26</time>Częstochowa</li>
-            <li><time>·</time>Radomsko</li>
-            <li><time>·</time>Piotrków Trybunalski</li>
-            <li><time>·</time>Koluszki</li>
-            <li><time>·</time>Skierniewice</li>
-            <li><time>·</time>Żyrardów</li>
-            <li><time>12:35</time>Warszawa Zachodnia</li>
-            <li class="major end"><time>12:40</time>Warszawa Centralna</li>
+            <li class="major"><time>10:24</time>Legnica</li>
+            <li class="major"><time>10:58 · 11:32</time>Wrocław Główny</li>
+            <li><time>12:53</time>Ostrów Wlkp.</li>
+            <li><time>13:09</time>Kalisz</li>
+            <li><time>13:42</time>Sieradz</li>
+            <li class="major"><time>14:36</time>Łódź Widzew</li>
+            <li><time>15:11</time>Skierniewice</li>
+            <li><time>15:43</time>W-wa Zachodnia</li>
+            <li class="major end"><time>15:48</time>Warszawa Centralna</li>
           </ol>
         </div>
       </div>
 
       <details class="unwrap reveal">
-        <summary><span>Jak kupić bilet i na co uważać</span><i></i></summary>
+        <summary><span>Bilet</span><i></i></summary>
         <div class="unwrap__body"><div>
           <ul>
-            <li>Bilet kupisz w <b>aplikacji Koleo</b> lub na intercity.pl. W IC obowiązuje <b>rezerwacja miejsca</b>, więc warto kupić wcześniej i wybrać miejsce przy oknie.</li>
-            <li>Jeśli masz <b>legitymację studencką (do 26 lat)</b>, przysługuje Ci zniżka 51%, czyli ok. 39 zł zamiast 79 zł.</li>
-            <li>Na Centralnej wysiadasz na peronie II. Wyjście „Al. Jerozolimskie” prowadzi prosto na trasę do restauracji.</li>
-            <li>Pociąg zatrzymuje się też na <b>Warszawie Zachodniej (12:35)</b>. <u>Nie wysiadaj tam</u>, bo jedziemy do Centralnej.</li>
+            <li>Kup w Koleo: <b>jeden bilet</b> na oba pociągi.</li>
+            <li>Student do 26 lat: −51%, ok. 38 zł.</li>
+            <li>Nie wysiadaj na W-wie Zachodniej.</li>
           </ul>
         </div></div>
       </details>
 
       <details class="unwrap reveal">
-        <summary><span>Plan B: co jeśli nie zdążę na 07:48?</span><i></i></summary>
+        <summary><span>Plan B</span><i></i></summary>
         <div class="unwrap__body"><div>
           <table class="tbl">
-            <thead><tr><th>Odjazd</th><th>Połączenie</th><th>Przyjazd</th><th>Ocena</th></tr></thead>
+            <thead><tr><th>Odjazd</th><th>Połączenie</th><th>Przyjazd</th></tr></thead>
             <tbody>
-              <tr><td>08:20</td><td>IC 8318 „Mehoffer” → Wrocław → IC 6128 „Mickiewicz”</td><td>13:48</td><td class="ok">OK, obiad się mieści</td></tr>
-              <tr><td>09:06</td><td>KD 66152 → Wrocław 09:43 → IC 6142 „Fredro” 10:30</td><td>14:40</td><td class="meh">Ciasno: obiad bez spaceru</td></tr>
-              <tr><td>11:07</td><td>KD → Wrocław → EIC 6102 „Ślęża”</td><td>16:16</td><td class="bad">Awaryjnie: jedzenie „po drodze”</td></tr>
+              <tr><td>11:07</td><td>KD → Wrocław → IC 6102 „Ślęża”</td><td>16:16</td></tr>
             </tbody>
           </table>
-          <p>Wszystkie warianty z przesiadką we Wrocławiu Głównym. Dla odważnych jest też 05:35 (KD + EIP), z przyjazdem o 10:08.</p>
+          <p>Obiad skraca się do ~40 min, ale wciąż zdążysz.</p>
         </div></div>
       </details>
     </section>
@@ -207,62 +180,50 @@
     <section class="section" id="jedzenie">
       <header class="section__head">
         <span class="section__num">03</span>
-        <h2 class="section__title reveal">Obiad: pierogi, nie burgery</h2>
-        <p class="section__lead reveal">Prawdziwa polska kuchnia, siedząco, z normalnymi talerzami i za rozsądne pieniądze.</p>
+        <h2 class="section__title reveal">Obiad</h2>
       </header>
 
-      <article class="glass card food reveal tilt">
+      <article class="glass card food reveal">
         <div class="food__main">
-          <span class="chip">Wybór główny</span>
+          <span class="chip">Wybór</span>
           <h3>Zapiecek</h3>
-          <p class="food__addr">Al. Jerozolimskie 28, Warszawa · ok. 15 min pieszo od Centralnej</p>
-          <p>Sieć warszawskich pierogarni w stylu staropolskiej karczmy: drewno, obrusy, kelnerzy. Pierogi na każdy sposób (ruskie, z mięsem, z kapustą i grzybami, na słodko), do tego żurek, placki, gołąbki.</p>
+          <p class="food__addr">Al. Jerozolimskie 28 · 15 min pieszo od Centralnej</p>
+          <p>Pierogarnia z obsługą kelnerską. Nie fastfood, a tanio.</p>
           <dl class="facts">
-            <div><dt>Budżet</dt><dd>~40–60 zł / os.</dd></div>
-            <div><dt>Otwarte</dt><dd>od 11:00</dd></div>
-            <div><dt>Typ</dt><dd>restauracja, obsługa kelnerska</dd></div>
+            <div><dt>Budżet</dt><dd>~40–60 zł</dd></div>
+            <div><dt>Czas</dt><dd>~1 h</dd></div>
           </dl>
           <div class="btns">
-            <a class="btn btn--primary magnetic" href="https://www.google.com/maps/search/?api=1&query=Zapiecek+Aleje+Jerozolimskie+28+Warszawa" target="_blank" rel="noopener">Zobacz w Google Maps ↗</a>
+            <a class="btn btn--primary" href="https://www.google.com/maps/search/?api=1&query=Zapiecek+Aleje+Jerozolimskie+28+Warszawa" target="_blank" rel="noopener">Google Maps ↗</a>
           </div>
         </div>
         <div class="food__menu">
           <h4>Co zamówić</h4>
           <ul>
-            <li><span>Pierogi ruskie (pieczone lub gotowane)</span></li>
-            <li><span>Żurek w chlebie, jeśli jesteś bardzo głodny</span></li>
-            <li><span>Pierogi z jagodami na deser</span></li>
-            <li><span>Kompot</span></li>
+            <li>Pierogi ruskie</li>
+            <li>Żurek</li>
+            <li>Pierogi z jagodami</li>
           </ul>
-          <p class="note">Ceny orientacyjne. Menu i godziny sprawdź na miejscu albo w Google Maps.</p>
         </div>
       </article>
 
-      <div class="grid2">
-        <article class="glass card alt reveal tilt">
-          <span class="chip chip--muted">Alternatywa · taniej</span>
-          <h3>Bar Mleczny Prasowy</h3>
-          <p class="food__addr">ul. Marszałkowska 10/16 · przy metrze Politechnika (M1)</p>
-          <p>Kultowy bar mleczny w odnowionym, ładnym wnętrzu. Ceny PRL-owe (~20–30 zł za obfity obiad), ale jest samoobsługa. Leży dokładnie na linii M1, więc po obiedzie wsiadasz od razu.</p>
-          <a class="btn magnetic" href="https://www.google.com/maps/search/?api=1&query=Bar+Mleczny+Prasowy+Marszałkowska+10+Warszawa" target="_blank" rel="noopener">Mapa ↗</a>
-        </article>
-        <article class="glass card alt reveal tilt">
-          <span class="chip chip--muted">Alternatywa · blisko</span>
-          <h3>Bar Bambino</h3>
-          <p class="food__addr">ul. Krucza 21 · ok. 10 min od Centralnej</p>
-          <p>Klasyczny bar mleczny w centrum: naleśniki, pierogi, kotlety, zupy. W soboty otwarty mniej więcej do 18:00, więc idealnie na obiad. Najtańsza sensowna opcja.</p>
-          <a class="btn magnetic" href="https://www.google.com/maps/search/?api=1&query=Bar+Bambino+Krucza+21+Warszawa" target="_blank" rel="noopener">Mapa ↗</a>
-        </article>
-      </div>
-
       <details class="unwrap reveal">
-        <summary><span>Dlaczego Zapiecek, a nie coś bliżej areny?</span><i></i></summary>
+        <summary><span>Alternatywy</span><i></i></summary>
         <div class="unwrap__body"><div>
           <ul>
-            <li><b>Czas:</b> przyjeżdżamy o 12:40 do centrum i mamy prawie 4 godziny. Jedzenie przy dworcu oznacza zero ryzyka i nic nie dźwigamy przez pół miasta.</li>
-            <li><b>Okolice Areny Ursynów</b> to głównie osiedla, pizzerie i fastfoody, a w sobotę przed koncertem będą tam tłumy. W centrum wybór jest nieporównywalnie lepszy.</li>
-            <li><b>„Tanio, ale nie fastfood”:</b> Zapiecek to złoty środek, czyli prawdziwa restauracja z obsługą za cenę zbliżoną do zestawu w sieciówce. Bary mleczne są jeszcze tańsze, ale to samoobsługa i stołówkowy klimat.</li>
-            <li><b>Logistyka:</b> z Zapiecka do stacji metra Centrum jest ok. 10 minut spacerem, a M1 jedzie prosto pod Arenę.</li>
+            <li><a href="https://www.google.com/maps/search/?api=1&query=Bar+Mleczny+Prasowy+Marszałkowska+10+Warszawa" target="_blank" rel="noopener"><b>Bar Mleczny Prasowy</b></a> · ~25 zł, przy metrze Politechnika</li>
+            <li><a href="https://www.google.com/maps/search/?api=1&query=Bar+Bambino+Krucza+21+Warszawa" target="_blank" rel="noopener"><b>Bar Bambino</b></a> · ~25 zł, 10 min od Centralnej</li>
+          </ul>
+        </div></div>
+      </details>
+
+      <details class="unwrap reveal">
+        <summary><span>Dlaczego Zapiecek?</span><i></i></summary>
+        <div class="unwrap__body"><div>
+          <ul>
+            <li>Blisko dworca i metra Centrum.</li>
+            <li>Przy Arenie są głównie fastfoody i tłumy.</li>
+            <li>Bary mleczne są tańsze, ale to samoobsługa.</li>
           </ul>
         </div></div>
       </details>
@@ -272,127 +233,107 @@
     <section class="section" id="dojazd">
       <header class="section__head">
         <span class="section__num">04</span>
-        <h2 class="section__title reveal">Trasa po Warszawie</h2>
-        <p class="section__lead reveal">Interaktywne mapy, a pod każdą opis, czym <i>dokładnie</i> jedziesz, skąd, dokąd i ile to trwa.</p>
+        <h2 class="section__title reveal">Dojazd</h2>
       </header>
 
       <div class="leg reveal">
         <div class="leg__head">
-          <span class="leg__tag">Odcinek A</span>
-          <h3>Warszawa Centralna → Zapiecek</h3>
-          <span class="leg__time">~15 min</span>
+          <span class="leg__tag">A</span>
+          <h3>Centralna → Zapiecek</h3>
+          <span class="leg__time">15 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Warszawa Centralna do Zapiecek" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Warszawa+Centralna,+Aleje+Jerozolimskie+54,+Warszawa&daddr=Zapiecek,+Aleje+Jerozolimskie+28,+Warszawa&dirflg=w&output=embed"></iframe>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Warszawa+Centralna&destination=Zapiecek+Aleje+Jerozolimskie+28+Warszawa&travelmode=walking">Otwórz ↗</a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo, ok. 1,2 km, 15 min</b><p>Wyjście z dworca na Al. Jerozolimskie i prosto na wschód, mijając Rotundę i skrzyżowanie z Marszałkowską, aż do nr 28 (przed Nowym Światem).</p></div></li>
-            <li class="step step--tram"><span class="step__icon">🚋</span><div><b>Albo tramwaj: 7, 9, 22 lub 24</b><p>Przystanek <b>Dworzec Centralny 07</b> → <b>Muzeum Narodowe 05</b> (2 przystanki, ok. 4 min), potem 2 min pieszo. Kursują co kilka minut.</p></div></li>
+            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo · 1,2 km · 15 min</b><p>Al. Jerozolimskie na wschód.</p></div></li>
+            <li class="step step--tram"><span class="step__icon">🚋</span><div><b>Albo tramwaj 7 / 9 / 22 / 24</b><p>Dworzec Centralny → Muzeum Narodowe · 2 przyst. · 4 min</p></div></li>
           </ol>
-          <a class="btn magnetic" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Warszawa+Centralna&destination=Zapiecek+Aleje+Jerozolimskie+28+Warszawa&travelmode=walking">Otwórz trasę w Google Maps ↗</a>
         </div>
       </div>
 
       <div class="leg reveal">
         <div class="leg__head">
-          <span class="leg__tag">Odcinek B</span>
-          <h3>Zapiecek → Arena Ursynów</h3>
-          <span class="leg__time">~40 min</span>
+          <span class="leg__tag">B</span>
+          <h3>Zapiecek → Arena</h3>
+          <span class="leg__time">40 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Zapiecek do Areny Ursynów" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Aleje+Jerozolimskie+28,+Warszawa&daddr=Arena+Ursyn%C3%B3w,+Rotmistrza+Witolda+Pileckiego+122,+Warszawa&dirflg=r&output=embed"></iframe>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Aleje+Jerozolimskie+28+Warszawa&destination=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&travelmode=transit">Otwórz ↗</a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Centrum, ok. 9 min</b><p>Al. Jerozolimskie na zachód do skrzyżowania z Marszałkowską, zejście do stacji <b>Centrum</b> (linia M1).</p></div></li>
+            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Centrum · 9 min</b></div></li>
             <li class="step step--metro"><span class="step__icon">Ⓜ</span><div>
-              <b>Metro M1 w kierunku <u>Kabaty</u>, 17 min</b>
-              <p>Wsiadasz na <b>Centrum</b>, wysiadasz na <b>Imielin</b>. 9 przystanków. W sobotę po południu metro kursuje <b>co 5 min</b>.</p>
+              <b>M1 kierunek <u>Kabaty</u> · 17 min</b>
+              <p>Centrum → Imielin · 9 przyst. · co 5 min</p>
               <div class="metro-line" aria-label="Przystanki M1">
                 <span class="on">Centrum</span><span>Politechnika</span><span>Pole Mokotowskie</span><span>Racławicka</span><span>Wierzbno</span><span>Wilanowska</span><span>Służew</span><span>Ursynów</span><span>Stokłosy</span><span class="on">Imielin</span>
               </div>
             </div></li>
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do Areny, ok. 800 m, 10 min</b><p>Ze stacji Imielin wyjście w stronę ul. Pileckiego i na południowy zachód do nr 122. Po drodze zobaczysz tłum w fioletowych bluzach.</p></div></li>
+            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do Areny · 800 m · 10 min</b></div></li>
           </ol>
-          <a class="btn magnetic" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Aleje+Jerozolimskie+28+Warszawa&destination=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&travelmode=transit">Otwórz trasę w Google Maps ↗</a>
         </div>
       </div>
 
       <details class="unwrap reveal">
-        <summary><span>Dlaczego metro, a nie autobus czy Uber?</span><i></i></summary>
+        <summary><span>Bilet ZTM</span><i></i></summary>
         <div class="unwrap__body"><div>
-          <ul>
-            <li><b>Przewidywalność:</b> metro nie stoi w korkach, a w sobotę po południu ulice w centrum potrafią się zablokować. 17 minut to 17 minut.</li>
-            <li><b>Częstotliwość:</b> w sobotę w ciągu dnia M1 jeździ co 5 minut (według rozkładu ZTM), więc nie trzeba niczego planować co do minuty.</li>
-            <li><b>Bliskość:</b> Imielin jest ok. 800 m od Areny. Alternatywnie stacja Natolin (jedną dalej) jest podobnie daleko.</li>
-            <li><b>Cena:</b> taksówka z centrum na Ursynów to ok. 40–60 zł, a metro kosztuje kilka złotych.</li>
-          </ul>
+          <table class="tbl">
+            <thead><tr><th>Bilet</th><th>Cena</th></tr></thead>
+            <tbody>
+              <tr><td>75-min</td><td>4,40 zł</td></tr>
+              <tr><td><b>24h</b> ✓</td><td><b>15 zł</b></td></tr>
+            </tbody>
+          </table>
+          <p>Weź 24h: kupiony ok. 16:00 starczy na powrót. Jakdojade, mobilet lub biletomat. Student −50%.</p>
         </div></div>
       </details>
 
       <details class="unwrap reveal">
-        <summary><span>Bilety ZTM: który kupić?</span><i></i></summary>
+        <summary><span>Dlaczego metro?</span><i></i></summary>
         <div class="unwrap__body"><div>
-          <table class="tbl">
-            <thead><tr><th>Bilet</th><th>Cena</th><th>Kiedy</th></tr></thead>
-            <tbody>
-              <tr><td>Jednorazowy 75-min (strefa 1)</td><td>4,40 zł</td><td>pojedynczy przejazd z przesiadkami</td></tr>
-              <tr><td><b>24-godzinny (strefa 1)</b></td><td><b>15 zł</b></td><td class="ok">polecany: tramwaj + 2× metro + zapas</td></tr>
-            </tbody>
-          </table>
-          <p>Najwygodniej kupić w aplikacji <b>Jakdojade</b>, <b>mobilet</b> lub <b>SkyCash</b>, albo w biletomacie na stacji (karta zbliżeniowa). Bilet 24h kupiony ok. 13:00 będzie ważny aż do powrotu na dworzec w nocy. Ulgowe (np. student) kosztują 50% ceny. Ceny według taryfy ZTM, warto sprawdzić przed wyjazdem.</p>
+          <ul>
+            <li>Bez korków, co 5 min.</li>
+            <li>Taksówka: 40–60 zł. Metro: w cenie biletu.</li>
+          </ul>
         </div></div>
       </details>
     </section>
 
-    <!-- TICKET + DRESSCODE -->
-    <section class="section" id="dresscode">
+    <!-- WEAR -->
+    <section class="section" id="ubior">
       <header class="section__head">
         <span class="section__num">05</span>
-        <h2 class="section__title reveal">Dress code</h2>
-        <p class="section__lead reveal">Nie ma oficjalnego, ale jest listopad, hala sportowa i 6–8 km chodzenia w ciągu dnia.</p>
+        <h2 class="section__title reveal">Pogoda i ubiór</h2>
       </header>
 
-      <div class="grid3">
-        <article class="glass card dress reveal tilt">
-          <span class="dress__icon">🧥</span>
-          <h3>Warstwy</h3>
-          <p>W Warszawie w połowie listopada jest ok. <b>2–8°C</b> i często mży. Ciepła kurtka na zewnątrz, a pod nią bluza lub sweter, który zostaje na koncercie. W hali jest ciepło.</p>
-        </article>
-        <article class="glass card dress reveal tilt">
-          <span class="dress__icon">👟</span>
-          <h3>Wygodne buty</h3>
-          <p>Dworzec → restauracja → spacer → metro → arena → powrót. Wybierz buty, w których przejdziesz kilka kilometrów i które nie przemokną.</p>
-        </article>
-        <article class="glass card dress reveal tilt">
-          <span class="dress__icon">💜</span>
-          <h3>Akcent Undertale</h3>
-          <p>Opcjonalnie, ale klimatycznie: sweter w paski (Frisk), niebieska bluza z kapturem (Sans), czerwony szalik (Papyrus) albo przypinka z serduszkiem. Na koncercie fanów nikt nie uzna tego za dziwne.</p>
-        </article>
+      <div class="glass card wear reveal">
+        <div class="weather">
+          <div><span>13:00</span><b>5°</b></div>
+          <div><span>18:00</span><b>2°</b></div>
+          <div><span>21:00</span><b>0°</b></div>
+          <div><span>noc</span><b>−2°</b></div>
+          <div class="weather__dry"><span>opady</span><b>~0%</b></div>
+        </div>
+        <ul class="wear__list">
+          <li>🧥 Zimowa kurtka, czapka, rękawiczki</li>
+          <li>👕 Warstwy · w hali jest ciepło</li>
+          <li>👟 Wygodne buty</li>
+        </ul>
+        <p class="note">Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.</p>
       </div>
 
-      <details class="unwrap reveal">
-        <summary><span>Co zabrać do torby</span><i></i></summary>
-        <div class="unwrap__body"><div>
-          <p>Weź <b>mały plecak albo nerkę</b>. Na wydarzeniach w halach często obowiązuje limit wielkości torby (zwykle ok. A4). Sprawdź regulamin wydarzenia na stronie organizatora.</p>
-          <ul>
-            <li>Parasolka składana</li>
-            <li>Powerbank i kabel (Koleo, bilety ZTM i Mapy na jednym telefonie szybko go rozładują)</li>
-            <li>Butelka wody / przekąska na pociąg</li>
-            <li>Coś ciepłego na nocny powrót: w pociągu o 4 rano bywa chłodno</li>
-          </ul>
-        </div></div>
-      </details>
-
-      <!-- TICKET -->
-      <div class="ticket reveal tilt" id="bilet">
+      <div class="ticket reveal" id="bilet">
         <div class="ticket__main">
-          <p class="eyebrow">GraMuzyka prezentuje</p>
-          <h3>UNDERTALE · Witaj w Podziemiu</h3>
-          <p>Arena Ursynów · ul. Rotmistrza Witolda Pileckiego 122, Warszawa</p>
+          <p class="eyebrow">GraMuzyka</p>
+          <h3>UNDERTALE</h3>
+          <p>Arena Ursynów · ul. Rotmistrza Witolda Pileckiego 122</p>
           <dl>
             <div><dt>Data</dt><dd>14.11.2026</dd></div>
             <div><dt>Start</dt><dd>18:30</dd></div>
@@ -402,7 +343,7 @@
         </div>
         <div class="ticket__stub">
           <span>RZĄD</span><b>19</b><span>MIEJSCE</span><b>31</b>
-          <span class="ticket__heart">❤</span>
+          <span class="px-heart ticket__heart"></span>
         </div>
       </div>
     </section>
@@ -411,71 +352,67 @@
     <section class="section" id="powrot">
       <header class="section__head">
         <span class="section__num">06</span>
-        <h2 class="section__title reveal">Powrót nocą</h2>
-        <p class="section__lead reveal">Po koncercie nie ma już dziennych pociągów do Legnicy. Wracamy nocnym, a do domu dojeżdżamy przed świtem.</p>
+        <h2 class="section__title reveal">Powrót</h2>
       </header>
 
       <div class="leg reveal">
         <div class="leg__head">
-          <span class="leg__tag">Odcinek C</span>
-          <h3>Arena Ursynów → Warszawa Centralna</h3>
-          <span class="leg__time">~35 min</span>
+          <span class="leg__tag">C</span>
+          <h3>Arena → Centralna</h3>
+          <span class="leg__time">35 min</span>
         </div>
         <div class="leg__body">
           <div class="map glass">
             <iframe title="Mapa: Arena Ursynów do Warszawa Centralna" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
               src="https://maps.google.com/maps?saddr=Arena+Ursyn%C3%B3w,+Rotmistrza+Witolda+Pileckiego+122,+Warszawa&daddr=Warszawa+Centralna,+Aleje+Jerozolimskie+54,+Warszawa&dirflg=r&output=embed"></iframe>
+            <a class="map__open" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&destination=Warszawa+Centralna&travelmode=transit">Otwórz ↗</a>
           </div>
           <ol class="steps">
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Imielin, 10 min</b><p>Tą samą drogą, którą przyszliśmy. Po koncercie pójdzie tam cały tłum.</p></div></li>
-            <li class="step step--metro"><span class="step__icon">Ⓜ</span><div><b>Metro M1 w kierunku <u>Młociny</u>, 17 min</b><p>Imielin → <b>Centrum</b>. Wieczorem kursuje <b>co ok. 7–8 min</b>, po 22:50 co ~9 min, a w nocy z soboty na niedzielę metro jeździ do ok. 2:00.</p></div></li>
-            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo na Centralną, 5 min</b><p>Ze stacji Centrum przejściem podziemnym prosto na dworzec.</p></div></li>
+            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo do metra Imielin · 10 min</b></div></li>
+            <li class="step step--metro"><span class="step__icon">Ⓜ</span><div><b>M1 kierunek <u>Młociny</u> · 17 min</b><p>Imielin → Centrum · co 7–8 min</p></div></li>
+            <li class="step step--walk"><span class="step__icon">🚶</span><div><b>Pieszo na Centralną · 5 min</b></div></li>
           </ol>
-          <a class="btn magnetic" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Arena+Ursyn%C3%B3w+Rotmistrza+Witolda+Pileckiego+122+Warszawa&destination=Warszawa+Centralna&travelmode=transit">Otwórz trasę w Google Maps ↗</a>
         </div>
       </div>
 
-      <article class="glass card train__card reveal tilt">
-        <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 16170 „Karkonosze”</b> + <span class="badge badge--kd">KD</span> Koleje Dolnośląskie</div>
+      <article class="glass card train__card reveal">
+        <div class="train__brand"><span class="badge badge--ic">IC</span> <b>IC 16170 „Karkonosze”</b> + <span class="badge badge--kd">KD</span> <b>KD 69553</b></div>
         <div class="train__route train__route--3">
-          <div><time>23:39</time><b>Warszawa Centralna</b><small>peron IV</small></div>
+          <div><time>23:39</time><b>W-wa Centralna</b><small>peron IV</small></div>
           <div class="train__line"><span>4 h 36 min</span></div>
-          <div><time>04:15</time><b>Wrocław Główny</b><small>przesiadka 6 min</small></div>
+          <div><time>04:15</time><b>Wrocław Gł.</b><small>przesiadka 6 min</small></div>
           <div class="train__line"><span>55 min</span></div>
-          <div><time>05:16</time><b>Legnica</b><small>KD 69553, peron 4</small></div>
+          <div><time>05:16</time><b>Legnica</b><small>peron 4</small></div>
         </div>
         <dl class="facts">
-          <div><dt>Cena (łącznie, normalny)</dt><dd>98 zł</dd></div>
-          <div><dt>Przez</dt><dd>Łódź, Kalisz, Ostrów Wlkp.</dd></div>
+          <div><dt>Cena</dt><dd>98 zł</dd></div>
           <div><dt>Czas</dt><dd>5 h 37 min</dd></div>
         </dl>
         <div class="btns">
-          <a class="btn btn--primary magnetic" href="https://koleo.pl/rozklad-pkp/warszawa-centralna/legnica/14-11-2026_23:00/all/all" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
+          <a class="btn btn--primary" href="https://koleo.pl/connection/6714666485" target="_blank" rel="noopener">Otwórz w Koleo ↗</a>
+          <a class="btn" href="https://koleo.pl/rozklad-pkp/warszawa-centralna/legnica/14-11-2026_23:00/all/all" target="_blank" rel="noopener">Wszystkie połączenia</a>
         </div>
       </article>
 
       <details class="unwrap reveal">
-        <summary><span>A jeśli ucieknie przesiadka we Wrocławiu?</span><i></i></summary>
+        <summary><span>Ucieknie przesiadka we Wrocławiu?</span><i></i></summary>
         <div class="unwrap__body"><div>
-          <p>Przesiadka trwa tylko 6 minut, ale o 4 rano dworzec jest pusty, więc zwykle wystarcza. Jeśli nocny pociąg się spóźni:</p>
           <table class="tbl">
-            <thead><tr><th>Odjazd z Wrocławia</th><th>Pociąg</th><th>Legnica</th></tr></thead>
+            <thead><tr><th>Wrocław</th><th>Pociąg</th><th>Legnica</th></tr></thead>
             <tbody>
               <tr><td>04:42</td><td>IC 68102 „Swarożyc”</td><td>05:21</td></tr>
-              <tr><td>05:20</td><td>Koleje Dolnośląskie</td><td>06:03</td></tr>
+              <tr><td>05:20</td><td>KD</td><td>06:03</td></tr>
             </tbody>
           </table>
-          <p>Na odcinek Wrocław → Legnica możesz też kupić bilet osobno, już po dotarciu do Wrocławia.</p>
         </div></div>
       </details>
 
       <details class="unwrap reveal">
-        <summary><span>Dlaczego nocny pociąg, a nie nocleg?</span><i></i></summary>
+        <summary><span>Dlaczego nocny pociąg?</span><i></i></summary>
         <div class="unwrap__body"><div>
           <ul>
-            <li>Koncert kończy się ok. 21:00, a <b>ostatni sensowny dzienny pociąg do Legnicy odjeżdża przed koncertem</b>.</li>
-            <li>Hotel w Warszawie w sobotę to minimum 150–250 zł. Nocny pociąg za 98 zł załatwia i transport, i „nocleg”.</li>
-            <li>Między końcem koncertu a 23:39 są ponad 2 godziny zapasu: spokojny dojazd, kolacja przy dworcu (Złote Tarasy są obok) i zero stresu.</li>
+            <li>Po 21:00 nie ma dziennych pociągów do Legnicy.</li>
+            <li>Hotel: 150–250 zł. Pociąg: 98 zł.</li>
           </ul>
         </div></div>
       </details>
@@ -486,29 +423,27 @@
       <header class="section__head">
         <span class="section__num">07</span>
         <h2 class="section__title reveal">Checklista</h2>
-        <p class="section__lead reveal">Odhaczaj śmiało, bo zapamiętuje się w przeglądarce.</p>
       </header>
       <ul class="checklist glass reveal" id="checklist">
-        <li><label><input type="checkbox" data-key="ticket" /><span>Bilet na koncert (PDF / aplikacja)</span></label></li>
-        <li><label><input type="checkbox" data-key="train1" /><span>Bilet IC 6144 Legnica → Warszawa</span></label></li>
-        <li><label><input type="checkbox" data-key="train2" /><span>Bilet IC 16170 + KD Warszawa → Legnica</span></label></li>
-        <li><label><input type="checkbox" data-key="id" /><span>Dowód osobisty / legitymacja</span></label></li>
-        <li><label><input type="checkbox" data-key="ztm" /><span>Aplikacja z biletami ZTM (Jakdojade / mobilet)</span></label></li>
-        <li><label><input type="checkbox" data-key="power" /><span>Powerbank naładowany</span></label></li>
-        <li><label><input type="checkbox" data-key="umbrella" /><span>Parasolka, ciepła warstwa</span></label></li>
-        <li><label><input type="checkbox" data-key="snack" /><span>Woda i przekąska na pociąg</span></label></li>
-        <li><label><input type="checkbox" data-key="outfit" /><span>Akcent Undertale ❤</span></label></li>
+        <li><label><input type="checkbox" data-key="ticket" /><span>Bilet na koncert</span></label></li>
+        <li><label><input type="checkbox" data-key="train1" /><span>Bilet IC 8314 + IC 6126</span></label></li>
+        <li><label><input type="checkbox" data-key="train2" /><span>Bilet IC 16170 + KD</span></label></li>
+        <li><label><input type="checkbox" data-key="id" /><span>Dowód / legitymacja</span></label></li>
+        <li><label><input type="checkbox" data-key="ztm" /><span>Bilet ZTM 24h</span></label></li>
+        <li><label><input type="checkbox" data-key="power" /><span>Powerbank</span></label></li>
+        <li><label><input type="checkbox" data-key="umbrella" /><span>Czapka i rękawiczki</span></label></li>
+        <li><label><input type="checkbox" data-key="snack" /><span>Woda i przekąska</span></label></li>
       </ul>
       <div class="dialog dialog--end reveal" role="note">
-        <span class="dialog__heart" aria-hidden="true">❤</span>
-        <p class="dialog__text" data-type="* Wszystko gotowe. Pociąg, pierogi, metro, rząd 19. Napełnia cię to DETERMINACJĄ."></p>
+        <span class="px-heart dialog__heart" aria-hidden="true"></span>
+        <p class="dialog__text" data-type="* Wszystko gotowe. Rząd 19, miejsce 31."></p>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>Prywatny plan wyjazdu · nieoficjalna strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
-    <p>Rozkłady: Koleo / PKP Intercity, ZTM Warszawa (GTFS). Stan na listopad 2026, <b>sprawdź przed wyjazdem</b>.</p>
+    <p>Prywatny plan · strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
+    <p>Rozkłady: Koleo, ZTM. <b>Sprawdź przed wyjazdem.</b></p>
   </footer>
 
   <script type="module" src="/src/main.js"></script>
