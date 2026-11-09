@@ -94,14 +94,22 @@
       </header>
 
       <ol class="timeline">
-        <li class="timeline__item reveal"><time>10:24</time><a class="glass" href="#wyjazd"><h3>Legnica</h3><p><span class="badge badge--ic badge--sm">IC</span> 8314, peron III</p></a></li>
-        <li class="timeline__item reveal"><time>10:58</time><a class="glass" href="#wyjazd"><h3>Przesiadka we Wrocławiu</h3><p><span class="badge badge--ic badge--sm">IC</span> 6126 o 11:32, peron II</p></a></li>
+        <li class="timeline__item reveal"><time>10:24</time><a class="glass" href="#wyjazd"><h3>Legnica odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 8314, peron III</p></a></li>
+        <li class="timeline__range"><p class="timeline__label reveal">Przesiadka we Wrocławiu</p><ol>
+          <li class="timeline__item reveal"><time>10:58</time><a class="glass" href="#wyjazd"><h3>Wrocław Gł. przyjazd</h3><p>peron II</p></a></li>
+          <li class="timeline__item reveal"><time>11:32</time><a class="glass" href="#wyjazd"><h3>Wrocław Gł. odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 6126, peron II</p></a></li>
+        </ol></li>
         <li class="timeline__item reveal"><time>15:48</time><a class="glass" href="#wyjazd"><h3>Warszawa Centralna</h3></a></li>
         <li class="timeline__item reveal"><time>16:05</time><a class="glass" href="#jedzenie"><h3>Obiad · Bar Bambino</h3><p>ul. Hoża 19</p></a></li>
         <li class="timeline__item reveal"><time>17:15</time><a class="glass" href="#leg-arena"><h3>Metro M1 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> Imielin</h3><p>ze stacji Centrum</p></a></li>
         <li class="timeline__item reveal"><time>17:55</time><a class="glass" href="#leg-arena"><h3>Arena Ursynów</h3></a></li>
         <li class="timeline__item timeline__item--hot reveal"><time>18:30</time><a class="glass" href="#bilet"><h3>Koncert</h3><p>Rząd 19, miejsce 31</p></a></li>
-        <li class="timeline__item reveal"><time>23:39</time><a class="glass" href="#powrot"><h3>Pociąg powrotny</h3><p>Legnica 05:16</p></a></li>
+        <li class="timeline__range"><p class="timeline__label reveal">Pociąg powrotny</p><ol>
+          <li class="timeline__item reveal"><time>23:39</time><a class="glass" href="#powrot"><h3>Warszawa Centralna odjazd</h3><p><span class="badge badge--ic badge--sm">IC</span> 16170, peron IV</p></a></li>
+          <li class="timeline__item reveal"><time>04:15</time><a class="glass" href="#powrot"><h3>Wrocław Gł. przyjazd</h3></a></li>
+          <li class="timeline__item reveal"><time>04:21</time><a class="glass" href="#powrot"><h3>Wrocław Gł. odjazd</h3><p><span class="badge badge--kd badge--sm">KD</span> 69553, peron 5</p></a></li>
+          <li class="timeline__item reveal"><time>05:16</time><a class="glass" href="#powrot"><h3>Legnica</h3><p>peron 4</p></a></li>
+        </ol></li>
       </ol>
 
       <details class="unwrap reveal">
@@ -127,7 +135,7 @@
         <div class="train__route train__route--3">
           <div><time>10:24</time><b>Legnica</b><small>peron III</small></div>
           <div class="train__line"><span>34 min</span></div>
-          <div><time>10:58</time><b>Wrocław Gł.</b><small>przesiadka 34 min</small></div>
+          <div><time>10:58</time><b>Wrocław Gł.</b><small>peron II</small></div>
           <div class="train__line"><span>4 h 16 min</span></div>
           <div><time>15:48</time><b>W-wa Centralna</b><small>peron II</small></div>
         </div>
@@ -355,7 +363,7 @@
         <div class="train__route train__route--3">
           <div><time>23:39</time><b>W-wa Centralna</b><small>peron IV</small></div>
           <div class="train__line"><span>4 h 36 min</span></div>
-          <div><time>04:15</time><b>Wrocław Gł.</b><small>przesiadka 6 min</small></div>
+          <div><time>04:15</time><b>Wrocław Gł.</b><small>peron 5</small></div>
           <div class="train__line"><span>55 min</span></div>
           <div><time>05:16</time><b>Legnica</b><small>peron 4</small></div>
         </div>
@@ -377,8 +385,8 @@
       </header>
       <ul class="checklist glass reveal" id="checklist">
         <li><label><input type="checkbox" data-key="ticket" /><span>Bilet na koncert</span></label></li>
-        <li><label><input type="checkbox" data-key="train1" /><span>Bilet <span class="badge badge--ic badge--sm">IC</span> 8314 + <span class="badge badge--ic badge--sm">IC</span> 6126</span></label></li>
-        <li><label><input type="checkbox" data-key="train2" /><span>Bilet <span class="badge badge--ic badge--sm">IC</span> 16170 + <span class="badge badge--kd badge--sm">KD</span> 69553</span></label></li>
+        <li><label><input type="checkbox" data-key="train1" /><span>Bilet <span class="badge badge--ic badge--sm">IC</span> 8314 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> <span class="badge badge--ic badge--sm">IC</span> 6126</span></label></li>
+        <li><label><input type="checkbox" data-key="train2" /><span>Bilet <span class="badge badge--ic badge--sm">IC</span> 16170 <svg class="ic ic--arrow" aria-hidden="true"><use href="#i-arrow"/></svg> <span class="badge badge--kd badge--sm">KD</span> 69553</span></label></li>
         <li><label><input type="checkbox" data-key="id" /><span>Dowód / legitymacja</span></label></li>
         <li><label><input type="checkbox" data-key="ztm" /><span>Bilet ZTM 24h</span></label></li>
         <li><label><input type="checkbox" data-key="power" /><span>Powerbank</span></label></li>
@@ -393,9 +401,8 @@
   </main>
 
   <footer class="footer">
-    <p>Prywatny plan · strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
-    <p>Rozkłady: Koleo, ZTM. <b>Sprawdź przed wyjazdem.</b></p>
-    <p class="footer__author">Planista: <b>Mykyta Mykulskyi</b></p>
+    <p>Prywatny plan, strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
+    <p class="footer__author">Autor: <b>Mykyta Mykulskyi</b></p>
   </footer>
 
   <script type="module" src="/src/main.js"></script>
