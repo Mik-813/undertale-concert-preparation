@@ -143,7 +143,7 @@
           </div>
         </article>
 
-        <div class="stops glass reveal" id="stops">
+        <div class="stops glass tilt reveal" id="stops">
           <h3>Trasa</h3>
           <div class="stops__rail"><span class="stops__fill" id="stopsFill"></span><span class="stops__train" id="stopsTrain"><svg class="ic" aria-hidden="true"><use href="#i-train"/></svg></span></div>
           <ol>
@@ -387,29 +387,6 @@
           <a class="btn" href="https://koleo.pl/rozklad-pkp/warszawa-centralna/legnica/14-11-2026_23:00/all/all" target="_blank" rel="noopener">Wszystkie połączenia</a>
         </div>
       </article>
-
-      <details class="unwrap reveal">
-        <summary><span>Ucieknie przesiadka we Wrocławiu?</span><i></i></summary>
-        <div class="unwrap__body"><div>
-          <table class="tbl">
-            <thead><tr><th>Wrocław</th><th>Pociąg</th><th>Legnica</th></tr></thead>
-            <tbody>
-              <tr><td>04:42</td><td>IC 68102 „Swarożyc”</td><td>05:21</td></tr>
-              <tr><td>05:20</td><td>KD</td><td>06:03</td></tr>
-            </tbody>
-          </table>
-        </div></div>
-      </details>
-
-      <details class="unwrap reveal">
-        <summary><span>Dlaczego nocny pociąg?</span><i></i></summary>
-        <div class="unwrap__body"><div>
-          <ul>
-            <li>Po 21:00 nie ma dziennych pociągów do Legnicy.</li>
-            <li>Hotel: 150–250 zł. Pociąg: 98 zł.</li>
-          </ul>
-        </div></div>
-      </details>
     </section>
 
     <!-- CHECKLIST -->
@@ -427,9 +404,9 @@
         <li><label><input type="checkbox" data-key="umbrella" /><span>Czapka i rękawiczki</span></label></li>
         <li><label><input type="checkbox" data-key="snack" /><span>Woda i przekąska</span></label></li>
       </ul>
-      <div class="dialog dialog--end reveal" role="note">
+      <div class="dialog dialog--end" id="endDialog" role="status" aria-live="polite">
         <span class="px-heart dialog__heart" aria-hidden="true"></span>
-        <p class="dialog__text" data-type="* Wszystko gotowe. Rząd 19, miejsce 31."></p>
+        <p class="dialog__text" data-type="* Masz plan. Napełnia cię to DETERMINACJĄ."></p>
       </div>
     </section>
   </main>
@@ -437,7 +414,7 @@
   <footer class="footer">
     <p>Prywatny plan · strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.</p>
     <p>Rozkłady: Koleo, ZTM. <b>Sprawdź przed wyjazdem.</b></p>
-    <p class="footer__author">Przygotował <b>Mykyta Mykulskyi</b></p>
+    <p class="footer__author">Planista: <b>Mykyta Mykulskyi</b></p>
   </footer>
 
   <script type="module" src="/src/main.js"></script>
