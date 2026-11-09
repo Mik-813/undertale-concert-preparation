@@ -138,7 +138,6 @@ const navLinks = $$('.nav__links a');
 const sections = navLinks.map((a) => $(a.getAttribute('href')));
 const stops = $('#stops');
 const stopsFill = $('#stopsFill');
-const stopsTrain = $('#stopsTrain');
 const arcs = $('#arcs');
 let lastY = 0;
 let ticking = false;
@@ -165,7 +164,6 @@ function onFrame() {
     const start = innerHeight * 0.7, end = innerHeight * 0.45;
     const p = Math.min(1, Math.max(0, (start - r.top) / (r.height + start - end)));
     stopsFill.style.transform = `scaleY(${p})`;
-    stopsTrain.style.top = `${p * 100}%`;
   }
 
   if (!reduced) {
