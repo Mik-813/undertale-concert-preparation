@@ -153,7 +153,7 @@ const dojazd = () => section(S.dojazd, `
 /* ---------- wear + ticket ---------- */
 
 const ticket = () => `
-  <div class="ticket tilt reveal" id="bilet">
+  <div class="ticket tilt reveal">
     <div class="ticket__main">
       <p class="eyebrow">${event.org}</p>
       <h3>${event.name}</h3>
@@ -168,8 +168,9 @@ const ubior = () => section(S.ubior, `
     <div class="weather">${weather.map(([k, v, mod]) => `<div${mod ? ` class="weather__${mod}"` : ''}><span>${k}</span><b>${v}</b></div>`).join('')}</div>
     ${list(wear.map(([ic, t]) => `${icon(ic)} ${t}`), 'wear__list')}
     <p class="note">Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.</p>
-  </div>
-  ${ticket()}`);
+  </div>`);
+
+const bilet = () => section(S.bilet, ticket());
 
 /* ---------- return ---------- */
 
@@ -179,12 +180,11 @@ const powrot = () => section(S.powrot, `${leg(legs.back, 'C')}${trainCard(trains
 
 const checklist = [
   ['ticket', 'Bilet na koncert'],
+  ['id', 'Dowód / legitymacja'],
   ['train1', `Bilet ${chain(trains.out.legs)}`],
   ['train2', `Bilet ${chain(trains.back.legs)}`],
-  ['id', 'Dowód / legitymacja'],
-  ['ztm', 'Bilet ZTM 24h'],
   ['power', 'Powerbank'],
-  ['umbrella', 'Czapka i rękawiczki'],
+  ['umbrella', 'Ciepłe ubrania'],
   ['snack', 'Woda i przekąska'],
 ];
 
@@ -196,7 +196,7 @@ const checklista = () => section(S.checklista, `
 
 export const main = () => `
   <main id="top">
-    ${hero()}${marquee()}${plan()}${wyjazd()}${jedzenie()}${dojazd()}${ubior()}${powrot()}${checklista()}
+    ${hero()}${marquee()}${plan()}${wyjazd()}${jedzenie()}${dojazd()}${ubior()}${bilet()}${powrot()}${checklista()}
   </main>`;
 
 export const foot = () => `

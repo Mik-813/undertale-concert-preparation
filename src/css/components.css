@@ -44,8 +44,9 @@
   transition: background 0.3s, border-color 0.3s;
 }
 .btn:hover { background: rgba(255,255,255,0.12); border-color: rgb(var(--violet-3-rgb) / 0.4); }
-.btn--primary { background: linear-gradient(135deg, var(--violet), #5b21b6); border-color: transparent; box-shadow: 0 10px 30px -8px rgb(var(--violet-rgb) / 0.8); }
-.btn--primary:hover { background: linear-gradient(135deg, #8b5cf6, var(--violet)); }
+.btn--primary, .btn--primary:hover { position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(135deg, var(--violet), #5b21b6); border-color: transparent; box-shadow: 0 10px 30px -8px rgb(var(--violet-rgb) / 0.8); }
+.btn--primary::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, #8b5cf6, var(--violet)); opacity: 0; transition: opacity 0.3s var(--ease); }
+.btn--primary:hover::before { opacity: 1; }
 .note { font-size: 13.5px; color: var(--muted); margin: 18px 0 0; }
 
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0 0; }
