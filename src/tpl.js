@@ -20,7 +20,7 @@ export const train = (t, { sm = true, named = false } = {}) => {
   return `${badge(t.carrier, sm)} ${sm ? label : `<b>${label}</b>`}`;
 };
 export const chain = (legs, opts) => legs.map((l) => train(l, opts)).join(` ${arrow()} `);
-export const peron = (n) => `peron ${roman(n)}`;
+export const peron = (n, from) => `peron ${from ? `${roman(from)} ${arrow()} ` : ''}${roman(n)}`;
 
 export const extLink = (href, label, cls = '') => `<a${cls && ` class="${cls}"`} href="${href}" target="_blank" rel="noopener">${label}</a>`;
 export const btn = (href, label, primary = false) =>

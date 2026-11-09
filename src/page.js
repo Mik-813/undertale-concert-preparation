@@ -47,10 +47,9 @@ const tl = ({ times, href, title, lines = [], hot }) => {
 
 // A train becomes points (departure, arrival) and ranges (transfers: the window before the next train leaves).
 const ride = ({ stops, legs: ls }, href) => stops.map((st, i) => {
-  const name = st.full || st.name;
-  if (i === 0) return { times: [st.dep], href, title: `${name} odjazd`, lines: [`${train(ls[0])}, ${peron(st.platform)}`] };
-  if (i === stops.length - 1) return { times: [st.arr], href, title: `${name} przyjazd`, lines: [peron(st.platform)] };
-  return { times: [st.arr, st.dep], href, title: `Przesiadka ${st.loc}`, lines: [`${train(ls[i])}, ${peron(st.platform)}`] };
+  if (i === 0) return { times: [st.dep], href, title: `${st.name} odjazd`, lines: [`${train(ls[0])}, ${peron(st.platform)}`] };
+  if (i === stops.length - 1) return { times: [st.arr], href, title: `${st.name} przyjazd`, lines: [peron(st.platform)] };
+  return { times: [st.arr, st.dep], href, title: `Przesiadka ${st.loc}`, lines: [`${train(ls[i])}, ${peron(st.platform, st.arrPlatform)}`] };
 });
 
 const timeline = [
@@ -74,7 +73,7 @@ const plan = () => section(S.plan, `
 
 const trainCard = (t) => {
   const stops = t.stops.map((s, i) => {
-    const stop = `<div><time>${s.arr ?? s.dep}</time><b>${s.name}</b><small>${peron(s.platform)}</small></div>`;
+    const stop = `<div><time>${s.arr ?? s.dep}</time><b>${s.name}</b><small>${peron(s.platform, s.arrPlatform)}</small></div>`;
     if (!i) return stop;
     const prev = t.stops[i - 1];
     return `<div class="train__line"><span>${dur(span(prev.dep, s.arr))}</span></div>${stop}`;
@@ -147,7 +146,7 @@ const dojazd = () => section(S.dojazd, `
   ${leg(legs.meal, 'A')}
   ${leg(legs.arena, 'B')}
   ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')}`, `<b>${v}</b>`] : [k, v])))
-    + '<p>Weź 24h: kupiony ok. 16:00 starczy na powrót. Jakdojade, mobilet lub biletomat. Student −50%.</p>')}
+    + '<p>Weź 2× 75-min: tam i z powrotem. Jakdojade, mobilet lub biletomat. Student −50%.</p>')}
   ${unwrap('Dlaczego metro?', list(['Bez korków, co 5 min.', 'Taksówka: 40–60 zł. Metro: w cenie biletu.']))}`);
 
 /* ---------- wear + ticket ---------- */
@@ -174,7 +173,12 @@ const bilet = () => section(S.bilet, ticket());
 
 /* ---------- return ---------- */
 
-const powrot = () => section(S.powrot, `${leg(legs.back, 'C')}${trainCard(trains.back)}`);
+const powrot = () => section(S.powrot, `${leg(legs.back, 'C')}${trainCard(trains.back)}
+  ${unwrap('Po koncercie', list([
+    `Koniec ok. <b>20:30</b>, pociąg o <b>${trains.back.stops[0].dep}</b>.`,
+    `Kolacja: <b>${meal.alternatives[2].name}</b>, ${meal.alternatives[2].info[0]}, do 23:00.`,
+    'Hala Centralnej jest ogrzewana i otwarta całą noc.',
+  ]))}`);
 
 /* ---------- checklist ---------- */
 
@@ -184,6 +188,7 @@ const checklist = [
   ['train1', `Bilet ${chain(trains.out.legs)}`],
   ['train2', `Bilet ${chain(trains.back.legs)}`],
   ['power', 'Powerbank'],
+  ['charger', 'Ładowarka'],
   ['umbrella', 'Ciepłe ubrania'],
   ['snack', 'Woda i przekąska'],
 ];
