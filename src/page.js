@@ -7,8 +7,7 @@ import {
 
 const S = Object.fromEntries(sections.map((s) => [s.id, s]));
 const seat = (sep) => `Rząd ${event.row}${sep}${event.seat}`;
-const [outA, outB, outC] = trains.out.stops;
-const [backA, backB, backC] = trains.back.stops;
+const [outA, , outC] = trains.out.stops;
 
 /* ---------- nav / hero / marquee ---------- */
 
@@ -46,18 +45,21 @@ const tl = ({ times, href, title, lines = [], hot }) => {
   return `<li class="${cls}">${range ? `<span class="timeline__times">${t}</span>` : t}<a class="glass" href="#${href}"><h3>${title}</h3>${lines.map((l) => `<p>${l}</p>`).join('')}</a></li>`;
 };
 
+// A train becomes points (departure, arrival) and ranges (transfers: the window before the next train leaves).
+const ride = ({ stops, legs: ls }, href) => stops.map((st, i) => {
+  const name = st.full || st.name;
+  if (i === 0) return { times: [st.dep], href, title: `${name} odjazd`, lines: [`${train(ls[0])}, ${peron(st.platform)}`] };
+  if (i === stops.length - 1) return { times: [st.arr], href, title: `${name} przyjazd`, lines: [peron(st.platform)] };
+  return { times: [st.arr, st.dep], href, title: `Przesiadka ${st.loc}`, lines: [`${train(ls[i])}, ${peron(st.platform)}`] };
+});
+
 const timeline = [
-  { times: [outA.dep], href: 'wyjazd', title: `${outA.name} odjazd`, lines: [`${train(trains.out.legs[0])}, ${peron(outA.platform)}`] },
-  { times: [outB.arr, outB.dep], href: 'wyjazd', title: 'Przesiadka we Wrocławiu', lines: [`${train(trains.out.legs[1])}, ${peron(outB.platform)}`] },
-  { times: [outC.arr], href: 'wyjazd', title: places.centralna.name },
+  ...ride(trains.out, 'wyjazd'),
   { times: [schedule.meal], href: 'jedzenie', title: `Obiad · ${meal.place.name}`, lines: [meal.addr] },
   { times: [schedule.leave], href: legs.arena.id, title: `Metro M1 ${arrow()} Imielin`, lines: ['ze stacji Centrum'] },
   { times: [schedule.arena], href: legs.arena.id, title: places.arena.name },
   { times: [event.start], href: 'bilet', title: 'Koncert', lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true },
-  {
-    times: [backA.dep, backC.arr], href: 'powrot', title: 'Pociąg powrotny',
-    lines: [`${chain(trains.back.legs)}, ${peron(backA.platform)}`, `Przesiadka we Wrocławiu ${backB.arr}–${backB.dep}`],
-  },
+  ...ride(trains.back, 'powrot'),
 ];
 
 const plan = () => section(S.plan, `
@@ -188,7 +190,7 @@ const checklist = [
 
 const checklista = () => section(S.checklista, `
   <ul class="checklist glass reveal" id="checklist">${checklist.map(([k, t]) => `<li><label><input type="checkbox" data-key="${k}" /><span>${t}</span></label></li>`).join('')}</ul>
-  ${dialog(event.motto, { id: 'endDialog', cls: 'dialog--end', role: 'status' })}`);
+  ${dialog(event.done, { id: 'endDialog', cls: 'dialog--end', role: 'status' })}`);
 
 /* ---------- page ---------- */
 

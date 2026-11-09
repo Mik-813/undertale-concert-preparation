@@ -57,7 +57,7 @@ img, svg { display: block; max-width: 100%; }
 .nav__logo b { font-family: var(--f-display); letter-spacing: 0.08em; font-size: 22px; margin-left: 8px; font-weight: 400; }
 .nav__links { display: flex; gap: 22px; }
 .nav__links a { text-decoration: none; font-size: 14px; color: var(--muted); letter-spacing: 0.02em; position: relative; transition: color 0.3s; }
-.nav__links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: var(--blue); transform: scaleX(0); transition: transform 0.35s; transform-origin: left; }
+.nav__links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: var(--violet-2); transform: scaleX(0); transition: transform 0.35s; transform-origin: left; }
 .nav__links a:hover, .nav__links a.is-active { color: #fff; }
 .nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); }
 .nav__cta {

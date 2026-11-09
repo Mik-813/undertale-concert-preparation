@@ -15,6 +15,7 @@ export const event = {
   row: 19,
   seat: 31,
   motto: '* Masz plan. Napełnia cię to DETERMINACJĄ.',
+  done: '* Wszystko według planu. Napełnia cię to DETERMINACJĄ.',
 };
 
 export const sections = [
@@ -24,7 +25,7 @@ export const sections = [
   { id: 'dojazd', title: 'Dojazd', nav: 'Dojazd' },
   { id: 'ubior', title: 'Pogoda i ubiór', nav: 'Ubiór' },
   { id: 'powrot', title: 'Powrót', nav: 'Powrót' },
-  { id: 'checklista', title: 'Checklista' },
+  { id: 'checklista', title: 'Checklista', nav: 'Checklista' },
 ];
 
 export const places = {
@@ -45,8 +46,8 @@ export const trains = {
     ],
     stops: [
       { name: 'Legnica', dep: '10:24', platform: 3 },
-      { name: 'Wrocław Gł.', arr: '10:58', dep: '11:32', platform: 2 },
-      { name: 'W-wa Centralna', arr: '15:48', platform: 2 },
+      { name: 'Wrocław Gł.', loc: 'we Wrocławiu', arr: '10:58', dep: '11:32', platform: 2 },
+      { name: 'W-wa Centralna', full: places.centralna.name, arr: '15:48', platform: 2 },
     ],
   },
   back: {
@@ -58,8 +59,8 @@ export const trains = {
       { carrier: 'KD', no: '69553' },
     ],
     stops: [
-      { name: 'W-wa Centralna', dep: '23:39', platform: 4 },
-      { name: 'Wrocław Gł.', arr: '04:15', dep: '04:21', platform: 5 },
+      { name: 'W-wa Centralna', full: places.centralna.name, dep: '23:39', platform: 4 },
+      { name: 'Wrocław Gł.', loc: 'we Wrocławiu', arr: '04:15', dep: '04:21', platform: 5 },
       { name: 'Legnica', arr: '05:16', platform: 4 },
     ],
   },
