@@ -6,7 +6,7 @@ Landing page z planem wyjazdu **Legnica → Warszawa** na koncert *Undertale* (G
 
 ## Co jest w środku
 - Pociąg 10:24 IC 8314 „Matejko” → IC 6126 „Leśmian” (bezpośredni link do połączenia w Koleo), plan B
-- Obiad: Zapiecek (pierogi) + tańsze alternatywy
+- Obiad: Bar Mleczny Bambino (Hoża 19) + tańsze alternatywy
 - Trasy na Google Maps z dokładnym opisem transportu (tramwaj, metro M1)
 - Pogoda i ubiór, checklista (zapisywana w localStorage)
 - Powrót nocnym IC 16170 „Karkonosze”

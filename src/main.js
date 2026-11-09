@@ -131,13 +131,11 @@ function drawStars(y) {
   }
 }
 
-/* ---------- Scroll: progress, nav, active link, stops rail ---------- */
+/* ---------- Scroll: progress, nav, active link ---------- */
 const progress = $('#progress');
 const nav = $('#nav');
 const navLinks = $$('.nav__links a');
 const sections = navLinks.map((a) => $(a.getAttribute('href')));
-const stops = $('#stops');
-const stopsFill = $('#stopsFill');
 const arcs = $('#arcs');
 let lastY = 0;
 let ticking = false;
@@ -159,12 +157,6 @@ function onFrame() {
   });
   navLinks.forEach((l, i) => l.classList.toggle('is-active', i === active));
 
-  if (stops) {
-    const r = stops.getBoundingClientRect();
-    const start = innerHeight * 0.7, end = innerHeight * 0.45;
-    const p = Math.min(1, Math.max(0, (start - r.top) / (r.height + start - end)));
-    stopsFill.style.transform = `scaleY(${p})`;
-  }
 
   if (!reduced) {
     drawStars(y);
