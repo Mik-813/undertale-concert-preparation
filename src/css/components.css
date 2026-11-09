@@ -1,0 +1,53 @@
+/* ---------- Unwrap (details) ---------- */
+.unwrap { margin-top: 16px; border: 1px solid var(--stroke); border-radius: 18px; background: rgba(18, 10, 34, 0.6); overflow: hidden; transition: border-color 0.3s, background 0.3s; }
+.js .unwrap.is-in { transition: opacity 0.7s ease, transform 0.45s var(--ease), border-color 0.3s, background 0.3s, box-shadow 0.45s; }
+@media (hover: hover) and (pointer: fine) {
+  .js .unwrap.is-in:hover, .unwrap:hover { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-color: rgb(var(--violet-3-rgb) / 0.3); transform: translateY(-3px); box-shadow: 0 24px 50px -28px rgb(var(--violet-rgb) / 0.55); background-color: rgba(28, 16, 52, 0.62); }
+}
+.unwrap[open] { background: rgb(var(--violet-rgb) / 0.07); border-color: rgb(var(--violet-2-rgb) / 0.35); }
+.unwrap summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; font-weight: 500; }
+.unwrap summary::-webkit-details-marker { display: none; }
+.unwrap summary span { display: flex; align-items: center; }
+.unwrap summary span::before { content: ''; width: 14px; height: 14px; margin-right: 12px; flex: none; background: var(--px-heart) center / contain no-repeat; image-rendering: pixelated; transition: transform 0.3s; }
+.unwrap[open] summary span::before { transform: scale(1.25); }
+.unwrap summary i { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--stroke); position: relative; transition: transform 0.4s var(--ease), background 0.3s; }
+.unwrap summary i::before, .unwrap summary i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; margin: -1px 0 0 -6px; background: var(--violet-3); border-radius: 2px; }
+.unwrap summary i::after { transform: rotate(90deg); transition: transform 0.4s; }
+.unwrap[open] summary i { transform: rotate(180deg); background: var(--violet); }
+.unwrap[open] summary i::after { transform: rotate(0deg); }
+.unwrap__body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease); }
+.unwrap__body > div { overflow: hidden; padding: 0 22px; color: #d8d1ea; transition: padding 0.5s; }
+.unwrap.is-open .unwrap__body { grid-template-rows: 1fr; }
+.unwrap.is-open .unwrap__body > div { padding-bottom: 20px; }
+.unwrap ul { padding-left: 20px; margin: 0 0 10px; }
+.unwrap li { margin-bottom: 6px; }
+.unwrap li::marker { color: var(--violet-2); }
+.unwrap p { margin: 0 0 12px; }
+
+/* ---------- Tables, chips, buttons ---------- */
+.tbl { width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 14px; }
+.tbl th, .tbl td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--stroke); vertical-align: top; }
+.tbl th { font-weight: 400; }
+.tbl td:first-child { font-family: var(--f-mono); color: var(--violet-3); white-space: nowrap; }
+@media (max-width: 600px) { .tbl { display: block; overflow-x: auto; } }
+
+.chip { display: inline-block; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; background: var(--violet); color: #fff; }
+.badge { display: inline-grid; place-items: center; min-width: 34px; height: 24px; padding: 0 6px; border-radius: 6px; font-family: var(--f-mono); font-size: 12px; font-weight: 600; color: #fff; }
+.badge--ic { background: linear-gradient(135deg, #f97316, #dc2626); }
+.badge--kd { background: linear-gradient(135deg, #22c55e, #15803d); }
+
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; cursor: pointer;
+  padding: 12px 20px; border-radius: 999px; font: 500 15px var(--f-body); color: #fff;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--stroke);
+  transition: background 0.3s, border-color 0.3s;
+}
+.btn:hover { background: rgba(255,255,255,0.12); border-color: rgb(var(--violet-3-rgb) / 0.4); }
+.btn--primary { background: linear-gradient(135deg, var(--violet), #5b21b6); border-color: transparent; box-shadow: 0 10px 30px -8px rgb(var(--violet-rgb) / 0.8); }
+.btn--primary:hover { background: linear-gradient(135deg, #8b5cf6, var(--violet)); }
+.note { font-size: 13.5px; color: var(--muted); margin: 18px 0 0; }
+
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0 0; }
+.facts div { padding: 12px 14px; border-radius: 14px; background: rgba(0,0,0,0.25); border: 1px solid var(--stroke); }
+.facts dd { margin: 2px 0 0; font-weight: 600; font-size: 17px; }

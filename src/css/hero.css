@@ -1,0 +1,41 @@
+/* ---------- Hero ---------- */
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 20px 80px; position: relative; }
+.hero__title { font-family: var(--f-display); font-weight: 400; margin: 0; line-height: 0.85; font-size: clamp(72px, 17vw, 240px); letter-spacing: 0.01em; }
+.hero__title .line { display: block; overflow: hidden; padding: 0.14em 0.04em 0; margin-top: -0.14em; }
+.hero__title .split { display: inline-block; }
+.hero__title .accent {
+  background: linear-gradient(90deg, var(--violet-3), var(--violet) 45%, var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero__sub { font-size: clamp(17px, 2vw, 21px); color: var(--muted); max-width: 640px; margin: 28px auto 36px; }
+
+.countdown { display: grid; grid-template-columns: repeat(4, 92px); gap: 12px; justify-content: center; }
+@media (max-width: 480px) { .countdown { grid-template-columns: repeat(2, minmax(0, 132px)); } }
+.countdown div { min-width: 0; padding: 14px 10px 10px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--stroke); }
+.countdown b { display: block; font-family: var(--f-display); font-weight: 400; font-size: 52px; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.dialog {
+  display: flex; gap: 16px; align-items: flex-start; text-align: left;
+  width: min(640px, 100%); margin: 48px auto 0; padding: 20px 24px;
+  background: #000; border: 4px solid #fff; border-radius: 4px;
+  font-family: var(--f-mono); font-size: 16px; line-height: 1.6;
+  box-shadow: 0 0 0 4px #000, 0 20px 60px rgb(var(--violet-rgb) / 0.35);
+}
+.px-heart { display: inline-block; width: 16px; height: 16px; flex: none; background: var(--px-heart) center / contain no-repeat; image-rendering: pixelated; }
+.nav__logo .px-heart { width: 16px; height: 16px; }
+.dialog__heart { width: 22px; height: 22px; margin-top: 3px; animation: beat 1.4s steps(2, end) infinite; }
+.dialog__text { margin: 0; min-height: 3.2em; }
+.dialog__text::after { content: '▌'; animation: blink 1s steps(1) infinite; color: var(--yellow); margin-left: 2px; }
+.dialog--end { margin-top: 40px; opacity: 0; transform: translateY(16px) scale(0.96); visibility: hidden; transition: opacity 0.5s ease, transform 0.6s var(--ease), visibility 0s 0.6s; }
+.dialog--end.is-shown { opacity: 1; transform: none; visibility: visible; transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.3,1.4,.5,1), visibility 0s; }
+@keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.25); } 30% { transform: scale(1); } 45% { transform: scale(1.15); } }
+@keyframes blink { 50% { opacity: 0; } }
+
+.scroll-hint { position: absolute; bottom: 28px; left: 50%; width: 26px; height: 42px; margin-left: -13px; border: 2px solid var(--stroke); border-radius: 20px; }
+.scroll-hint span { position: absolute; top: 8px; left: 50%; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--violet-2); animation: wheel 1.8s infinite; }
+@keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
+
+/* ---------- Marquee ---------- */
+.marquee { overflow: hidden; border-block: 1px solid var(--stroke); background: rgb(var(--violet-rgb) / 0.08); padding: 18px 0; transform: rotate(-2deg) scale(1.05); margin: 40px 0; }
+.marquee__track { will-change: transform; display: flex; gap: 32px; width: max-content; animation: marquee 40s linear infinite; font-family: var(--f-display); font-size: 34px; letter-spacing: 0.06em; white-space: nowrap; align-items: center; }
+.marquee__track i.px-heart { width: 18px; height: 18px; }
+@keyframes marquee { to { transform: translateX(-50%); } }

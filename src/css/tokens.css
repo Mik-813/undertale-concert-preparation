@@ -1,0 +1,31 @@
+:root {
+  --bg-0: #07040d;
+  --bg-1: #120a22;
+  --bg-2: #1d0f38;
+  --violet-rgb: 124 58 237;
+  --violet-2-rgb: 167 139 250;
+  --violet-3-rgb: 196 181 253;
+  --violet: rgb(var(--violet-rgb));
+  --violet-2: rgb(var(--violet-2-rgb));
+  --violet-3: rgb(var(--violet-3-rgb));
+  --blue: #3b82f6;
+  --red: #ff2d55;
+  --yellow: #facc15;
+  --green: #4ade80;
+  --soul-red: #ff0000;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.3, 1.6, .5, 1);
+  --mx: 50vw;
+  --my: 30vh;
+  --text: #ece7f7;
+  --muted: #a69cbf;
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-strong: rgba(255, 255, 255, 0.08);
+  --stroke: rgb(var(--violet-3-rgb) / 0.14);
+  --radius: 22px;
+  --f-display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+  --f-body: 'Work Sans', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --px-heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill='%23ff0000' d='M2 0h2v1h-2zM12 0h2v1h-2zM1 1h5v1h-5zM10 1h5v1h-5zM0 2h7v2h-7zM9 2h7v2h-7zM0 4h16v6h-16zM2 10h12v2h-12zM4 12h8v2h-8zM6 14h4v2h-4z'/%3E%3C/svg%3E");
+  --px-heart-white: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill='%23ffffff' d='M2 0h2v1h-2zM12 0h2v1h-2zM1 1h5v1h-5zM10 1h5v1h-5zM0 2h7v2h-7zM9 2h7v2h-7zM0 4h16v6h-16zM2 10h12v2h-12zM4 12h8v2h-8zM6 14h4v2h-4z'/%3E%3C/svg%3E");
+}
