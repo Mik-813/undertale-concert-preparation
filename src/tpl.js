@@ -63,8 +63,8 @@ export const table = (head, rows) =>
 export const unwrap = (title, body) =>
   `<details class="unwrap reveal"><summary><span>${title}</span><i></i></summary><div class="unwrap__body"><div>${body}</div></div></details>`;
 
-export const section = ({ id, title, num }, body) =>
-  `<section class="section" id="${id}"><header class="section__head">${num ? `<p class="section__num reveal" aria-hidden="true">${num}</p>` : ''}<h2 class="section__title reveal">${title}</h2></header>${body}</section>`;
+export const section = ({ id, title }, body) =>
+  `<section class="section" id="${id}"><header class="section__head"><h2 class="section__title reveal">${title}</h2></header>${body}</section>`;
 
 export const dialog = (text, { id, mod = '', role = 'note' } = {}) =>
   `<div${cls('dialog', mod)}${attr('id', id)} role="${role}"${role === 'status' ? ' aria-live="polite"' : ''}>${heart('dialog__heart')}<p class="dialog__text" data-type="${text}"></p></div>`;

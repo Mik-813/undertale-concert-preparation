@@ -167,14 +167,6 @@ svg {
   transition: transform 0.35s;
   transform-origin: left;
 }
-.nav__links i {
-  font-style: normal;
-  font-family: var(--f-mono);
-  font-size: 10px;
-  margin-right: 5px;
-  color: var(--violet-2);
-  opacity: 0.55;
-}
 .nav__links a:hover,
 .nav__links a.is-active {
   color: #fff;
@@ -215,14 +207,6 @@ main {
 .section__head {
   position: relative;
   margin-bottom: 48px;
-}
-.section__num {
-  margin: 0 0 6px;
-  font-family: var(--f-mono);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  color: var(--violet-2);
 }
 .section__title {
   width: fit-content;

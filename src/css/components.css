@@ -196,7 +196,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  padding: 1px 0.6em 1px 1px;
+  padding: 1px 0.4em 1px 1px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.06);
@@ -206,7 +206,7 @@
 }
 .train-id--sm {
   gap: 0.4em;
-  padding-right: 0.5em;
+  padding-right: 0.35em;
   border-radius: calc(0.252em + 1px);
   vertical-align: -0.3em;
 }

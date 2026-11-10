@@ -77,6 +77,7 @@ export const trains = {
 export const schedule = { off: '15:50', leave: '17:15' };
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
+const M1_TAIL = ['Natolin', 'Kabaty']; // past the exit, up to the terminal
 const M1_MIN = 17; // Centrum to Imielin
 const arenaWalk = { dist: '1 km', min: 13 }; // Metro Imielin <-> Arena, both ways
 const walk = (from, to, rest) => ({ type: 'walk', from, to, ...rest });
@@ -115,7 +116,7 @@ export const route = (r) => {
       id: `leg-arena-${r.key}`, from: r.place, to: places.arena, at: schedule.leave,
       parts: [
         walk(r.place, r.metro.station, { min: r.metro.min, dist: r.metro.dist }),
-        metro(r.metro.station, places.mImielin, { dir: 'Kabaty', min: metroMin, every: '5', stations }),
+        metro(r.metro.station, places.mImielin, { dir: 'Kabaty', min: metroMin, every: '5', stations, beyond: M1_TAIL }),
         walk(places.mImielin, places.arena, arenaWalk),
       ],
     },

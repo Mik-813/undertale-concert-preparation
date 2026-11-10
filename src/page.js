@@ -1,12 +1,11 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
 import { event, sections, places, trains, restaurants, route, back, ztm, weather, wear, footer, copy, checklist } from './data.js';
 import {
-  join, sum, each, roman, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
+  join, sum, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
   dl, facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
-const secs = sections.map((s, i) => ({ ...s, num: roman(i + 1) }));
-const S = Object.fromEntries(secs.map((s) => [s.id, s]));
+const S = Object.fromEntries(sections.map((s) => [s.id, s]));
 const seat = (sep) => `Rząd ${event.row}${sep}${event.seat}`;
 const date = event.iso.slice(0, 10);
 const routes = Object.fromEntries(restaurants.map((r) => [r.key, route(r)]));
@@ -27,7 +26,7 @@ const perR = (fn, tag = 'div', cls = '') =>
 export const nav = () => `
   <header class="nav is-hidden" id="nav">
     <a href="#top" class="nav__logo" aria-label="Na górę">${heart()}<b>Undertale</b></a>
-    <nav class="nav__links" aria-label="Sekcje">${each(secs, (s) => `<a href="#${s.id}"><i>${s.num}</i>${s.nav}</a>`)}</nav>
+    <nav class="nav__links" aria-label="Sekcje">${each(sections, (s) => `<a href="#${s.id}">${s.nav}</a>`)}</nav>
     <a class="nav__cta" href="#bilet">${seat(' · ')}</a>
   </header>`;
 
@@ -51,9 +50,9 @@ const marquee = () => {
 // Naming rule for every plan point: eyebrow = the action (one fixed word), title = the place, lines = structured data.
 const ACT = { dep: 'Odjazd', arr: 'Przyjazd', change: 'Przesiadka', meal: 'Obiad', metro: 'Metro', enter: 'Wejście', show: 'Koncert' };
 
-// Chip with the target section's numeral; the label slides out on hover/focus.
-const chip = ({ num, nav: label }) =>
-  `<span class="chip" aria-hidden="true"><b>${num}</b><span class="chip__more"><span>${label} ${arrow()}</span></span></span>`;
+// Chip with the target section's name; the arrow slides out on hover/focus.
+const chip = ({ nav: label }) =>
+  `<span class="chip" aria-hidden="true">${label}<span class="chip__more"><span>${arrow()}</span></span></span>`;
 
 // A plan point is an instant (one time) or a range (two times: a transfer window). `sec` owns it; `href` defaults to it.
 const planBody = ({ times, act, place, lines = [], sec, href = sec, hot }) => {
@@ -70,7 +69,7 @@ const planItem = (p) => `<li class="${ITEM}">${planBody(p)}</li>`;
 const STOP = {
   dep: (st, leg) => ({ times: [st.dep], lines: [train(leg), peron(st.platform)] }),
   change: (st, leg) => ({ times: [st.arr, st.dep], lines: [train(leg), peron(st.platform, st.arrPlatform)] }),
-  arr: (st) => ({ times: [st.arr], lines: [peron(st.platform)] }),
+  arr: (st) => ({ times: [st.arr] }),
 };
 const trainPoints = ({ stops, legs }, sec) => stops.map((st, i) => {
   const act = i === 0 ? 'dep' : i === stops.length - 1 ? 'arr' : 'change';
@@ -82,31 +81,21 @@ const cityPoints = (r, { meal, arena }) => {
   const m1 = arena.parts.find((p) => p.type === 'metro');
   return [
     { times: [clock(meal.at, meal.parts).at(-1)], act: 'meal', sec: 'jedzenie', place: r.place.name, lines: [`ul. ${r.street}`] },
-    { times: [metro], act: 'metro', sec: 'dojazd', href: arena.id, place: m1.from.name, lines: [`${m1.line} ${arrow()} ${m1.dir}`] },
+    { times: [metro], act: 'metro', sec: 'dojazd', href: arena.id, place: m1.from.name, lines: [`${m1.line} kierunek ${m1.dir}`] },
     { times: [arrive], act: 'enter', sec: 'dojazd', href: arena.id, place: places.arena.name },
   ];
 };
 
 // Restaurant-dependent points: one <li>, one variant per restaurant inside (see perR).
-const cityItems = [0, 1, 2].map((i) => ({ sec: cityPoints(first, routes[first.key])[i].sec, html: perR((r, rt) => planBody(cityPoints(r, rt)[i]), 'li', ITEM) }));
+const cityItems = [0, 1, 2].map((i) => perR((r, rt) => planBody(cityPoints(r, rt)[i]), 'li', ITEM));
 const concert = { times: [event.start], act: 'show', sec: 'bilet', place: event.venue, lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true };
-const pointItem = (p) => ({ sec: p.sec, html: planItem(p) });
 
-// Consecutive points of one section form a group: a tinted rail band with the section numeral at its start.
-const groups = (items) => items.reduce((gs, it) => {
-  const g = gs.at(-1);
-  if (g?.sec === it.sec) g.items.push(it.html); else gs.push({ sec: it.sec, items: [it.html] });
-  return gs;
-}, []);
-const group = ({ sec, items }) =>
-  `<li class="timeline__group"><span class="timeline__tag" aria-hidden="true">${S[sec].num}</span><ol>${items.join('')}</ol></li>`;
-
-const timeline = () => each(groups([
-  ...trainPoints(trains.out, 'wyjazd').map(pointItem),
+const timeline = () => [
+  ...trainPoints(trains.out, 'wyjazd').map(planItem),
   ...cityItems,
-  pointItem(concert),
-  ...trainPoints(trains.back, 'powrot').map(pointItem),
-]), group);
+  planItem(concert),
+  ...trainPoints(trains.back, 'powrot').map(planItem),
+].join('');
 
 const plan = () => section(S.plan, `
   <ol class="timeline">${timeline()}</ol>
@@ -187,7 +176,8 @@ const PART = {
     map: () => '',
     info: (p) => {
       const last = p.stations.length - 1;
-      const stops = each(p.stations, (n, i) => `<li${i === 0 || i === last ? ' class="on"' : ''}>${n}</li>`);
+      const stops = each(p.stations, (n, i) => `<li${i === 0 || i === last ? ' class="on"' : ''}>${n}</li>`)
+        + each(p.beyond ?? [], (n) => `<li class="off">${n}</li>`);
       return `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${last} przyst.`])}</p>
        <ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>`;
     },
