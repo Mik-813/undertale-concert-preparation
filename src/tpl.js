@@ -3,7 +3,7 @@
 export const join = (parts, sep = ' · ') => parts.filter(Boolean).join(sep);
 export const sum = (xs) => xs.reduce((a, b) => a + b, 0);
 const attr = (name, v) => (v || v === 0 ? ` ${name}="${v}"` : '');
-const cls = (...names) => attr('class', join(names, ' '));
+export const cls = (...names) => attr('class', join(names, ' '));
 export const each = (xs, fn) => xs.map(fn).join('');
 
 /* ---------- numbers & time ---------- */

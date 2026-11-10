@@ -60,6 +60,21 @@ for (const device of ['desktop', 'phone']) {
     els.map((e) => { const r = (e.querySelector('time') ?? e).getBoundingClientRect(); return r.top + r.height / 2; }));
   if (!touch) ok('train row aligned', Math.max(...ys) - Math.min(...ys) < 2, ys.map(Math.round).join(','));
 
+  // Metro stops: tap height, a tap opens photos that load, one station open at a time.
+  const stop = p.locator('.metro-line:visible .stop').first();
+  await stop.scrollIntoViewIfNeeded();
+  ok('stop tap height', (await stop.boundingBox()).height >= 36);
+  touch ? await stop.tap() : await stop.click();
+  await p.waitForTimeout(500);
+  const img = stop.locator('xpath=..').locator('img').first();
+  await img.evaluate((i) => i.complete || new Promise((r) => { i.onload = i.onerror = r; }));
+  ok('stop photo', (await img.isVisible()) && (await img.evaluate((i) => i.naturalWidth)) > 0);
+  if (shots) await stop.locator('xpath=ancestor::li[contains(@class,"part")]').screenshot({ path: `${shots}/${device}-metro.png` });
+  const next = p.locator('.metro-line:visible .stop').nth(1);
+  touch ? await next.tap() : await next.click();
+  await p.waitForTimeout(500);
+  ok('one stop open', (await p.$$eval('.metro-line li.is-open', (e) => e.length)) === 1);
+
   // Checklist: all checked shows the end dialog, unchecking hides it, state persists.
   const boxes = p.locator('.checklist input');
   const n = await boxes.count();

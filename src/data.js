@@ -80,6 +80,24 @@ const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierz
 // Stations past the exit, up to the terminal of each direction.
 const M1_SOUTH = ['Natolin', 'Kabaty'];
 const M1_NORTH = ['Świętokrzyska', 'Ratusz Arsenał', 'Dworzec Gdański', 'Plac Wilsona', 'Marymont', 'Słodowiec', 'Stare Bielany', 'Wawrzyszew', 'Młociny'];
+// Station photos, Wikimedia Commons. Boarding and exit stations also show the entrance.
+const photo = (label, file, by, lic) => ({ label, file, by, lic });
+export const stationPhotos = {
+  'Centrum': [photo('Wejście', 'Patelnia Stacja metra Centrum 2019b.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl'), photo('Peron', 'Stacja metra Centrum w Warszawie.JPG', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Politechnika': [photo('Wejście', '2026 Warszawa Metro Politechnika, wejście, 1.jpg', 'Cybularny', 'CC0'), photo('Peron', 'Metro-Politechnika-2020-AB.jpg', 'Andrzej Barabasz', 'CC BY-SA 4.0')],
+  'Pole Mokotowskie': [photo('Peron', 'Warsaw 07-13 img12 Pole Mokotowskie metro.jpg', 'A.Savin', 'CC BY-SA 3.0')],
+  'Racławicka': [photo('Peron', 'Stacja metra Racławicka 2015 01.JPG', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Wierzbno': [photo('Peron', 'Stacja linii metra M1 Wierzbno.jpg', 'Matel4472', 'CC BY-SA 4.0')],
+  'Wilanowska': [photo('Peron', 'Wilanowska warsaw metro1.JPG', 'Adamon', 'CC BY 2.5')],
+  'Służew': [photo('Peron', 'Stacja metra Służew 2020.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Ursynów': [photo('Peron', 'Stacja metra Ursynów 2020.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Stokłosy': [photo('Peron', 'Stacja metra Stokłosy 2015.JPG', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Imielin': [photo('Wejście', 'Wejście do metra Imielin i Urząd Dzielnicy Ursynów w Warszawie, 2025.jpg', 'SagbataMaesho', 'CC BY-SA 4.0'), photo('Peron', 'Stacja metra Imielin 01.JPG', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Natolin': [photo('Peron', 'Stacja metra Natolin 2020.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Kabaty': [photo('Peron', 'Stacja metra Kabaty 2020.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Świętokrzyska': [photo('Peron', 'Stacja metra Świętokrzyska 2022.jpg', 'Adrian Grycuk', 'CC BY-SA 3.0 pl')],
+  'Młociny': [photo('Peron', 'A23 Warsaw Metro.jpg', 'Patryk Korzeniecki', 'CC BY-SA 3.0')],
+};
 const M1_MIN = 17; // Centrum to Imielin
 const arenaWalk = { dist: '1 km', min: 13 }; // Metro Imielin <-> Arena, both ways
 const walk = (from, to, rest) => ({ type: 'walk', from, to, ...rest });
@@ -166,7 +184,13 @@ export const copy = {
     `Przyjazd do Warszawy: <b>${outC.arr}</b>.`,
   ],
   planB: `Obiad skrócony: <b>${lunch.short}</b> zamiast ${lunch.full}.`,
-  ztm: '2× 75-min: tam i z powrotem. Jakdojade, mobilet, biletomat. Student −50%.',
+  ztm: [
+    ['Potrzebne', '2× 75-min', 'strefa 1, tam i z powrotem'],
+    ['Zakup', 'Biletomat', 'przy wejściu do metra, gotówka lub karta'],
+    ['Kasowanie', 'Bramka', 'przed peronem'],
+    ['Aplikacje', 'mobiWAWA, Jakdojade', 'aktywacja w aplikacji'],
+    ['Ulga', '−50%', 'legitymacja studencka'],
+  ],
   weather: 'Prognoza Open-Meteo, Ursynów.',
   after: [
     `Koniec: <b>20:30</b>.`,

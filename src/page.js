@@ -1,7 +1,7 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
-import { event, sections, places, trains, restaurants, route, back, ztm, weather, wear, footer, copy, checklist } from './data.js';
+import { event, sections, places, trains, restaurants, route, back, ztm, stationPhotos, weather, wear, footer, copy, checklist } from './data.js';
 import {
-  join, sum, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
+  cls, join, sum, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
   dl, facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
@@ -164,6 +164,20 @@ const map = (p, at) => {
       </div>`;
 };
 
+// A metro stop: the name opens its photos (Wikimedia Commons).
+const commons = (f) => `https://commons.wikimedia.org/wiki/${f}`;
+const shot = (n, { label, file, by, lic }) => `
+  <figure>
+    <a href="${commons(`File:${encodeURIComponent(file)}`)}" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="${commons(`Special:FilePath/${encodeURIComponent(file)}?width=480`)}" alt="${n}: ${label.toLowerCase()}"></a>
+    <figcaption><b>${label}</b><small>${join([by, lic])}</small></figcaption>
+  </figure>`;
+const stop = (n, c) => {
+  const photos = stationPhotos[n];
+  if (!photos) return `<li${cls(c)}>${n}</li>`;
+  return `<li${cls(c)}><button class="stop" type="button" aria-expanded="false">${n}</button>
+    <div class="stop__photos"><div>${each(photos, (ph) => shot(n, ph))}</div></div></li>`;
+};
+
 // Part strategy: how each kind of part is drawn.
 // Long tails collapse to: next station, gap, terminal.
 const tail = (l) => (l.length > 2 ? [l[0], null, l.at(-1)] : l);
@@ -178,8 +192,8 @@ const PART = {
     map: () => '',
     info: (p) => {
       const last = p.stations.length - 1;
-      const stops = each(p.stations, (n, i) => `<li${i === 0 || i === last ? ' class="on"' : ''}>${n}</li>`)
-        + each(tail(p.beyond ?? []), (n) => (n ? `<li class="off">${n}</li>` : '<li class="off gap" aria-hidden="true"></li>'));
+      const stops = each(p.stations, (n, i) => stop(n, i === 0 || i === last ? 'on' : ''))
+        + each(tail(p.beyond ?? []), (n) => (n ? stop(n, 'off') : '<li class="off gap" aria-hidden="true"></li>'));
       return `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${last} przyst.`])}</p>
        <ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>`;
     },
@@ -207,7 +221,7 @@ const ztmRow = ([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')
 
 const dojazd = () => section(S.dojazd, `
   ${perR((r, rt) => `<div>${leg(rt.meal)}${leg(rt.arena)}</div>`)}
-  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + ps([copy.ztm]))}`);
+  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + facts(copy.ztm.map(([k, v, note]) => [k, sub(v, note)])))}`);
 
 /* ---------- wear / ticket / return ---------- */
 
