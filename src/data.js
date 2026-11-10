@@ -20,11 +20,10 @@ export const event = {
 
 export const sections = [
   { id: 'plan', title: 'Plan', nav: 'Plan' },
+  { id: 'ubior', title: 'Pogoda i ubiór', nav: 'Ubiór' },
   { id: 'wyjazd', title: 'Wyjazd', nav: 'Wyjazd' },
   { id: 'jedzenie', title: 'Obiad', nav: 'Obiad' },
-  { id: 'dojazd', title: 'Dojazd', nav: 'Dojazd' },
-  { id: 'ubior', title: 'Pogoda i ubiór', nav: 'Ubiór' },
-  { id: 'bilet', title: 'Bilet', nav: 'Bilet' },
+  { id: 'koncert', title: 'Koncert', nav: 'Koncert' },
   { id: 'powrot', title: 'Powrót', nav: 'Powrót' },
   { id: 'checklista', title: 'Checklista', nav: 'Checklista' },
 ];

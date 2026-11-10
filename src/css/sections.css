@@ -225,6 +225,61 @@
   }
 }
 
+/* ---------- Dress ---------- */
+.weather {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.weather div {
+  padding: 14px 10px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--stroke);
+  text-align: center;
+}
+.weather span {
+  display: block;
+}
+.weather b {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1.05;
+  color: var(--violet-3);
+}
+.weather__dry b {
+  color: var(--green);
+}
+@media (max-width: 600px) {
+  .weather {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.wear__list {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 18px;
+}
+.wear__list .ic {
+  width: 20px;
+  height: 20px;
+  color: var(--violet-2);
+}
+.wear__list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--stroke);
+}
+
 /* ---------- Train ---------- */
 .train__card {
   padding: 32px;
@@ -446,6 +501,10 @@
 .leg {
   margin-bottom: 28px;
   scroll-margin-top: 100px;
+}
+/* Obiad: the walk from the station follows the restaurant card. */
+.swap + .swap > .leg {
+  margin-top: 48px;
 }
 .leg__head {
   display: flex;
@@ -721,61 +780,6 @@
   display: block;
   font-size: 10px;
   color: var(--muted);
-}
-
-/* ---------- Dress ---------- */
-.weather {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-}
-.weather div {
-  padding: 14px 10px;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid var(--stroke);
-  text-align: center;
-}
-.weather span {
-  display: block;
-}
-.weather b {
-  display: block;
-  font-family: var(--f-display);
-  font-weight: 400;
-  font-size: 44px;
-  line-height: 1.05;
-  color: var(--violet-3);
-}
-.weather__dry b {
-  color: var(--green);
-}
-@media (max-width: 600px) {
-  .weather {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-.wear__list {
-  list-style: none;
-  margin: 24px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-  font-size: 18px;
-}
-.wear__list .ic {
-  width: 20px;
-  height: 20px;
-  color: var(--violet-2);
-}
-.wear__list li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid var(--stroke);
 }
 
 /* ---------- Ticket ---------- */

@@ -91,7 +91,7 @@ for (const device of ['desktop', 'phone']) {
 
   // Pointer effects.
   if (!touch) {
-    const t = p.locator('#bilet .ticket');
+    const t = p.locator('#koncert .ticket');
     await t.scrollIntoViewIfNeeded();
     await p.waitForTimeout(800);
     const bb = await t.boundingBox();

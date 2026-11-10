@@ -1,6 +1,6 @@
 ---
 name: undertale-site
-description: "Working on the undertale-concert-preparation landing page (Vite, vanilla JS/CSS, GitHub Pages). Use for any change to this repo's content, plan, trains, restaurants, routes, checklist, styles or effects, and for verifying and deploying it. Triggers: undertale site, concert plan page, plan/wyjazd/obiad/dojazd/powrót/checklista section, mik-813.github.io/undertale-concert-preparation."
+description: "Working on the undertale-concert-preparation landing page (Vite, vanilla JS/CSS, GitHub Pages). Use for any change to this repo's content, plan, trains, restaurants, routes, checklist, styles or effects, and for verifying and deploying it. Triggers: undertale site, concert plan page, plan/ubiór/wyjazd/obiad/koncert/powrót/checklista section, mik-813.github.io/undertale-concert-preparation."
 ---
 
 # Undertale concert site

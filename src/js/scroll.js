@@ -7,7 +7,8 @@ export function initScroll() {
   const navLinks = $$('.nav__links a');
   const sections = navLinks.map((a) => $(a.getAttribute('href')));
   const plan = $('#plan');
-  let ticking = false, drawn = false;
+  const hint = $('.scroll-hint');
+  let ticking = false, drawn = false, hintGone = null;
 
   function onFrame(t) {
     ticking = false;
@@ -15,6 +16,8 @@ export function initScroll() {
     const max = document.documentElement.scrollHeight - innerHeight;
     progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
     nav.classList.toggle('is-hidden', plan.getBoundingClientRect().bottom > 0);
+    const gone = y > 8;
+    if (hint && gone !== hintGone) hint.classList.toggle('is-gone', (hintGone = gone));
 
     const mid = innerHeight / 2;
     let active = -1;

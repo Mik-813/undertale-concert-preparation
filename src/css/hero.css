@@ -157,6 +157,17 @@
   margin-left: -13px;
   border: 2px solid var(--stroke);
   border-radius: 20px;
+  transition:
+    opacity 0.4s var(--ease),
+    visibility 0s linear 0s;
+}
+.scroll-hint.is-gone {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s var(--ease),
+    visibility 0s linear 0.4s;
 }
 .scroll-hint span {
   position: absolute;
@@ -195,14 +206,18 @@
 .marquee__track {
   will-change: transform;
   display: flex;
-  gap: 32px;
   width: max-content;
-  animation: marquee 40s linear infinite;
+  animation: marquee 80s linear infinite;
   font-family: var(--f-display);
   font-size: 34px;
   letter-spacing: 0.06em;
   white-space: nowrap;
   align-items: center;
+}
+/* margin instead of gap so -50% lands exactly on the seam */
+.marquee__track > * {
+  flex: none;
+  margin-right: 32px;
 }
 .marquee__track i.px-heart {
   width: 18px;

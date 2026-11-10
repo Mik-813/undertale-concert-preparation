@@ -27,7 +27,7 @@ export const nav = () => `
   <header class="nav is-hidden" id="nav">
     <a href="#top" class="nav__logo" aria-label="Na górę">${heart()}<b>Undertale</b></a>
     <nav class="nav__links" aria-label="Sekcje">${each(sections, (s) => `<a href="#${s.id}">${s.nav}</a>`)}</nav>
-    <a class="nav__cta" href="#bilet">${seat(' · ')}</a>
+    <a class="nav__cta" href="#koncert">${seat(' · ')}</a>
   </header>`;
 
 const hero = () => `
@@ -41,7 +41,7 @@ const hero = () => `
   </section>`;
 
 const marquee = () => {
-  const run = each(copy.marquee, (t) => `<span>${t}</span>${heart('', 'i')}`);
+  const run = each(copy.marquee, (t) => `<span>${t}</span>${heart('', 'i')}`).repeat(2);
   return `<div class="marquee" aria-hidden="true"><div class="marquee__track">${run}${run}</div></div>`;
 };
 
@@ -81,14 +81,14 @@ const cityPoints = (r, { meal, arena }) => {
   const m1 = arena.parts.find((p) => p.type === 'metro');
   return [
     { times: [clock(meal.at, meal.parts).at(-1)], act: 'meal', sec: 'jedzenie', place: r.place.name, lines: [`ul. ${r.street}`] },
-    { times: [metro], act: 'metro', sec: 'dojazd', href: arena.id, place: m1.from.name, lines: [`${m1.line} kierunek ${m1.dir}`] },
-    { times: [arrive], act: 'enter', sec: 'dojazd', href: arena.id, place: places.arena.name },
+    { times: [metro], act: 'metro', sec: 'koncert', href: arena.id, place: m1.from.name, lines: [`${m1.line} kierunek ${m1.dir}`] },
+    { times: [arrive], act: 'enter', sec: 'koncert', href: arena.id, place: places.arena.name },
   ];
 };
 
 // Restaurant-dependent points: one <li>, one variant per restaurant inside (see perR).
 const cityItems = [0, 1, 2].map((i) => perR((r, rt) => planBody(cityPoints(r, rt)[i]), 'li', ITEM));
-const concert = { times: [event.start], act: 'show', sec: 'bilet', place: event.venue, lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true };
+const concert = { times: [event.start], act: 'show', sec: 'koncert', place: event.venue, lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true };
 
 const timeline = () => [
   ...trainPoints(trains.out, 'wyjazd').map(planItem),
@@ -151,7 +151,7 @@ const tabs = () => `
     <i class="tabs__ink" aria-hidden="true"></i>
   </div>`;
 
-const jedzenie = () => section(S.jedzenie, `${tabs()}${perR(restaurant)}`);
+const jedzenie = () => section(S.jedzenie, `${tabs()}${perR(restaurant)}${perR((r, rt) => leg(rt.meal))}`);
 
 /* ---------- routes ---------- */
 
@@ -219,11 +219,7 @@ const leg = (l) => {
 
 const ztmRow = ([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')}`, `<b>${v}</b>`] : [k, v]);
 
-const dojazd = () => section(S.dojazd, `
-  ${perR((r, rt) => `<div>${leg(rt.meal)}${leg(rt.arena)}</div>`)}
-  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + facts(copy.ztm.map(([k, v, note]) => [k, sub(v, note)])))}`);
-
-/* ---------- wear / ticket / return ---------- */
+/* ---------- wear / concert / return ---------- */
 
 const ubior = () => section(S.ubior, `
   <div class="glass card tilt wear reveal">
@@ -232,7 +228,9 @@ const ubior = () => section(S.ubior, `
     <p class="note">${copy.weather}</p>
   </div>`);
 
-const bilet = () => section(S.bilet, `
+const koncert = () => section(S.koncert, `
+  ${perR((r, rt) => leg(rt.arena))}
+  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + facts(copy.ztm.map(([k, v, note]) => [k, sub(v, note)])))}
   <div class="ticket tilt reveal">
     <div class="ticket__main">
       <p class="eyebrow">${event.org}</p>
@@ -259,7 +257,7 @@ const checklista = () => section(S.checklista, `
 
 export const main = () => `
   <main id="top">
-    ${[hero, marquee, plan, wyjazd, jedzenie, dojazd, ubior, bilet, powrot, checklista].map((f) => f()).join('')}
+    ${[hero, marquee, plan, ubior, wyjazd, jedzenie, koncert, powrot, checklista].map((f) => f()).join('')}
   </main>`;
 
 export const foot = () => `
