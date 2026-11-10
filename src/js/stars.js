@@ -4,20 +4,7 @@ const canvas = $('#stars');
 const ctx = canvas.getContext('2d');
 const layers = [];
 const rings = [[120, 2, 0.7], [190, 1.5, 0.55], [270, 1.2, 0.45], [360, 1, 0.35], [460, 0.8, 0.25]];
-let W = 0, H = 0, arcs = null, A = 0, glow = null;
-const G = 560;
-export const spot = { on: false, x: 0, y: 0 };
-
-function buildGlow() {
-  glow = document.createElement('canvas');
-  glow.width = glow.height = G;
-  const c = glow.getContext('2d');
-  const g = c.createRadialGradient(G / 2, G / 2, 0, G / 2, G / 2, G / 2);
-  g.addColorStop(0, 'rgba(167, 139, 250, 0.16)');
-  g.addColorStop(0.55, 'rgba(124, 58, 237, 0.06)');
-  g.addColorStop(1, 'rgba(124, 58, 237, 0)');
-  c.fillStyle = g; c.fillRect(0, 0, G, G);
-}
+let W = 0, H = 0, arcs = null, A = 0;
 
 // Arcs are rasterised once; per frame we only blit rotated bitmaps (an SVG would be re-rasterised every frame).
 function buildArcs() {
@@ -51,11 +38,10 @@ export function buildStars() {
     layers.push({ off, z });
   }
   buildArcs();
-  if (!glow) buildGlow();
 }
 
 let lastT = -1;
-// Called from several rAF loops (scroll, touch glow); draws at most once per frame.
+// Draws at most once per frame.
 export function paint(t, y) {
   if (t !== undefined && t === lastT) return;
   lastT = t;
@@ -70,7 +56,6 @@ export function drawStars(y) {
   ctx.rotate((y * 0.02 * Math.PI) / 180);
   ctx.drawImage(arcs, -A / 2, -A / 2);
   ctx.restore();
-  if (spot.on) ctx.drawImage(glow, spot.x - G / 2, spot.y - G / 2);
   for (const { off, z } of layers) {
     const dy = ((-(y * z * 0.3)) % H + H) % H;
     ctx.drawImage(off, 0, dy - H);

@@ -1,5 +1,4 @@
 import { reduced, loop, light } from './dom.js';
-import { spot, paint } from './stars.js';
 
 // The background glow eases toward the pointer; `ease()` returns true while it is still moving.
 const glow = { x: innerWidth / 2, y: innerHeight / 3, tx: innerWidth / 2, ty: innerHeight / 3 };
@@ -58,30 +57,12 @@ function initMouse() {
   addEventListener('scroll', release, { passive: true });
 }
 
-// Touch: the glow lives in the stars canvas (already redrawn on scroll), follows the finger
-// and drifts while scrolling; the last tapped pane stays lit at the tap point.
+// Touch: no glow; the last tapped pane stays lit at the tap point.
 function initTouch() {
   document.querySelector('.bg__spotlight')?.remove();
-  Object.assign(spot, { on: true, x: glow.x, y: glow.y });
-
-  const go = loop((t) => {
-    const moving = ease();
-    spot.x = glow.x; spot.y = glow.y;
-    paint(t, reduced ? 0 : scrollY);
-    return moving;
-  });
-  const follow = (e) => { aim(e.clientX, e.clientY); go(); };
-
   addEventListener('pointerdown', (e) => {
-    follow(e);
     const glass = e.target.closest?.('.glass') ?? null;
     litUp(glass);
     if (glass) light(glass, e.clientX, e.clientY);
-  }, { passive: true });
-  addEventListener('pointermove', follow, { passive: true });
-  addEventListener('scroll', () => {
-    const k = scrollY / 520;
-    aim(innerWidth * (0.5 + 0.32 * Math.sin(k)), innerHeight * (0.42 + 0.12 * Math.cos(k * 0.7)));
-    go();
   }, { passive: true });
 }
