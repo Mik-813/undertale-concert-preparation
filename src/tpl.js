@@ -30,7 +30,7 @@ export const train = (t, { sm = true, named = false } = {}) => {
   const name = named && t.name ? ` <span class="train-id__name">${t.name}</span>` : '';
   return `<span${cls('train-id', sm && 'train-id--sm')}>${badge(t.carrier, sm)}<span class="train-id__no">${t.no}${name}</span></span>`;
 };
-export const chain = (legs, opts) => legs.map((l) => train(l, opts)).join(` ${arrow()} `);
+export const chain = (legs, opts) => `<span class="chain">${legs.map((l) => train(l, opts)).join(arrow())}</span>`;
 export const peron = (n, from) => `peron ${from ? `${roman(from)} ${arrow()} ` : ''}${roman(n)}`;
 
 /* ---------- links ---------- */

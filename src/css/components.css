@@ -191,6 +191,18 @@
   line-height: 1;
 }
 
+/* Train chain: pills and arrows on one centre line. */
+.chain {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  vertical-align: middle;
+}
+.chain > .ic--arrow {
+  margin: 0;
+}
+
 /* Train ID: badge + number in one pill, 1px padding, concentric radius. */
 .train-id {
   display: inline-flex;

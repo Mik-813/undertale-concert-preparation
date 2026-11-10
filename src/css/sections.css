@@ -622,6 +622,18 @@
 .metro-line li.on:has(+ .off)::before {
   opacity: 0.35;
 }
+/* Skipped stations: dotted line, no stop. */
+.metro-line li.gap {
+  height: 1.2em;
+}
+.metro-line li.gap::before {
+  top: -0.6em;
+  bottom: -0.6em;
+  background: repeating-linear-gradient(#e30613 0 3px, transparent 3px 6px);
+}
+.metro-line li.gap::after {
+  display: none;
+}
 .metro-line li.on::after {
   left: -1px;
   top: calc(0.6em - 7px);

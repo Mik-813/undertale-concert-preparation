@@ -77,7 +77,9 @@ export const trains = {
 export const schedule = { off: '15:50', leave: '17:15' };
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
-const M1_TAIL = ['Natolin', 'Kabaty']; // past the exit, up to the terminal
+// Stations past the exit, up to the terminal of each direction.
+const M1_SOUTH = ['Natolin', 'Kabaty'];
+const M1_NORTH = ['Świętokrzyska', 'Ratusz Arsenał', 'Dworzec Gdański', 'Plac Wilsona', 'Marymont', 'Słodowiec', 'Stare Bielany', 'Wawrzyszew', 'Młociny'];
 const M1_MIN = 17; // Centrum to Imielin
 const arenaWalk = { dist: '1 km', min: 13 }; // Metro Imielin <-> Arena, both ways
 const walk = (from, to, rest) => ({ type: 'walk', from, to, ...rest });
@@ -116,7 +118,7 @@ export const route = (r) => {
       id: `leg-arena-${r.key}`, from: r.place, to: places.arena, at: schedule.leave,
       parts: [
         walk(r.place, r.metro.station, { min: r.metro.min, dist: r.metro.dist }),
-        metro(r.metro.station, places.mImielin, { dir: 'Kabaty', min: metroMin, every: '5', stations, beyond: M1_TAIL }),
+        metro(r.metro.station, places.mImielin, { dir: 'Kabaty', min: metroMin, every: '5', stations, beyond: M1_SOUTH }),
         walk(places.mImielin, places.arena, arenaWalk),
       ],
     },
@@ -130,7 +132,7 @@ export const back = {
   from: places.arena, to: places.centralna, at: '20:30',
   parts: [
     walk(places.arena, places.mImielin, { min: arenaWalk.min }),
-    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7-8', stations: [...M1].reverse() }),
+    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7-8', stations: [...M1].reverse(), beyond: M1_NORTH }),
     walk(places.mCentrum, places.centralna, { min: 5 }),
   ],
 };
@@ -153,16 +155,17 @@ export const footer = {
 const [outA, , outC] = trains.out.stops;
 
 // Copy that is not a fact of its own: notes, labels, list items. `<b>` marks the key value.
+const lunch = { full: '1 h', short: '40 min' }; // Plan B arrives later and shortens lunch
 export const copy = {
   countdown: [['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek']],
   marquee: [`LEGNICA ${outA.dep}`, `WARSZAWA ${outC.arr}`, 'METRO M1', `ARENA ${event.start}`, `RZĄD ${event.row} · MIEJSCE ${event.seat}`],
   planWhy: [
     'Na miejscu: <b>30 min</b> przed startem.',
     'Dojazd z centrum: <b>40 min</b>.',
-    'Obiad: <b>1 h</b>.',
+    `Obiad: <b>${lunch.full}</b>.`,
     `Przyjazd do Warszawy: <b>${outC.arr}</b>.`,
   ],
-  planB: 'Obiad: <b>40 min</b>.',
+  planB: `Obiad skrócony: <b>${lunch.short}</b> zamiast ${lunch.full}.`,
   ztm: '2× 75-min: tam i z powrotem. Jakdojade, mobilet, biletomat. Student −50%.',
   weather: 'Prognoza Open-Meteo, Ursynów.',
   after: [

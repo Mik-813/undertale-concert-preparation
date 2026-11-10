@@ -165,6 +165,8 @@ const map = (p, at) => {
 };
 
 // Part strategy: how each kind of part is drawn.
+// Long tails collapse to: next station, gap, terminal.
+const tail = (l) => (l.length > 2 ? [l[0], null, l.at(-1)] : l);
 const PART = {
   walk: {
     badge: () => icon('walk'),
@@ -177,7 +179,7 @@ const PART = {
     info: (p) => {
       const last = p.stations.length - 1;
       const stops = each(p.stations, (n, i) => `<li${i === 0 || i === last ? ' class="on"' : ''}>${n}</li>`)
-        + each(p.beyond ?? [], (n) => `<li class="off">${n}</li>`);
+        + each(tail(p.beyond ?? []), (n) => (n ? `<li class="off">${n}</li>` : '<li class="off gap" aria-hidden="true"></li>'));
       return `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${last} przyst.`])}</p>
        <ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>`;
     },
