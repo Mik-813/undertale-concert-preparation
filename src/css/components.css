@@ -271,7 +271,6 @@
   overflow: hidden;
   background: linear-gradient(135deg, var(--violet), #5b21b6);
   border-color: transparent;
-  box-shadow: 0 10px 30px -8px rgb(var(--violet-rgb) / 0.8);
 }
 .btn--primary::before {
   content: '';

@@ -359,7 +359,6 @@
   left: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--violet), #5b21b6);
-  box-shadow: 0 8px 24px -8px rgb(var(--violet-rgb) / 0.8);
   transition:
     transform 0.45s var(--ease),
     width 0.45s var(--ease);
@@ -522,7 +521,6 @@
   text-decoration: none;
   color: #fff;
   background: rgb(var(--violet-rgb) / 0.92);
-  box-shadow: 0 6px 20px -6px rgb(var(--violet-rgb) / 0.9);
   opacity: 0.85;
   transition:
     opacity 0.3s,

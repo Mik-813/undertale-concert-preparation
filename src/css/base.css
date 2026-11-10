@@ -184,9 +184,7 @@ svg {
   border-radius: 999px;
   background: var(--violet);
   color: #fff;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-    0 8px 30px rgb(var(--violet-rgb) / 0.5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
 }
 @media (max-width: 860px) {
   .nav__links {
