@@ -1,5 +1,5 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
-import { event, sections, places, trains, schedule, meal, legs, ztm, weather, wear, footer } from './data.js';
+import { event, sections, places, trains, schedule, restaurants, route, dinner, legs, ztm, weather, wear, footer } from './data.js';
 import {
   join, span, addMin, dur, icon, arrow, heart, badge, train, chain, peron, extLink, btn, btns, maps,
   facts, list, table, unwrap, section, dialog,
@@ -8,6 +8,13 @@ import {
 const S = Object.fromEntries(sections.map((s) => [s.id, s]));
 const seat = (sep) => `Rząd ${event.row}${sep}${event.seat}`;
 const [outA, , outC] = trains.out.stops;
+const [r0] = restaurants;
+const routes = Object.fromEntries(restaurants.map((r) => [r.key, route(r)]));
+const minOf = (l) => l.parts.reduce((m, pt) => m + pt.min, 0);
+
+// Restaurant-dependent markup: one variant per restaurant, only the selected one is shown (see js/tabs.js).
+const variant = (r, html) => html.replace(/^(\s*<[a-z]+)/, `$1 data-r="${r.key}"${r === r0 ? '' : ' hidden'}`);
+const perR = (fn) => restaurants.map((r) => variant(r, fn(r, routes[r.key]))).join('');
 
 /* ---------- nav / hero / marquee ---------- */
 
@@ -52,17 +59,25 @@ const ride = ({ stops, legs: ls }, href) => stops.map((st, i) => {
   return { times: [st.arr, st.dep], href, title: `Przesiadka ${st.loc}`, lines: [`${train(ls[i])}, ${peron(st.platform, st.arrPlatform)}`] };
 });
 
-const timeline = [
-  ...ride(trains.out, 'wyjazd'),
-  { times: [schedule.meal], href: 'jedzenie', title: `Obiad · ${meal.place.name}`, lines: [meal.addr] },
-  { times: [schedule.leave], href: legs.arena.id, title: `Metro M1 ${arrow()} Imielin`, lines: ['ze stacji Centrum'] },
-  { times: [schedule.arena], href: legs.arena.id, title: places.arena.name },
-  { times: [event.start], href: 'bilet', title: 'Koncert', lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true },
-  ...ride(trains.back, 'powrot'),
-];
+const stay = (r, { meal: m, arena: a }) => {
+  const meal = addMin(m.at, minOf(m));
+  const metro = addMin(a.at, a.parts[0].min);
+  return [
+    { times: [meal], href: 'jedzenie', title: `Obiad · ${r.place.name}`, lines: [`ul. ${r.street}`] },
+    { times: [metro], href: a.id, title: `Metro M1 ${arrow()} Imielin`, lines: [r.metro.station.name] },
+    { times: [addMin(a.at, minOf(a))], href: a.id, title: places.arena.name },
+  ];
+};
+
+const timeline = () => [
+  ...ride(trains.out, 'wyjazd').map(tl),
+  ...[0, 1, 2].map((i) => perR((r, rt) => tl(stay(r, rt)[i]))),
+  tl({ times: [event.start], href: 'bilet', title: 'Koncert', lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true }),
+  ...ride(trains.back, 'powrot').map(tl),
+].join('');
 
 const plan = () => section(S.plan, `
-  <ol class="timeline">${timeline.map(tl).join('')}</ol>
+  <ol class="timeline">${timeline()}</ol>
   ${unwrap('Dlaczego taki rozkład?', list([
     'Liczone od końca: na arenie <b>~30 min</b> przed startem, dojazd z centrum <b>~40 min</b>, obiad <b>~1 h</b>.',
     `Czyli w Warszawie trzeba być ok. <b>16:00</b>. Pociąg o ${outA.dep} przyjeżdża ${outC.arr}.`,
@@ -95,19 +110,31 @@ const wyjazd = () => section(S.wyjazd, `
 
 /* ---------- food ---------- */
 
-const jedzenie = () => section(S.jedzenie, `
-  <article class="glass card tilt food reveal">
+const value = (main, sub) => `${main}${sub ? `<small>${sub}</small>` : ''}`;
+
+const restaurant = (r) => `
+  <article class="glass card tilt food${r.menu ? '' : ' food--solo'} reveal" role="tabpanel" id="food-${r.key}" aria-labelledby="tab-${r.key}">
     <div class="food__main">
-      <span class="chip">Wybór</span>
-      <h3>${meal.place.name}</h3>
-      <p class="food__addr">${join([meal.addr, meal.walk])}</p>
-      <p>${meal.about}</p>
-      ${facts([['Budżet', meal.budget], meal.hours])}
-      ${btns(btn(maps.search(meal.place.q), 'Google Maps', true))}
+      <h3>${r.place.name}</h3>
+      ${facts([
+        ['Adres', `ul. ${r.street}`],
+        ['Sobota', r.hours],
+        ['Cena', r.price],
+        ['Z dworca', value(`${r.walk.min} min`, r.walk.dist)],
+        ['Do metra', value(`${r.metro.min} min`, join([r.metro.station.short, r.metro.dist]))],
+      ])}
+      ${btns(btn(maps.search(r.place.q), 'Google Maps', true))}
     </div>
-    <div class="food__menu"><h4>Co zamówić</h4>${list(meal.menu.map((m) => join(m)))}</div>
-  </article>
-  ${unwrap('Alternatywy', list(meal.alternatives.map((a) => join([extLink(maps.search(a.q), `<b>${a.name}</b>`), ...a.info]))))}`);
+    ${r.menu ? `<div class="food__menu"><h4>Menu</h4>${list(r.menu.map(([d, c]) => `<span>${d}</span><b>${c}</b>`))}</div>` : ''}
+  </article>`;
+
+const tabs = () => `
+  <div class="tabs glass reveal" role="tablist" aria-label="Restauracja" data-tabs>
+    ${restaurants.map((r) => `<button type="button" role="tab" id="tab-${r.key}" aria-controls="food-${r.key}" aria-selected="${r === r0}" tabindex="${r === r0 ? 0 : -1}" data-key="${r.key}">${r.place.short}</button>`).join('')}
+    <i class="tabs__ink" aria-hidden="true"></i>
+  </div>`;
+
+const jedzenie = () => section(S.jedzenie, `${tabs()}${perR(restaurant)}`);
 
 /* ---------- routes ---------- */
 
@@ -132,7 +159,7 @@ const part = (pt, at) => {
 const leg = (l, tag) => {
   let at = l.at;
   const parts = l.parts.map((pt) => { const html = part(pt, at); at = addMin(at, pt.min); return html; }).join('');
-  const total = l.parts.reduce((m, pt) => m + pt.min, 0);
+  const total = minOf(l);
   return `
   <div class="leg reveal"${l.id ? ` id="${l.id}"` : ''}>
     <div class="leg__head"><span class="leg__tag">${tag}</span><h3>${l.from.short} ${arrow()} ${l.to.short}</h3><span class="leg__time">${total} min</span></div>
@@ -141,8 +168,7 @@ const leg = (l, tag) => {
 };
 
 const dojazd = () => section(S.dojazd, `
-  ${leg(legs.meal, 'A')}
-  ${leg(legs.arena, 'B')}
+  ${perR((r, rt) => `<div>${leg(rt.meal, 'A')}${leg(rt.arena, 'B')}</div>`)}
   ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')}`, `<b>${v}</b>`] : [k, v])))
     + '<p>Weź 2× 75-min: tam i z powrotem. Jakdojade, mobilet lub biletomat. Student −50%.</p>')}
   ${unwrap('Dlaczego metro?', list(['Bez korków, co 5 min.', 'Taksówka: 40–60 zł. Metro: w cenie biletu.']))}`);
@@ -174,7 +200,7 @@ const bilet = () => section(S.bilet, ticket());
 const powrot = () => section(S.powrot, `${leg(legs.back, 'C')}${trainCard(trains.back)}
   ${unwrap('Po koncercie', list([
     `Koniec ok. <b>20:30</b>, pociąg o <b>${trains.back.stops[0].dep}</b>.`,
-    `Kolacja: <b>${meal.alternatives[2].name}</b>, ${meal.alternatives[2].info[0]}, do 23:00.`,
+    `Kolacja: <b>${dinner.name}</b>, ul. ${dinner.street}, do ${dinner.until}.`,
     'Hala Centralnej jest ogrzewana i otwarta całą noc.',
   ]))}`);
 

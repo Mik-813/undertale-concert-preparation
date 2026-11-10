@@ -32,7 +32,10 @@ export const sections = [
 export const places = {
   centralna: { name: 'Warszawa Centralna', short: 'Centralna', q: 'Warszawa Centralna, Aleje Jerozolimskie 54, Warszawa' },
   bambino: { name: 'Bar Bambino', short: 'Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
+  mleczarnia: { name: 'Mleczarnia Jerozolimska', short: 'Mleczarnia', q: 'Mleczarnia Jerozolimska, Emilii Plater 47, Warszawa' },
+  prasowy: { name: 'Bar Prasowy', short: 'Prasowy', q: 'Bar Mleczny Prasowy, Marszałkowska 10/16, Warszawa' },
   mCentrum: { name: 'Metro Centrum', short: 'Centrum', q: 'Stacja metra Centrum, Warszawa' },
+  mPolitechnika: { name: 'Metro Politechnika', short: 'Politechnika', q: 'Stacja metra Politechnika, Warszawa' },
   mImielin: { name: 'Metro Imielin', short: 'Imielin', q: 'Stacja metra Imielin, Warszawa' },
   arena: { name: 'Arena Ursynów', gen: 'Areny Ursynów', short: 'Arena', q: 'Arena Ursynów, Rotmistrza Witolda Pileckiego 122, Warszawa' },
 };
@@ -70,45 +73,62 @@ export const trains = {
   planB: { dep: '11:07', arr: '16:16', legs: [{ carrier: 'KD', no: 'Wrocław' }, { carrier: 'IC', no: '6102', name: 'Ślęża' }] },
 };
 
-// Local times of the plan that are not train times.
-export const schedule = { meal: '16:05', leave: '17:15', arena: '17:55' };
-
-export const meal = {
-  place: places.bambino,
-  addr: 'ul. Hoża 19',
-  walk: '17 min pieszo od Centralnej',
-  about: 'Klasyczny bar mleczny od 1959. Domowe jedzenie, tanio.',
-  budget: '~25–40 zł',
-  hours: ['Sobota', '9:00–18:00'],
-  menu: [['Pierogi ruskie', '18,90 zł'], ['Pierogi z mięsem', '18,90 zł'], ['Schabowy, sam kotlet', '14,50 zł']],
-  alternatives: [
-    { name: 'Mleczarnia Jerozolimska', q: 'Mleczarnia Jerozolimska Emilii Plater 47 Warszawa', info: ['Emilii Plater 47', '~30 zł', '6 min od Centralnej', '8–20'] },
-    { name: 'Bar Mleczny Prasowy', q: 'Bar Mleczny Prasowy Marszałkowska 10 Warszawa', info: ['Marszałkowska 10/16', '~25 zł', 'przy metrze Politechnika', '8–20'] },
-    { name: 'Gościniec', q: 'Gościniec Polskie Pierogi Nowy Świat 43 Warszawa', info: ['Nowy Świat 43', '~50 zł', 'z obsługą kelnerską', '11–23'] },
-  ],
-};
+// Local times of the plan that are not train times: leave the station, leave the restaurant.
+export const schedule = { off: '15:50', leave: '17:15' };
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
+const M1_MIN = 17; // Centrum to Imielin
+const exit = { type: 'walk', from: places.mImielin, to: places.arena, dist: '1 km', min: 13 };
+
+// Every restaurant is one record. `walk` = from Centralna, `metro` = its own way to the M1 (the route strategy).
+export const restaurants = [
+  {
+    key: 'bambino', place: places.bambino, street: 'Hoża 19', price: '25–40 zł', hours: '09:00–18:00',
+    menu: [['Pierogi ruskie', '18,90 zł'], ['Pierogi z mięsem', '18,90 zł'], ['Schabowy, sam kotlet', '14,50 zł']],
+    walk: { min: 17, dist: '1,3 km', note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' },
+    metro: { station: places.mCentrum, min: 8, dist: '650 m' },
+  },
+  {
+    key: 'mleczarnia', place: places.mleczarnia, street: 'Emilii Plater 47', price: '~30 zł', hours: '08:00–20:00',
+    walk: { min: 6, dist: '450 m' },
+    metro: { station: places.mCentrum, min: 11, dist: '850 m' },
+  },
+  {
+    key: 'prasowy', place: places.prasowy, street: 'Marszałkowska 10/16', price: '~25 zł', hours: '08:00–20:00',
+    walk: { min: 29, dist: '2,2 km' },
+    metro: { station: places.mPolitechnika, min: 8, dist: '600 m' },
+  },
+];
+
+// Route strategy: the same two legs for any restaurant, built from its own walk and metro access.
+export const route = (r) => {
+  const stations = M1.slice(M1.indexOf(r.metro.station.short));
+  const metroMin = Math.round(M1_MIN * (stations.length - 1) / (M1.length - 1));
+  return {
+    meal: {
+      id: `leg-meal-${r.key}`, from: places.centralna, to: r.place, at: schedule.off,
+      parts: [{ type: 'walk', from: places.centralna, to: r.place, ...r.walk }],
+    },
+    arena: {
+      id: `leg-arena-${r.key}`, from: r.place, to: places.arena, at: schedule.leave,
+      parts: [
+        { type: 'walk', from: r.place, to: r.metro.station, min: r.metro.min, dist: r.metro.dist },
+        { type: 'metro', from: r.metro.station, to: places.mImielin, line: 'M1', dir: 'Kabaty', min: metroMin, every: '5', stations },
+        exit,
+      ],
+    },
+  };
+};
+
+export const dinner = { name: 'Gościniec', street: 'Nowy Świat 43', until: '23:00' };
 
 // A leg is split into parts, each with its own map. `at` is when the leg starts; part times follow from `min`.
 export const legs = {
-  meal: {
-    from: places.centralna, to: places.bambino, at: '15:50',
-    parts: [{ type: 'walk', from: places.centralna, to: places.bambino, dist: '1,3 km', min: 17, note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' }],
-  },
-  arena: {
-    id: 'leg-arena', from: places.bambino, to: places.arena, at: schedule.leave,
-    parts: [
-      { type: 'walk', from: places.bambino, to: places.mCentrum, min: 8 },
-      { type: 'metro', from: places.mCentrum, to: places.mImielin, line: 'M1', dir: 'Kabaty', min: 17, every: '5', stations: M1 },
-      { type: 'walk', from: places.mImielin, to: places.arena, dist: '1 km', min: 13 },
-    ],
-  },
   back: {
     from: places.arena, to: places.centralna, at: '20:30',
     parts: [
       { type: 'walk', from: places.arena, to: places.mImielin, min: 13 },
-      { type: 'metro', from: places.mImielin, to: places.mCentrum, line: 'M1', dir: 'Młociny', min: 17, every: '7–8', stations: [...M1].reverse() },
+      { type: 'metro', from: places.mImielin, to: places.mCentrum, line: 'M1', dir: 'Młociny', min: M1_MIN, every: '7–8', stations: [...M1].reverse() },
       { type: 'walk', from: places.mCentrum, to: places.centralna, min: 5 },
     ],
   },
