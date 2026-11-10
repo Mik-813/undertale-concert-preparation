@@ -1,7 +1,7 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
 import { event, sections, places, trains, restaurants, route, back, ztm, stationPhotos, weather, wear, footer, copy, checklist } from './data.js';
 import {
-  cls, join, sum, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
+  cls, join, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
   dl, facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
@@ -10,7 +10,6 @@ const seat = (sep) => `Rząd ${event.row}${sep}${event.seat}`;
 const date = event.iso.slice(0, 10);
 const routes = Object.fromEntries(restaurants.map((r) => [r.key, route(r)]));
 const [first] = restaurants;
-const total = (l) => sum(l.parts.map((p) => p.min));
 const sub = (main, small) => `${main}${small ? `<small>${small}</small>` : ''}`;
 const ps = (lines) => each(lines, (l) => `<p>${l}</p>`);
 
@@ -212,7 +211,6 @@ const leg = (l) => {
   const at = clock(l.at, l.parts);
   return `
   <div class="leg reveal"${l.id ? ` id="${l.id}"` : ''}>
-    <div class="leg__head"><h3>${l.from.name} ${arrow()} ${l.to.name}</h3><span class="leg__time">${total(l)} min</span></div>
     <ol class="parts">${l.parts.map((p, i) => part(p, at[i])).join('')}</ol>
   </div>`;
 };
