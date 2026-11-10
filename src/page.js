@@ -193,7 +193,7 @@ const PART = {
   walk: {
     badge: () => icon('walk'),
     media: map,
-    info: (p) => `<b>${p.from.name} ${arrow()} ${p.to.name}</b><p>${join(['Pieszo', p.dist, `${p.min} min`])}</p>${p.note ? `<p>${p.note}</p>` : ''}`,
+    info: (p) => `<b>${p.from.name} ${arrow()} ${p.to.name}</b><p>${join(['Pieszo', p.dist])}</p>${p.note ? `<p>${p.note}</p>` : ''}`,
   },
   metro: {
     badge: () => 'M',
@@ -201,27 +201,32 @@ const PART = {
       const last = p.stations.length - 1;
       const stops = each(p.stations, (n, i) => stop(n, i === 0 || i === last ? 'on' : ''))
         + each(tail(p.beyond ?? []), (n) => (n ? stop(n, 'off') : '<li class="off gap" aria-hidden="true"></li>'));
-      return `<ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>${zt(p, at)}`;
+      return `<ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>`;
     },
-    info: (p) => `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${p.stations.length - 1} przyst.`])}</p>`,
+    aside: zt,
+    info: (p) => `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`co ${p.every} min`, `${p.stations.length - 1} przyst.`])}</p>`,
   },
 };
 
-// A stage of the timeline: media, time stop, label pane. The arrival stage has no media.
-const stage = (type, at, badge, info, media = '') => `
-      <li class="stage stage--${type}">
-        ${media && `<div class="stage__media">${media}</div>`}
-        <span class="stage__time"><time>${at}</time></span>
-        <div class="stage__label step step--${type}"><span class="step__icon">${badge}</span><div>${info}</div></div>
+// A part of the timeline: media | time with the duration rail | label. The last part also carries the arrival.
+const label = (type, badge, info) => `<div class="stage__label step step--${type}"><span class="step__icon">${badge}</span><div>${info}</div></div>`;
+const when = (at, min) => `<span class="stage__time${min ? '' : ' stage__time--end'}"><time>${at}</time>${min ? `<span class="stage__run">${dur(min)}</span>` : ''}</span>`;
+const stage = (p, at, end) => {
+  const s = PART[p.type];
+  return `
+      <li class="stage stage--${p.type}${end ? ' stage--last' : ''}">
+        <div class="stage__media">${s.media(p, at)}</div>
+        ${when(at, p.min)}
+        ${label(p.type, s.badge(), s.info(p))}${s.aside?.(p, at) ?? ''}${end}
       </li>`;
+};
 
 const leg = (l) => {
   const at = clock(l.at, l.parts);
-  const s = (p) => PART[p.type];
+  const end = `${when(at.at(-1))}${label('end', heart(), `<b>${l.to.name}</b>`)}`;
   return `
   <div class="leg glass reveal"${l.id ? ` id="${l.id}"` : ''}>
-    <ol class="route">${l.parts.map((p, i) => stage(p.type, at[i], s(p).badge(), s(p).info(p), s(p).media(p, at[i]))).join('')}
-      ${stage('end', at.at(-1), heart(), `<b>${l.to.name}</b>`)}
+    <ol class="route">${l.parts.map((p, i) => stage(p, at[i], i === l.parts.length - 1 ? end : '')).join('')}
     </ol>
   </div>`;
 };
