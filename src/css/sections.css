@@ -557,13 +557,13 @@
   grid-area: 2 / 3;
   align-self: start;
 }
+/* Same face and colour as the plan times, centred on the label icon. */
 .stage__time time {
-  font: 700 22px/var(--icon) var(--f-mono);
-  letter-spacing: 0.02em;
-  color: #fff;
-  text-shadow: 0 0 18px rgb(var(--violet-rgb) / 0.7);
-}
-.stage__time--end time {
+  display: flex;
+  align-items: center;
+  height: var(--icon);
+  padding-top: 0.08em; /* Bebas Neue sits high in its box */
+  font: 32px/1 var(--f-display);
   color: var(--violet-3);
 }
 /* Duration sits on the rail between two times. */
@@ -624,7 +624,7 @@
   background: #8b5cf6;
 }
 .stage--metro .stage__media {
-  padding: 14px 16px 16px;
+  padding: 14px 16px 16px 26px;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid var(--stroke);
@@ -714,7 +714,7 @@
     grid-area: 3 / 2;
   }
   .stage__time time {
-    font-size: 17px;
+    font-size: 26px;
   }
   .stage__run {
     font-size: 11px;
@@ -723,7 +723,7 @@
     height: 230px;
   }
   .stage--metro .stage__media {
-    padding: 12px 10px 10px;
+    padding: 12px 10px 10px 18px;
   }
   .step {
     padding: 12px;
@@ -755,8 +755,7 @@
   width: 3px;
   background: #e30613;
 }
-.metro-line li:last-child::before,
-.metro-line li:has(+ .gap)::before {
+.metro-line li:last-child::before {
   bottom: 0;
 }
 .metro-line li:last-child::before {
@@ -790,9 +789,17 @@
   min-height: 20px;
   height: 20px;
 }
+/* Skipped stretch: dashed from the station before to the terminal. */
+.metro-line li:has(+ .gap)::before,
+.metro-line li.gap::before {
+  background: repeating-linear-gradient(#e30613 0 3px, transparent 3px 6px);
+}
+.metro-line li:has(+ .gap)::before {
+  bottom: 0;
+}
 .metro-line li.gap::before {
   top: 0;
-  background: repeating-linear-gradient(#e30613 0 3px, transparent 3px 6px);
+  opacity: 0.35;
 }
 .metro-line li.gap::after {
   display: none;

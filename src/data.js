@@ -174,7 +174,7 @@ export const wear = [
 ];
 
 export const footer = {
-  note: 'Prywatny plan, strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.',
+  note: 'Prywatny plan, niezwiązana z GraMuzyka ani Toby Foxem.',
   author: 'Mykyta Mykulskyi',
 };
 
