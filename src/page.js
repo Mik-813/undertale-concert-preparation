@@ -181,8 +181,7 @@ const ztmRow = ([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')
 
 const dojazd = () => section(S.dojazd, `
   ${perR((r, rt) => `<div>${leg(rt.meal, 'A')}${leg(rt.arena, 'B')}</div>`)}
-  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + ps([copy.ztm]))}
-  ${unwrap('Dlaczego metro?', list(copy.metroWhy))}`);
+  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + ps([copy.ztm]))}`);
 
 /* ---------- wear / ticket / return ---------- */
 

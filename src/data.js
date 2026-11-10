@@ -162,7 +162,6 @@ export const copy = {
   ],
   planB: 'Obiad skraca się do ~40 min, ale wciąż zdążysz.',
   ztm: 'Weź 2× 75-min: tam i z powrotem. Jakdojade, mobilet lub biletomat. Student −50%.',
-  metroWhy: ['Bez korków, co 5 min.', 'Taksówka: 40–60 zł. Metro: w cenie biletu.'],
   weather: 'Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.',
   after: [
     `Koniec ok. <b>20:30</b>, pociąg o <b>${trains.back.stops[0].dep}</b>.`,
