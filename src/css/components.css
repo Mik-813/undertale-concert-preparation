@@ -4,6 +4,9 @@
 @media (hover: hover) and (pointer: fine) {
   .js .unwrap.is-in:hover, .unwrap:hover { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-color: rgb(var(--violet-3-rgb) / 0.3); transform: translateY(-3px); box-shadow: 0 24px 50px -28px rgb(var(--violet-rgb) / 0.55); background-color: rgba(28, 16, 52, 0.62); }
 }
+@media (hover: none) {
+  .js .unwrap.is-in:active { transform: scale(0.985); border-color: rgb(var(--violet-3-rgb) / 0.3); background-color: rgba(28, 16, 52, 0.62); transition-duration: 0.7s, 0.15s, 0.3s, 0.3s, 0.45s; }
+}
 .unwrap[open] { background: rgb(var(--violet-rgb) / 0.07); border-color: rgb(var(--violet-2-rgb) / 0.35); }
 .unwrap summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; font-weight: 500; }
 .unwrap summary::-webkit-details-marker { display: none; }
@@ -43,6 +46,7 @@
   background: rgba(255,255,255,0.06); border: 1px solid var(--stroke);
   transition: background 0.3s, border-color 0.3s;
 }
+.btn:active { transform: scale(0.97); }
 .btn:hover { background: rgba(255,255,255,0.12); border-color: rgb(var(--violet-3-rgb) / 0.4); }
 .btn--primary, .btn--primary:hover { position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(135deg, var(--violet), #5b21b6); border-color: transparent; box-shadow: 0 10px 30px -8px rgb(var(--violet-rgb) / 0.8); }
 .btn--primary::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, #8b5cf6, var(--violet)); opacity: 0; transition: opacity 0.3s var(--ease); }
