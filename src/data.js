@@ -32,6 +32,8 @@ export const sections = [
 export const places = {
   centralna: { name: 'Warszawa Centralna', short: 'Centralna', q: 'Warszawa Centralna, Aleje Jerozolimskie 54, Warszawa' },
   bambino: { name: 'Bar Bambino', short: 'Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
+  mCentrum: { name: 'Metro Centrum', short: 'Centrum', q: 'Stacja metra Centrum, Warszawa' },
+  mImielin: { name: 'Metro Imielin', short: 'Imielin', q: 'Stacja metra Imielin, Warszawa' },
   arena: { name: 'Arena Ursynów', gen: 'Areny Ursynów', short: 'Arena', q: 'Arena Ursynów, Rotmistrza Witolda Pileckiego 122, Warszawa' },
 };
 
@@ -88,25 +90,26 @@ export const meal = {
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
 
+// A leg is split into parts, each with its own map. `at` is when the leg starts; part times follow from `min`.
 export const legs = {
   meal: {
-    from: places.centralna, to: places.bambino, min: 17, mode: 'walking',
-    steps: [{ type: 'walk', dist: '1,3 km', min: 17, note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' }],
+    from: places.centralna, to: places.bambino, at: '15:50',
+    parts: [{ type: 'walk', from: places.centralna, to: places.bambino, dist: '1,3 km', min: 17, note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' }],
   },
   arena: {
-    id: 'leg-arena', from: places.bambino, to: places.arena, min: 40, mode: 'transit',
-    steps: [
-      { type: 'walk', to: 'do metra Centrum', min: 8 },
-      { type: 'metro', line: 'M1', dir: 'Kabaty', min: 17, every: '5', stations: M1 },
-      { type: 'walk', to: 'do Areny', dist: '1 km', min: 13 },
+    id: 'leg-arena', from: places.bambino, to: places.arena, at: schedule.leave,
+    parts: [
+      { type: 'walk', from: places.bambino, to: places.mCentrum, min: 8 },
+      { type: 'metro', from: places.mCentrum, to: places.mImielin, line: 'M1', dir: 'Kabaty', min: 17, every: '5', stations: M1 },
+      { type: 'walk', from: places.mImielin, to: places.arena, dist: '1 km', min: 13 },
     ],
   },
   back: {
-    from: places.arena, to: places.centralna, min: 40, mode: 'transit',
-    steps: [
-      { type: 'walk', to: 'do metra Imielin', min: 13 },
-      { type: 'metro', line: 'M1', dir: 'Młociny', min: 17, every: '7–8', from: 'Imielin', to: 'Centrum' },
-      { type: 'walk', to: 'na Centralną', min: 5 },
+    from: places.arena, to: places.centralna, at: '20:30',
+    parts: [
+      { type: 'walk', from: places.arena, to: places.mImielin, min: 13 },
+      { type: 'metro', from: places.mImielin, to: places.mCentrum, line: 'M1', dir: 'Młociny', min: 17, every: '7–8', stations: [...M1].reverse() },
+      { type: 'walk', from: places.mCentrum, to: places.centralna, min: 5 },
     ],
   },
 };

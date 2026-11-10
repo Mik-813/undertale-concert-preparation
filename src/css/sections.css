@@ -60,27 +60,30 @@
 .leg__head h3 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 4vw, 46px); margin: 0; line-height: 1; flex: 1; position: relative; top: 0.07em; }
 .leg__head h3 .ic--arrow { vertical-align: 0.05em; }
 .leg__time { font-family: var(--f-display); font-size: 30px; color: var(--blue); text-shadow: 0 0 20px rgba(59, 130, 246, 0.35); }
-.leg__body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: start; }
-@media (max-width: 900px) { .leg__body { grid-template-columns: 1fr; } }
+.parts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.part { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .part { grid-template-columns: 1fr; gap: 12px; } }
 .map { padding: 8px; position: relative; transition: transform 0.35s var(--ease), box-shadow 0.35s, border-color 0.35s; }
 .map:hover { transform: translateY(-4px); border-color: rgb(var(--violet-2-rgb) / 0.55); box-shadow: 0 0 0 1px rgb(var(--violet-2-rgb) / .35), 0 18px 50px -12px rgb(var(--violet-rgb) / 0.7); }
-.map iframe { display: block; width: 100%; aspect-ratio: 4 / 3; min-height: 320px; border: 0; border-radius: 16px; filter: invert(0.9) hue-rotate(200deg) saturate(0.8) brightness(0.95) contrast(0.9); }
+.map iframe { display: block; width: 100%; aspect-ratio: 16 / 10; min-height: 260px; border: 0; border-radius: 16px; filter: invert(0.9) hue-rotate(200deg) saturate(0.8) brightness(0.95) contrast(0.9); }
 .map__open { position: absolute; right: 18px; bottom: 18px; padding: 7px 14px; border-radius: 999px; font: 500 13px var(--f-body); text-decoration: none; color: #fff; background: rgb(var(--violet-rgb) / 0.92); box-shadow: 0 6px 20px -6px rgb(var(--violet-rgb) / .9); opacity: .85; transition: opacity .3s, background .3s; }
 .map:hover .map__open, .map__open:focus-visible { opacity: 1; }
 .map__open:hover { background: #8b5cf6; }
-.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .step { display: flex; gap: 14px; padding: 16px 18px; border-radius: 16px; background: rgba(255,255,255,0.035); border: 1px solid var(--stroke); }
 .step__icon { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 19px; color: var(--violet-3); background: rgba(255,255,255,0.06); }
 .step__icon .ic { width: 22px; height: 22px; }
 .step--metro .step__icon { background: #e30613; color: #fff; font: 700 20px var(--f-body); box-shadow: 0 0 20px rgba(227, 6, 19, 0.45); }
 .step b { display: block; font-size: 16px; }
 .step p { margin: 4px 0 0; font-size: 14.5px; color: var(--muted); }
-.metro-line { display: flex; flex-wrap: wrap; gap: 4px 0; margin-top: 12px; font-size: 11.5px; font-family: var(--f-mono); }
-.metro-line span { position: relative; padding: 14px 6px 0 0; color: var(--muted); }
-.metro-line span::before { content: ''; position: absolute; left: 0; right: 0; top: 4px; height: 3px; background: #e30613; }
-.metro-line span::after { content: ''; position: absolute; left: 0; top: 0; width: 8px; height: 8px; margin-top: 1.5px; border-radius: 50%; background: #fff; border: 2px solid #e30613; box-sizing: border-box; }
-.metro-line span.on { color: #fff; font-weight: 600; }
-.metro-line span.on::after { width: 11px; height: 11px; margin-top: 0; background: #e30613; border-color: #fff; box-shadow: 0 0 10px #e30613; }
+.step time { display: block; margin-bottom: 4px; font: 600 13px var(--f-mono); color: var(--violet-3); letter-spacing: 0.04em; }
+.metro-line { list-style: none; margin: 14px 0 0; padding: 0; font-size: 13px; font-family: var(--f-mono); }
+.metro-line li { position: relative; padding: 0 0 10px 24px; color: var(--muted); line-height: 1.2; }
+.metro-line li:last-child { padding-bottom: 0; }
+.metro-line li::before { content: ''; position: absolute; left: 5px; top: 0.6em; bottom: -0.6em; width: 3px; background: #e30613; }
+.metro-line li:last-child::before { display: none; }
+.metro-line li::after { content: ''; position: absolute; left: 1px; top: calc(0.6em - 5px); width: 11px; height: 11px; border-radius: 50%; background: #fff; border: 2px solid #e30613; box-sizing: border-box; }
+.metro-line li.on { color: #fff; font-weight: 600; }
+.metro-line li.on::after { left: -1px; top: calc(0.6em - 7px); width: 15px; height: 15px; background: #e30613; border-color: #fff; box-shadow: 0 0 10px #e30613; }
 
 /* ---------- Dress ---------- */
 .weather { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }

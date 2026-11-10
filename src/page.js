@@ -1,7 +1,7 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
 import { event, sections, places, trains, schedule, meal, legs, ztm, weather, wear, footer } from './data.js';
 import {
-  join, span, dur, icon, arrow, heart, badge, train, chain, peron, extLink, btn, btns, maps,
+  join, span, addMin, dur, icon, arrow, heart, badge, train, chain, peron, extLink, btn, btns, maps,
   facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
@@ -90,11 +90,6 @@ const trainCard = (t) => {
 
 const wyjazd = () => section(S.wyjazd, `
   ${trainCard(trains.out)}
-  ${unwrap('Bilet', list([
-    'Kup w Koleo: <b>jeden bilet</b> na oba pociągi.',
-    'Student do 26 lat: −51%, ok. 38 zł.',
-    'Nie wysiadaj na W-wie Zachodniej.',
-  ]))}
   ${unwrap('Plan B', table(['Odjazd', 'Połączenie', 'Przyjazd'], [[trains.planB.dep, chain(trains.planB.legs, { named: true }), trains.planB.arr]])
     + '<p>Obiad skraca się do ~40 min, ale wciąż zdążysz.</p>')}`);
 
@@ -116,31 +111,34 @@ const jedzenie = () => section(S.jedzenie, `
 
 /* ---------- routes ---------- */
 
-const step = (s) => {
-  if (s.type === 'walk') {
-    const title = s.to ? `Pieszo ${join([s.to, s.dist, `${s.min} min`])}` : join(['Pieszo', s.dist, `${s.min} min`]);
-    return `<li class="step step--walk"><span class="step__icon">${icon('walk')}</span><div><b>${title}</b>${s.note ? `<p>${s.note}</p>` : ''}</div></li>`;
-  }
-  const from = s.stations?.[0] ?? s.from;
-  const to = s.stations?.at(-1) ?? s.to;
-  const stops = s.stations && `${s.stations.length - 1} przyst.`;
-  const line = s.stations
-    ? `<div class="metro-line" aria-label="Przystanki ${s.line}">${s.stations.map((n, i, a) => `<span${i === 0 || i === a.length - 1 ? ' class="on"' : ''}>${n}</span>`).join('')}</div>`
-    : '';
-  return `<li class="step step--metro"><span class="step__icon">M</span><div><b>${s.line} kierunek <u>${s.dir}</u> · ${s.min} min</b><p>${from} ${arrow()} ${join([to, stops, `co ${s.every} min`])}</p>${line}</div></li>`;
+const part = (pt, at) => {
+  const metro = pt.type === 'metro';
+  const mode = metro ? 'transit' : 'walking';
+  const ends = (n, i, a) => (i === 0 || i === a.length - 1 ? ' class="on"' : '');
+  const info = metro
+    ? `<b>${pt.line} kierunek <u>${pt.dir}</u></b><p>${join([`${pt.min} min`, `co ${pt.every} min`, `${pt.stations.length - 1} przyst.`])}</p>
+       <ol class="metro-line" aria-label="Przystanki ${pt.line}">${pt.stations.map((n, i, a) => `<li${ends(n, i, a)}>${n}</li>`).join('')}</ol>`
+    : `<b>${pt.from.short} ${arrow()} ${pt.to.short}</b><p>${join(['Pieszo', pt.dist, `${pt.min} min`])}</p>${pt.note ? `<p>${pt.note}</p>` : ''}`;
+  return `
+    <li class="part">
+      <div class="map glass">
+        <iframe title="Mapa: ${pt.from.name} do ${pt.to.gen ?? pt.to.name}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${maps.embed(pt.from.q, pt.to.q, mode)}"></iframe>
+        ${extLink(maps.dir(pt.from.q, pt.to.q, mode, event.iso.slice(0, 10), at), `Otwórz ${icon('ext')}`, 'map__open')}
+      </div>
+      <div class="step step--${pt.type}"><span class="step__icon">${metro ? 'M' : icon('walk')}</span><div><time>${at}</time>${info}</div></div>
+    </li>`;
 };
 
-const leg = (l, tag) => `
+const leg = (l, tag) => {
+  let at = l.at;
+  const parts = l.parts.map((pt) => { const html = part(pt, at); at = addMin(at, pt.min); return html; }).join('');
+  const total = l.parts.reduce((m, pt) => m + pt.min, 0);
+  return `
   <div class="leg reveal"${l.id ? ` id="${l.id}"` : ''}>
-    <div class="leg__head"><span class="leg__tag">${tag}</span><h3>${l.from.short} ${arrow()} ${l.to.short}</h3><span class="leg__time">${l.min} min</span></div>
-    <div class="leg__body">
-      <div class="map glass">
-        <iframe title="Mapa: ${l.from.name} do ${l.to.gen ?? l.to.name}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${maps.embed(l.from.q, l.to.q, l.mode)}"></iframe>
-        ${extLink(maps.dir(l.from.q, l.to.q, l.mode), `Otwórz ${icon('ext')}`, 'map__open')}
-      </div>
-      <ol class="steps">${l.steps.map(step).join('')}</ol>
-    </div>
+    <div class="leg__head"><span class="leg__tag">${tag}</span><h3>${l.from.short} ${arrow()} ${l.to.short}</h3><span class="leg__time">${total} min</span></div>
+    <ol class="parts">${parts}</ol>
   </div>`;
+};
 
 const dojazd = () => section(S.dojazd, `
   ${leg(legs.meal, 'A')}

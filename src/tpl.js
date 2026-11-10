@@ -6,6 +6,7 @@ const ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
 export const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, '');
 
 const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+export const addMin = (t, m) => { const x = (toMin(t) + m) % 1440; return `${String(Math.floor(x / 60)).padStart(2, '0')}:${String(x % 60).padStart(2, '0')}`; };
 export const span = (a, b) => (toMin(b) - toMin(a) + 1440) % 1440;
 export const dur = (min) => join([Math.floor(min / 60) && `${Math.floor(min / 60)} h`, min % 60 && `${min % 60} min`], ' ');
 
@@ -30,7 +31,12 @@ export const btns = (...b) => `<div class="btns">${b.join('')}</div>`;
 const enc = (s) => encodeURIComponent(s).replace(/%20/g, '+').replace(/%2C/g, ',');
 export const maps = {
   search: (q) => `https://www.google.com/maps/search/?api=1&query=${enc(q)}`,
-  dir: (a, b, mode) => `https://www.google.com/maps/dir/?api=1&origin=${enc(a)}&destination=${enc(b)}&travelmode=${mode}`,
+  // Path + data form is the only link format that carries a departure time (local time as epoch seconds, subway preferred).
+  dir: (a, b, mode, date, time) => {
+    const when = `!6e0!7e2!8j${Date.parse(`${date}T${time}:00Z`) / 1000}`;
+    const data = mode === 'walking' ? `!4m6!4m5!2m3${when}!3e2` : `!4m7!4m6!2m4!5e1${when}!3e3`;
+    return `https://www.google.com/maps/dir/${enc(a)}/${enc(b)}/data=${data}`;
+  },
   embed: (a, b, mode) => `https://maps.google.com/maps?saddr=${enc(a)}&daddr=${enc(b)}&dirflg=${mode === 'walking' ? 'w' : 'r'}&output=embed`,
 };
 
