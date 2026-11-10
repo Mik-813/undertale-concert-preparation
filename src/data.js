@@ -30,14 +30,14 @@ export const sections = [
 ];
 
 export const places = {
-  centralna: { name: 'Warszawa Centralna', short: 'Centralna', q: 'Warszawa Centralna, Aleje Jerozolimskie 54, Warszawa' },
-  bambino: { name: 'Bar Bambino', short: 'Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
-  mleczarnia: { name: 'Mleczarnia Jerozolimska', short: 'Mleczarnia', q: 'Mleczarnia Jerozolimska, Emilii Plater 47, Warszawa' },
-  prasowy: { name: 'Bar Prasowy', short: 'Prasowy', q: 'Bar Mleczny Prasowy, Marszałkowska 10/16, Warszawa' },
-  mCentrum: { name: 'Metro Centrum', short: 'Centrum', q: 'Stacja metra Centrum, Warszawa' },
-  mPolitechnika: { name: 'Metro Politechnika', short: 'Politechnika', q: 'Stacja metra Politechnika, Warszawa' },
-  mImielin: { name: 'Metro Imielin', short: 'Imielin', q: 'Stacja metra Imielin, Warszawa' },
-  arena: { name: 'Arena Ursynów', gen: 'Areny Ursynów', short: 'Arena', q: 'Arena Ursynów, Rotmistrza Witolda Pileckiego 122, Warszawa' },
+  centralna: { name: 'Warszawa', q: 'Warszawa Centralna, Aleje Jerozolimskie 54, Warszawa' },
+  bambino: { name: 'Bar Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
+  mleczarnia: { name: 'Mleczarnia Jerozolimska', q: 'Mleczarnia Jerozolimska, Emilii Plater 47, Warszawa' },
+  prasowy: { name: 'Bar Prasowy', q: 'Bar Mleczny Prasowy, Marszałkowska 10/16, Warszawa' },
+  mCentrum: { name: 'Metro Centrum', stop: 'Centrum', q: 'Stacja metra Centrum, Warszawa' },
+  mPolitechnika: { name: 'Metro Politechnika', stop: 'Politechnika', q: 'Stacja metra Politechnika, Warszawa' },
+  mImielin: { name: 'Metro Imielin', stop: 'Imielin', q: 'Stacja metra Imielin, Warszawa' },
+  arena: { name: 'Arena Ursynów', gen: 'Areny Ursynów', q: 'Arena Ursynów, Rotmistrza Witolda Pileckiego 122, Warszawa' },
 };
 
 // Stops: arr / dep times, platform as a number (rendered in Roman numerals).
@@ -52,7 +52,7 @@ export const trains = {
     ],
     stops: [
       { name: 'Legnica', dep: '10:24', platform: 3 },
-      { name: 'Wrocław Gł.', loc: 'we Wrocławiu', arr: '10:58', dep: '11:32', platform: 2 },
+      { name: 'Wrocław', arr: '10:58', dep: '11:32', platform: 2 },
       { name: 'Warszawa', arr: '15:48', platform: 2 },
     ],
   },
@@ -66,7 +66,7 @@ export const trains = {
     ],
     stops: [
       { name: 'Warszawa', dep: '23:39', platform: 4 },
-      { name: 'Wrocław Gł.', loc: 'we Wrocławiu', arr: '04:15', dep: '04:42', arrPlatform: 3, platform: 2 },
+      { name: 'Wrocław', arr: '04:15', dep: '04:42', arrPlatform: 3, platform: 2 },
       { name: 'Legnica', arr: '05:21', platform: 4 },
     ],
   },
@@ -82,21 +82,21 @@ const arenaWalk = { dist: '1 km', min: 13 }; // Metro Imielin <-> Arena, both wa
 const walk = (from, to, rest) => ({ type: 'walk', from, to, ...rest });
 const metro = (from, to, rest) => ({ type: 'metro', from, to, line: 'M1', ...rest });
 
-// Every restaurant is one record. `walk` = from Centralna, `metro` = its own way to the M1 (the route strategy).
+// Every restaurant is one record. `walk` = from the station, `metro` = its own way to the M1 (the route strategy).
 export const restaurants = [
   {
-    key: 'bambino', place: places.bambino, street: 'Hoża 19', price: '25–40 zł', hours: '09:00–18:00',
+    key: 'bambino', place: places.bambino, street: 'Hoża 19', price: '25-40 zł', hours: '09:00-18:00',
     menu: [['Pierogi ruskie', '18,90 zł'], ['Pierogi z mięsem', '18,90 zł'], ['Schabowy, sam kotlet', '14,50 zł']],
     walk: { min: 17, dist: '1,3 km', note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' },
     metro: { station: places.mCentrum, min: 8, dist: '650 m' },
   },
   {
-    key: 'mleczarnia', place: places.mleczarnia, street: 'Emilii Plater 47', price: '~30 zł', hours: '08:00–20:00',
+    key: 'mleczarnia', place: places.mleczarnia, street: 'Emilii Plater 47', price: '30 zł', hours: '08:00-20:00',
     walk: { min: 6, dist: '450 m' },
     metro: { station: places.mCentrum, min: 11, dist: '850 m' },
   },
   {
-    key: 'prasowy', place: places.prasowy, street: 'Marszałkowska 10/16', price: '~25 zł', hours: '08:00–20:00',
+    key: 'prasowy', place: places.prasowy, street: 'Marszałkowska 10/16', price: '25 zł', hours: '08:00-20:00',
     walk: { min: 29, dist: '2,2 km' },
     metro: { station: places.mPolitechnika, min: 8, dist: '600 m' },
   },
@@ -104,7 +104,7 @@ export const restaurants = [
 
 // Route strategy: the same two legs for any restaurant, built from its own walk and metro access.
 export const route = (r) => {
-  const stations = M1.slice(M1.indexOf(r.metro.station.short));
+  const stations = M1.slice(M1.indexOf(r.metro.station.stop));
   const metroMin = Math.round(M1_MIN * (stations.length - 1) / (M1.length - 1));
   return {
     meal: {
@@ -129,18 +129,18 @@ export const back = {
   from: places.arena, to: places.centralna, at: '20:30',
   parts: [
     walk(places.arena, places.mImielin, { min: arenaWalk.min }),
-    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7–8', stations: [...M1].reverse() }),
+    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7-8', stations: [...M1].reverse() }),
     walk(places.mCentrum, places.centralna, { min: 5 }),
   ],
 };
 
 export const ztm = [['20-min', '3,40 zł'], ['75-min', '4,40 zł', true], ['24h', '15 zł']];
 
-export const weather = [['13:00', '5°'], ['18:00', '2°'], ['21:00', '0°'], ['noc', '−2°'], ['opady', '~0%', 'dry']];
+export const weather = [['13:00', '5°'], ['18:00', '2°'], ['21:00', '0°'], ['noc', '−2°'], ['opady', '0%', 'dry']];
 
 export const wear = [
   ['snow', 'Zimowa kurtka, czapka, rękawiczki'],
-  ['layers', 'Warstwy · w hali jest ciepło'],
+  ['layers', 'Warstwy'],
   ['walk', 'Wygodne buty'],
 ];
 
@@ -154,19 +154,21 @@ const [outA, , outC] = trains.out.stops;
 // Copy that is not a fact of its own: notes, labels, list items. `<b>` marks the key value.
 export const copy = {
   countdown: [['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek']],
-  marquee: [`LEGNICA ${outA.dep}`, `CENTRALNA ${outC.arr}`, 'METRO M1', `ARENA ${event.start}`, `RZĄD ${event.row} · MIEJSCE ${event.seat}`],
+  marquee: [`LEGNICA ${outA.dep}`, `WARSZAWA ${outC.arr}`, 'METRO M1', `ARENA ${event.start}`, `RZĄD ${event.row} · MIEJSCE ${event.seat}`],
   planWhy: [
-    'Liczone od końca: na arenie <b>~30 min</b> przed startem, dojazd z centrum <b>~40 min</b>, obiad <b>~1 h</b>.',
-    `Czyli w Warszawie trzeba być ok. <b>16:00</b>. Pociąg o ${outA.dep} przyjeżdża ${outC.arr}.`,
-    'Bez wolnego czasu i bez porannej pobudki.',
+    'Na miejscu: <b>30 min</b> przed startem.',
+    'Dojazd z centrum: <b>40 min</b>.',
+    'Obiad: <b>1 h</b>.',
+    `Przyjazd do Warszawy: <b>${outC.arr}</b>.`,
   ],
-  planB: 'Obiad skraca się do ~40 min, ale wciąż zdążysz.',
-  ztm: 'Weź 2× 75-min: tam i z powrotem. Jakdojade, mobilet lub biletomat. Student −50%.',
-  weather: 'Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.',
+  planB: 'Obiad: <b>40 min</b>.',
+  ztm: '2× 75-min: tam i z powrotem. Jakdojade, mobilet, biletomat. Student −50%.',
+  weather: 'Prognoza Open-Meteo, Ursynów.',
   after: [
-    `Koniec ok. <b>20:30</b>, pociąg o <b>${trains.back.stops[0].dep}</b>.`,
+    `Koniec: <b>20:30</b>.`,
+    `Pociąg: <b>${trains.back.stops[0].dep}</b>.`,
     `Kolacja: <b>${dinner.name}</b>, ul. ${dinner.street}, do ${dinner.until}.`,
-    'Hala Centralnej jest ogrzewana i otwarta całą noc.',
+    'Hala dworca: ogrzewana, otwarta całą noc.',
   ],
 };
 
@@ -176,7 +178,6 @@ export const checklist = [
   ['id', 'Dowód / legitymacja'],
   ['train1', trains.out],
   ['train2', trains.back],
-  ['power', 'Powerbank'],
   ['charger', 'Ładowarka'],
   ['umbrella', 'Ciepłe ubrania'],
   ['snack', 'Woda i przekąska'],

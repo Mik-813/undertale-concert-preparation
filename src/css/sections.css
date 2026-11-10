@@ -1,13 +1,16 @@
 /* ---------- Timeline ---------- */
+.timeline,
+.timeline ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .timeline {
   --tl-line: color-mix(in srgb, var(--violet-2) 50%, var(--bg-0));
   --tl-col: 90px;
   --tl-gap: 44px;
   --tl-axis: 111px;
   --tl-fs: 34px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
   position: relative;
 }
 .timeline::before {
@@ -19,15 +22,50 @@
   width: 2px;
   background: var(--tl-line);
 }
+/* Consecutive points of one section: a faint violet band on the rail, the section numeral at its start. */
+.timeline__group {
+  position: relative;
+  padding: 30px 0 12px;
+  margin-bottom: 14px;
+}
+.timeline__group::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--tl-axis) - 13px);
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgb(var(--violet-rgb) / 0.2), rgb(var(--violet-rgb) / 0.08));
+  box-shadow: inset 0 0 0 1px rgb(var(--violet-3-rgb) / 0.1);
+}
+.timeline__tag {
+  position: absolute;
+  z-index: 1;
+  top: 6px;
+  left: var(--tl-axis);
+  translate: -50% 0;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--violet-3);
+}
 .timeline__item {
+  margin-bottom: 14px;
+}
+.timeline__group li:last-child {
+  margin-bottom: 0;
+}
+.timeline__row {
   display: grid;
   grid-template-columns: var(--tl-col) 1fr;
   gap: var(--tl-gap);
   align-items: center;
-  margin-bottom: 14px;
   position: relative;
 }
-.timeline__item::before,
+.timeline__row::before,
 .timeline__times time::after {
   content: '';
   position: absolute;
@@ -54,7 +92,7 @@
   color: inherit;
   text-decoration: none;
   cursor: pointer;
-  padding: 16px 22px;
+  padding: 14px 64px 16px 22px;
   transition:
     transform 0.4s var(--ease),
     border-color 0.3s,
@@ -73,13 +111,26 @@
     transition-duration: 0.15s;
   }
 }
+.timeline__act {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--violet-2);
+  margin-bottom: 4px;
+}
 .timeline__item h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
 }
 .timeline__item p {
-  margin: 2px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 4px 0 0;
   color: var(--muted);
   font-size: 15px;
 }
@@ -87,10 +138,66 @@
   outline: 2px solid var(--violet);
   outline-offset: 3px;
 }
-.timeline__item--range {
+/* Section chip: numeral always visible, the label unfolds via a 0fr -> 1fr grid track (no layout jump, it is absolute). */
+.chip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--violet-3-rgb) / 0.22);
+  background: rgb(var(--violet-rgb) / 0.14);
+  color: var(--violet-3);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
+.chip b {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.chip__more {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 0.35s var(--ease);
+}
+.chip__more > span {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 0;
+  opacity: 0;
+  transition:
+    opacity 0.25s,
+    padding-left 0.35s var(--ease);
+}
+.chip .ic--arrow {
+  width: 12px;
+  height: 12px;
+}
+.glass:is(:hover, :focus-visible) > .chip {
+  background: rgb(var(--violet-rgb) / 0.3);
+  border-color: rgb(var(--violet-3-rgb) / 0.4);
+}
+.glass:is(:hover, :focus-visible) > .chip .chip__more {
+  grid-template-columns: 1fr;
+}
+.glass:is(:hover, :focus-visible) > .chip .chip__more > span {
+  opacity: 1;
+  padding-left: 7px;
+}
+.timeline__row--range {
   align-items: stretch;
 }
-.timeline__item--range::before {
+.timeline__row--range::before {
   top: calc(14px + var(--tl-fs) / 2);
   bottom: calc(14px + var(--tl-fs) / 2);
   height: auto;
@@ -109,7 +216,7 @@
   gap: 56px;
   padding: 14px 0;
 }
-.timeline__item--range .glass {
+.timeline__row--range .glass {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -117,17 +224,17 @@
 .timeline__times time {
   position: relative;
 }
-.timeline__item--hot time {
+.timeline__row--hot time {
   color: var(--red);
   text-shadow: 0 0 18px rgba(255, 45, 85, 0.6);
 }
-.timeline__item--hot::before {
+.timeline__row--hot::before {
   border-color: var(--red);
   background: var(--red);
   box-shadow: 0 0 18px var(--red);
   animation: beat 1.4s infinite;
 }
-.timeline__item--hot .glass {
+.timeline__row--hot .glass {
   border-color: rgba(255, 45, 85, 0.4);
   background: linear-gradient(160deg, rgba(255, 45, 85, 0.12), rgb(var(--violet-rgb) / 0.08));
 }
@@ -140,6 +247,13 @@
     --tl-gap: 30px;
     --tl-axis: 71px;
     --tl-fs: 24px;
+  }
+  .timeline__item .glass {
+    padding: 12px 52px 14px 16px;
+  }
+  .chip {
+    top: 10px;
+    right: 10px;
   }
 }
 
@@ -282,19 +396,15 @@
     transform 0.45s var(--ease),
     width 0.45s var(--ease);
 }
-.is-swap {
-  animation: swap 0.45s var(--ease);
+/* Per-restaurant variants share one grid cell; js/tabs.js slides them with WAAPI (transform/opacity only). */
+.swap {
+  display: grid;
 }
-@keyframes swap {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
+.swap > [data-r] {
+  grid-area: 1 / 1;
+  min-width: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .is-swap {
-    animation: none;
-  }
   .tabs__ink {
     transition: none;
   }
@@ -376,21 +486,6 @@
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 18px;
-}
-.leg__tag {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: clamp(30px, 4vw, 46px);
-  height: clamp(30px, 4vw, 46px);
-  border-radius: 10px;
-  border: 1px solid var(--violet);
-  background: rgb(var(--violet-rgb) / 0.14);
-  color: var(--violet-3);
-  font-family: var(--f-display);
-  font-size: clamp(20px, 2.6vw, 30px);
-  line-height: 1;
-  padding-top: 0.08em;
 }
 .leg__head h3 {
   font-family: var(--f-display);

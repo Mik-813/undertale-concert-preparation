@@ -173,7 +173,7 @@
   border-radius: 6px;
   font-family: var(--f-mono);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   color: #fff;
 }
 .badge--ic {
@@ -188,8 +188,39 @@
   padding: 0 0.4em;
   font-size: 0.72em;
   border-radius: 0.35em;
-  vertical-align: 0.1em;
   line-height: 1;
+}
+
+/* Train ID: badge + number in one pill, 1px padding, concentric radius. */
+.train-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 1px 0.6em 1px 1px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+}
+.train-id--sm {
+  gap: 0.4em;
+  padding-right: 0.5em;
+  border-radius: calc(0.252em + 1px);
+  vertical-align: -0.3em;
+}
+.train-id__no {
+  font-weight: 600;
+  color: var(--text);
+}
+.train-id--sm .train-id__no {
+  font-weight: inherit;
+  color: inherit;
+}
+.train-id__name {
+  font-weight: 400;
+  opacity: 0.7;
 }
 
 .btns {

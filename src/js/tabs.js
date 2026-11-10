@@ -1,4 +1,4 @@
-import { $, $$, store } from './dom.js';
+import { $, $$, reduced, store } from './dom.js';
 
 const KEY = 'utc-restaurant';
 
@@ -11,31 +11,48 @@ export function initTabs() {
 
   const place = (t) => { ink.style.width = `${t.offsetWidth}px`; ink.style.transform = `translateX(${t.offsetLeft}px)`; };
 
-  // Replays the swap animation and skips the reveal-on-scroll for a freshly shown variant.
-  const swapIn = (el) => {
-    [el, ...$$('.reveal', el)].forEach((x) => x.classList.add('is-in'));
-    el.classList.remove('is-swap');
-    void el.offsetWidth;
-    el.classList.add('is-swap');
+  const index = (key) => tabs.findIndex((t) => t.dataset.key === key);
+  const variants = (key) => $$(`[data-r="${key}"]`);
+  const slide = (els, from, to, ms, easing) =>
+    Promise.all(els.map((el) => el.animate([from, to], { duration: ms, easing, fill: 'forwards' }).finished.catch(() => {})));
+
+  // Shows `key` everywhere; a fresh variant skips the reveal-on-scroll.
+  const show = (key, fresh = true) => $$('[data-r]').forEach((el) => {
+    const on = el.dataset.r === key;
+    if (on && el.hidden && fresh) [el, ...$$('.reveal', el)].forEach((x) => x.classList.add('is-in'));
+    el.hidden = !on;
+    if (!on) el.getAnimations().forEach((a) => a.cancel());
+  });
+
+  // Old variants slide out fully, then new ones slide in from the tab's side. One swap at a time; only the latest target queues.
+  let shown = null;
+  let busy = false;
+  let queued = null;
+  const swap = async (key) => {
+    if (busy) { queued = key; return; }
+    if (key === shown) return;
+    const from = shown;
+    shown = key;
+    if (from === null || reduced) { show(key, from !== null); return; }
+    busy = true;
+    const d = Math.sign(index(key) - index(from)) * 24;
+    await slide(variants(from), { opacity: 1, translate: '0' }, { opacity: 0, translate: `${-d}px 0` }, 220, 'ease-in');
+    show(key);
+    const incoming = variants(key);
+    await slide(incoming, { opacity: 0, translate: `${d}px 0` }, { opacity: 1, translate: '0' }, 260, 'ease-out');
+    incoming.forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
+    busy = false;
+    if (queued !== null) { const next = queued; queued = null; swap(next); }
   };
 
-  let first = true;
   const select = (key, focus = false) => {
     const tab = tabs.find((t) => t.dataset.key === key) ?? tabs[0];
     tabs.forEach((t) => { const on = t === tab; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
-    $$('[data-r]').forEach((el) => {
-      const on = el.dataset.r === tab.dataset.key;
-      if (el.hidden === !on) return;
-      el.hidden = !on;
-      if (on && !first) swapIn(el);
-    });
     place(tab);
     if (focus) tab.focus();
     store.set(KEY, tab.dataset.key);
-    first = false;
+    swap(tab.dataset.key);
   };
-
-  document.addEventListener('animationend', (e) => e.target.classList?.remove('is-swap'));
   bar.addEventListener('click', (e) => { const t = e.target.closest('[role="tab"]'); if (t) select(t.dataset.key); });
   bar.addEventListener('keydown', (e) => {
     const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];

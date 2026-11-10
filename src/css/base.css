@@ -167,6 +167,14 @@ svg {
   transition: transform 0.35s;
   transform-origin: left;
 }
+.nav__links i {
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  margin-right: 5px;
+  color: var(--violet-2);
+  opacity: 0.55;
+}
 .nav__links a:hover,
 .nav__links a.is-active {
   color: #fff;
@@ -208,6 +216,14 @@ main {
   position: relative;
   margin-bottom: 48px;
 }
+.section__num {
+  margin: 0 0 6px;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--violet-2);
+}
 .section__title {
   width: fit-content;
   font-family: var(--f-display);
@@ -231,7 +247,6 @@ main {
   margin-top: 18px;
   background: var(--violet);
   border-radius: 4px;
-  box-shadow: 0 0 18px var(--violet);
 }
 .countdown span,
 .tbl th,
@@ -347,8 +362,8 @@ main {
   height: 0.62em;
   vertical-align: 0.02em;
   margin: 0 0.08em;
-  color: var(--violet-2);
-  stroke-width: 2.4;
+  color: inherit;
+  stroke-width: 3.2;
 }
 .ic--ok {
   color: var(--green);

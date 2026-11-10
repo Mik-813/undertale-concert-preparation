@@ -1,11 +1,12 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
 import { event, sections, places, trains, restaurants, route, back, ztm, weather, wear, footer, copy, checklist } from './data.js';
 import {
-  join, sum, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
+  join, sum, each, roman, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
   dl, facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
-const S = Object.fromEntries(sections.map((s) => [s.id, s]));
+const secs = sections.map((s, i) => ({ ...s, num: roman(i + 1) }));
+const S = Object.fromEntries(secs.map((s) => [s.id, s]));
 const seat = (sep) => `Rząd ${event.row}${sep}${event.seat}`;
 const date = event.iso.slice(0, 10);
 const routes = Object.fromEntries(restaurants.map((r) => [r.key, route(r)]));
@@ -16,14 +17,17 @@ const ps = (lines) => each(lines, (l) => `<p>${l}</p>`);
 
 // Restaurant-dependent markup: one variant per restaurant, only the selected one is shown (see js/tabs.js).
 const variant = (r, html) => html.replace(/^(\s*<[a-z]+)/, `$1 data-r="${r.key}"${r === first ? '' : ' hidden'}`);
-const perR = (fn) => restaurants.map((r) => variant(r, fn(r, routes[r.key]))).join('');
+// perR(fn, tag = 'div', cls = '') → <tag class="swap cls"> with one variant per restaurant as direct children,
+// stacked in one grid cell so js/tabs.js can slide them in and out. fn(r, route) returns the variant's HTML.
+const perR = (fn, tag = 'div', cls = '') =>
+  `<${tag} class="${cls ? `swap ${cls}` : 'swap'}">${restaurants.map((r) => variant(r, fn(r, routes[r.key]))).join('')}</${tag}>`;
 
 /* ---------- nav / hero / marquee ---------- */
 
 export const nav = () => `
   <header class="nav is-hidden" id="nav">
     <a href="#top" class="nav__logo" aria-label="Na górę">${heart()}<b>Undertale</b></a>
-    <nav class="nav__links" aria-label="Sekcje">${each(sections, (s) => `<a href="#${s.id}">${s.nav}</a>`)}</nav>
+    <nav class="nav__links" aria-label="Sekcje">${each(secs, (s) => `<a href="#${s.id}"><i>${s.num}</i>${s.nav}</a>`)}</nav>
     <a class="nav__cta" href="#bilet">${seat(' · ')}</a>
   </header>`;
 
@@ -44,35 +48,65 @@ const marquee = () => {
 
 /* ---------- plan ---------- */
 
-// A plan item is an instant (one time) or a range (two times: a transfer window).
-const planItem = ({ times, href, title, lines = [], hot }) => {
+// Naming rule for every plan point: eyebrow = the action (one fixed word), title = the place, lines = structured data.
+const ACT = { dep: 'Odjazd', arr: 'Przyjazd', change: 'Przesiadka', meal: 'Obiad', metro: 'Metro', enter: 'Wejście', show: 'Koncert' };
+
+// Chip with the target section's numeral; the label slides out on hover/focus.
+const chip = ({ num, nav: label }) =>
+  `<span class="chip" aria-hidden="true"><b>${num}</b><span class="chip__more"><span>${label} ${arrow()}</span></span></span>`;
+
+// A plan point is an instant (one time) or a range (two times: a transfer window). `sec` owns it; `href` defaults to it.
+const planBody = ({ times, act, place, lines = [], sec, href = sec, hot }) => {
   const range = times.length > 1;
   const t = each(times, (x) => `<time>${x}</time>`);
-  return `<li class="${join(['timeline__item', range && 'timeline__item--range', hot && 'timeline__item--hot', 'reveal'], ' ')}">${
-    range ? `<span class="timeline__times">${t}</span>` : t}<a class="glass" href="#${href}"><h3>${title}</h3>${ps(lines)}</a></li>`;
+  return `<div class="${join(['timeline__row', range && 'timeline__row--range', hot && 'timeline__row--hot'], ' ')}">${
+    range ? `<span class="timeline__times">${t}</span>` : t}<a class="glass" href="#${href}">${chip(S[sec])}<span class="timeline__act">${ACT[act]}</span><h3>${place}</h3>${
+    lines.length ? `<p>${each(lines, (l) => `<span>${l}</span>`)}</p>` : ''}</a></div>`;
 };
+const ITEM = 'timeline__item reveal';
+const planItem = (p) => `<li class="${ITEM}">${planBody(p)}</li>`;
 
-const trainPoints = ({ stops, legs }, href) => stops.map((st, i) => {
-  if (i === 0) return { times: [st.dep], href, title: `${st.name} odjazd`, lines: [`${train(legs[0])}, ${peron(st.platform)}`] };
-  if (i === stops.length - 1) return { times: [st.arr], href, title: `${st.name} przyjazd`, lines: [peron(st.platform)] };
-  return { times: [st.arr, st.dep], href, title: `Przesiadka ${st.loc}`, lines: [`${train(legs[i])}, ${peron(st.platform, st.arrPlatform)}`] };
+// Train stop strategy by position: first departs, last arrives, the rest are transfers.
+const STOP = {
+  dep: (st, leg) => ({ times: [st.dep], lines: [train(leg), peron(st.platform)] }),
+  change: (st, leg) => ({ times: [st.arr, st.dep], lines: [train(leg), peron(st.platform, st.arrPlatform)] }),
+  arr: (st) => ({ times: [st.arr], lines: [peron(st.platform)] }),
+};
+const trainPoints = ({ stops, legs }, sec) => stops.map((st, i) => {
+  const act = i === 0 ? 'dep' : i === stops.length - 1 ? 'arr' : 'change';
+  return { act, sec, place: st.name, ...STOP[act](st, legs[i]) };
 });
 
 const cityPoints = (r, { meal, arena }) => {
-  const [leave, metro, , arrive] = clock(arena.at, arena.parts);
+  const [, metro, , arrive] = clock(arena.at, arena.parts);
+  const m1 = arena.parts.find((p) => p.type === 'metro');
   return [
-    { times: [clock(meal.at, meal.parts).at(-1)], href: 'jedzenie', title: `Obiad · ${r.place.name}`, lines: [`ul. ${r.street}`] },
-    { times: [metro], href: arena.id, title: `Metro M1 ${arrow()} Imielin`, lines: [r.metro.station.name] },
-    { times: [arrive], href: arena.id, title: places.arena.name },
+    { times: [clock(meal.at, meal.parts).at(-1)], act: 'meal', sec: 'jedzenie', place: r.place.name, lines: [`ul. ${r.street}`] },
+    { times: [metro], act: 'metro', sec: 'dojazd', href: arena.id, place: m1.from.name, lines: [`${m1.line} ${arrow()} ${m1.dir}`] },
+    { times: [arrive], act: 'enter', sec: 'dojazd', href: arena.id, place: places.arena.name },
   ];
 };
 
-const timeline = () => [
-  ...trainPoints(trains.out, 'wyjazd').map(planItem),
-  ...[0, 1, 2].map((i) => perR((r, rt) => planItem(cityPoints(r, rt)[i]))),
-  planItem({ times: [event.start], href: 'bilet', title: 'Koncert', lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true }),
-  ...trainPoints(trains.back, 'powrot').map(planItem),
-].join('');
+// Restaurant-dependent points: one <li>, one variant per restaurant inside (see perR).
+const cityItems = [0, 1, 2].map((i) => ({ sec: cityPoints(first, routes[first.key])[i].sec, html: perR((r, rt) => planBody(cityPoints(r, rt)[i]), 'li', ITEM) }));
+const concert = { times: [event.start], act: 'show', sec: 'bilet', place: event.venue, lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true };
+const pointItem = (p) => ({ sec: p.sec, html: planItem(p) });
+
+// Consecutive points of one section form a group: a tinted rail band with the section numeral at its start.
+const groups = (items) => items.reduce((gs, it) => {
+  const g = gs.at(-1);
+  if (g?.sec === it.sec) g.items.push(it.html); else gs.push({ sec: it.sec, items: [it.html] });
+  return gs;
+}, []);
+const group = ({ sec, items }) =>
+  `<li class="timeline__group"><span class="timeline__tag" aria-hidden="true">${S[sec].num}</span><ol>${items.join('')}</ol></li>`;
+
+const timeline = () => each(groups([
+  ...trainPoints(trains.out, 'wyjazd').map(pointItem),
+  ...cityItems,
+  pointItem(concert),
+  ...trainPoints(trains.back, 'powrot').map(pointItem),
+]), group);
 
 const plan = () => section(S.plan, `
   <ol class="timeline">${timeline()}</ol>
@@ -110,7 +144,7 @@ const restaurant = (r) => `
         ['Sobota', r.hours],
         ['Cena', r.price],
         ['Z dworca', sub(`${r.walk.min} min`, r.walk.dist)],
-        ['Do metra', sub(`${r.metro.min} min`, join([r.metro.station.short, r.metro.dist]))],
+        ['Do metra', sub(`${r.metro.min} min`, join([r.metro.station.name, r.metro.dist]))],
       ])}
       ${btns(btn(maps.search(r.place.q), 'Google Maps', true))}
     </div>
@@ -119,7 +153,7 @@ const restaurant = (r) => `
 
 const tab = (r) => {
   const on = r === first;
-  return `<button type="button" role="tab" id="tab-${r.key}" aria-controls="food-${r.key}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-key="${r.key}">${r.place.short}</button>`;
+  return `<button type="button" role="tab" id="tab-${r.key}" aria-controls="food-${r.key}" aria-selected="${on}" tabindex="${on ? 0 : -1}" data-key="${r.key}">${r.place.name}</button>`;
 };
 
 const tabs = () => `
@@ -146,7 +180,7 @@ const PART = {
   walk: {
     badge: () => icon('walk'),
     map,
-    info: (p) => `<b>${p.from.short} ${arrow()} ${p.to.short}</b><p>${join(['Pieszo', p.dist, `${p.min} min`])}</p>${p.note ? `<p>${p.note}</p>` : ''}`,
+    info: (p) => `<b>${p.from.name} ${arrow()} ${p.to.name}</b><p>${join(['Pieszo', p.dist, `${p.min} min`])}</p>${p.note ? `<p>${p.note}</p>` : ''}`,
   },
   metro: {
     badge: () => 'M',
@@ -168,11 +202,11 @@ const part = (p, at) => {
     </li>`;
 };
 
-const leg = (l, tag) => {
+const leg = (l) => {
   const at = clock(l.at, l.parts);
   return `
   <div class="leg reveal"${l.id ? ` id="${l.id}"` : ''}>
-    <div class="leg__head"><span class="leg__tag">${tag}</span><h3>${l.from.short} ${arrow()} ${l.to.short}</h3><span class="leg__time">${total(l)} min</span></div>
+    <div class="leg__head"><h3>${l.from.name} ${arrow()} ${l.to.name}</h3><span class="leg__time">${total(l)} min</span></div>
     <ol class="parts">${l.parts.map((p, i) => part(p, at[i])).join('')}</ol>
   </div>`;
 };
@@ -180,7 +214,7 @@ const leg = (l, tag) => {
 const ztmRow = ([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')}`, `<b>${v}</b>`] : [k, v]);
 
 const dojazd = () => section(S.dojazd, `
-  ${perR((r, rt) => `<div>${leg(rt.meal, 'A')}${leg(rt.arena, 'B')}</div>`)}
+  ${perR((r, rt) => `<div>${leg(rt.meal)}${leg(rt.arena)}</div>`)}
   ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + ps([copy.ztm]))}`);
 
 /* ---------- wear / ticket / return ---------- */
@@ -203,7 +237,7 @@ const bilet = () => section(S.bilet, `
     <div class="ticket__stub"><span>RZĄD</span><b>${event.row}</b><span>MIEJSCE</span><b>${event.seat}</b>${heart('ticket__heart')}</div>
   </div>`);
 
-const powrot = () => section(S.powrot, `${leg(back, 'C')}${trainCard(trains.back)}
+const powrot = () => section(S.powrot, `${leg(back)}${trainCard(trains.back)}
   ${unwrap('Po koncercie', list(copy.after))}`);
 
 /* ---------- checklist ---------- */
