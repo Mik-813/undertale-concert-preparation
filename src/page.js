@@ -146,12 +146,13 @@ const part = (pt, at) => {
     ? `<b>${pt.line} kierunek <u>${pt.dir}</u></b><p>${join([`${pt.min} min`, `co ${pt.every} min`, `${pt.stations.length - 1} przyst.`])}</p>
        <ol class="metro-line" aria-label="Przystanki ${pt.line}">${pt.stations.map((n, i, a) => `<li${ends(n, i, a)}>${n}</li>`).join('')}</ol>`
     : `<b>${pt.from.short} ${arrow()} ${pt.to.short}</b><p>${join(['Pieszo', pt.dist, `${pt.min} min`])}</p>${pt.note ? `<p>${pt.note}</p>` : ''}`;
-  return `
-    <li class="part">
-      <div class="map glass">
+  const map = metro ? '' : `
+      <div class="map">
         <iframe title="Mapa: ${pt.from.name} do ${pt.to.gen ?? pt.to.name}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${maps.embed(pt.from.q, pt.to.q, mode)}"></iframe>
         ${extLink(maps.dir(pt.from.q, pt.to.q, mode, event.iso.slice(0, 10), at), `Otwórz ${icon('ext')}`, 'map__open')}
-      </div>
+      </div>`;
+  return `
+    <li class="part part--${pt.type} glass">${map}
       <div class="step step--${pt.type}"><span class="step__icon">${metro ? 'M' : icon('walk')}</span><div><time>${at}</time>${info}</div></div>
     </li>`;
 };
