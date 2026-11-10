@@ -7,7 +7,7 @@ export function initScroll() {
   const navLinks = $$('.nav__links a');
   const sections = navLinks.map((a) => $(a.getAttribute('href')));
   const plan = $('#plan');
-  let ticking = false;
+  let ticking = false, drawn = false;
 
   function onFrame(t) {
     ticking = false;
@@ -25,9 +25,8 @@ export function initScroll() {
     });
     navLinks.forEach((l, i) => l.classList.toggle('is-active', i === active));
 
-    if (!reduced) {
-      paint(t, y);
-    } else if (!onFrame.drawn) { drawStars(0); onFrame.drawn = true; }
+    if (!reduced) paint(t, y);
+    else if (!drawn) { drawStars(0); drawn = true; }
   }
   const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(onFrame); } };
 

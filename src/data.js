@@ -73,12 +73,14 @@ export const trains = {
   planB: { dep: '11:07', arr: '16:16', legs: [{ carrier: 'KD', no: 'Wrocław' }, { carrier: 'IC', no: '6102', name: 'Ślęża' }] },
 };
 
-// Local times of the plan that are not train times: leave the station, leave the restaurant.
+// Plan times that are not train times: leave the station, leave the restaurant.
 export const schedule = { off: '15:50', leave: '17:15' };
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
 const M1_MIN = 17; // Centrum to Imielin
-const exit = { type: 'walk', from: places.mImielin, to: places.arena, dist: '1 km', min: 13 };
+const arenaWalk = { dist: '1 km', min: 13 }; // Metro Imielin <-> Arena, both ways
+const walk = (from, to, rest) => ({ type: 'walk', from, to, ...rest });
+const metro = (from, to, rest) => ({ type: 'metro', from, to, line: 'M1', ...rest });
 
 // Every restaurant is one record. `walk` = from Centralna, `metro` = its own way to the M1 (the route strategy).
 export const restaurants = [
@@ -107,14 +109,14 @@ export const route = (r) => {
   return {
     meal: {
       id: `leg-meal-${r.key}`, from: places.centralna, to: r.place, at: schedule.off,
-      parts: [{ type: 'walk', from: places.centralna, to: r.place, ...r.walk }],
+      parts: [walk(places.centralna, r.place, r.walk)],
     },
     arena: {
       id: `leg-arena-${r.key}`, from: r.place, to: places.arena, at: schedule.leave,
       parts: [
-        { type: 'walk', from: r.place, to: r.metro.station, min: r.metro.min, dist: r.metro.dist },
-        { type: 'metro', from: r.metro.station, to: places.mImielin, line: 'M1', dir: 'Kabaty', min: metroMin, every: '5', stations },
-        exit,
+        walk(r.place, r.metro.station, { min: r.metro.min, dist: r.metro.dist }),
+        metro(r.metro.station, places.mImielin, { dir: 'Kabaty', min: metroMin, every: '5', stations }),
+        walk(places.mImielin, places.arena, arenaWalk),
       ],
     },
   };
@@ -122,16 +124,14 @@ export const route = (r) => {
 
 export const dinner = { name: 'Gościniec', street: 'Nowy Świat 43', until: '23:00' };
 
-// A leg is split into parts, each with its own map. `at` is when the leg starts; part times follow from `min`.
-export const legs = {
-  back: {
-    from: places.arena, to: places.centralna, at: '20:30',
-    parts: [
-      { type: 'walk', from: places.arena, to: places.mImielin, min: 13 },
-      { type: 'metro', from: places.mImielin, to: places.mCentrum, line: 'M1', dir: 'Młociny', min: M1_MIN, every: '7–8', stations: [...M1].reverse() },
-      { type: 'walk', from: places.mCentrum, to: places.centralna, min: 5 },
-    ],
-  },
+// After the concert: back to the station. `at` is when the leg starts; part times follow from `min`.
+export const back = {
+  from: places.arena, to: places.centralna, at: '20:30',
+  parts: [
+    walk(places.arena, places.mImielin, { min: arenaWalk.min }),
+    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7–8', stations: [...M1].reverse() }),
+    walk(places.mCentrum, places.centralna, { min: 5 }),
+  ],
 };
 
 export const ztm = [['20-min', '3,40 zł'], ['75-min', '4,40 zł', true], ['24h', '15 zł']];
@@ -148,3 +148,37 @@ export const footer = {
   note: 'Prywatny plan, strona fanowska, niezwiązana z GraMuzyka ani Toby Foxem.',
   author: 'Mykyta Mykulskyi',
 };
+
+const [outA, , outC] = trains.out.stops;
+
+// Copy that is not a fact of its own: notes, labels, list items. `<b>` marks the key value.
+export const copy = {
+  countdown: [['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek']],
+  marquee: [`LEGNICA ${outA.dep}`, `CENTRALNA ${outC.arr}`, 'METRO M1', `ARENA ${event.start}`, `RZĄD ${event.row} · MIEJSCE ${event.seat}`],
+  planWhy: [
+    'Liczone od końca: na arenie <b>~30 min</b> przed startem, dojazd z centrum <b>~40 min</b>, obiad <b>~1 h</b>.',
+    `Czyli w Warszawie trzeba być ok. <b>16:00</b>. Pociąg o ${outA.dep} przyjeżdża ${outC.arr}.`,
+    'Bez wolnego czasu i bez porannej pobudki.',
+  ],
+  planB: 'Obiad skraca się do ~40 min, ale wciąż zdążysz.',
+  ztm: 'Weź 2× 75-min: tam i z powrotem. Jakdojade, mobilet lub biletomat. Student −50%.',
+  metroWhy: ['Bez korków, co 5 min.', 'Taksówka: 40–60 zł. Metro: w cenie biletu.'],
+  weather: 'Prognoza Open-Meteo dla Ursynowa. Sprawdź dzień wcześniej.',
+  after: [
+    `Koniec ok. <b>20:30</b>, pociąg o <b>${trains.back.stops[0].dep}</b>.`,
+    `Kolacja: <b>${dinner.name}</b>, ul. ${dinner.street}, do ${dinner.until}.`,
+    'Hala Centralnej jest ogrzewana i otwarta całą noc.',
+  ],
+};
+
+// A train record in place of a label renders as its ticket.
+export const checklist = [
+  ['ticket', 'Bilet na koncert'],
+  ['id', 'Dowód / legitymacja'],
+  ['train1', trains.out],
+  ['train2', trains.back],
+  ['power', 'Powerbank'],
+  ['charger', 'Ładowarka'],
+  ['umbrella', 'Ciepłe ubrania'],
+  ['snack', 'Woda i przekąska'],
+];

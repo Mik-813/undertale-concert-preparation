@@ -2,18 +2,15 @@ import { $$ } from './dom.js';
 import { event } from '../data.js';
 
 const concert = new Date(event.iso).getTime();
-const pad = (n) => String(n).padStart(2, '0');
+const UNITS = [['d', 864e5], ['h', 36e5], ['m', 6e4], ['s', 1e3]];
 
 export function initCountdown() {
-  const cd = Object.fromEntries($$('[data-cd]').map((el) => [el.dataset.cd, el]));
-  function updateCountdown() {
-    let diff = Math.max(0, concert - Date.now());
-    const d = Math.floor(diff / 864e5); diff -= d * 864e5;
-    const h = Math.floor(diff / 36e5); diff -= h * 36e5;
-    const m = Math.floor(diff / 6e4); diff -= m * 6e4;
-    const s = Math.floor(diff / 1e3);
-    cd.d.textContent = pad(d); cd.h.textContent = pad(h); cd.m.textContent = pad(m); cd.s.textContent = pad(s);
-  }
-  updateCountdown();
-  setInterval(() => { if (!document.hidden) updateCountdown(); }, 1000);
+  const cells = $$('[data-cd]');
+  const update = () => {
+    let left = Math.max(0, concert - Date.now());
+    const value = Object.fromEntries(UNITS.map(([k, ms]) => { const n = Math.floor(left / ms); left -= n * ms; return [k, n]; }));
+    cells.forEach((el) => { el.textContent = String(value[el.dataset.cd]).padStart(2, '0'); });
+  };
+  update();
+  setInterval(() => { if (!document.hidden) update(); }, 1000);
 }

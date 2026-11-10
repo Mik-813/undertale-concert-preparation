@@ -1,21 +1,31 @@
 // Generic build-time HTML helpers. Every repeated UI pattern lives here once.
 
 export const join = (parts, sep = ' · ') => parts.filter(Boolean).join(sep);
+export const sum = (xs) => xs.reduce((a, b) => a + b, 0);
+const attr = (name, v) => (v || v === 0 ? ` ${name}="${v}"` : '');
+const cls = (...names) => attr('class', join(names, ' '));
+export const each = (xs, fn) => xs.map(fn).join('');
+
+/* ---------- numbers & time ---------- */
 
 const ROMAN = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
 export const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, '');
 
+const pad = (n) => String(n).padStart(2, '0');
 const toMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
-export const addMin = (t, m) => { const x = (toMin(t) + m) % 1440; return `${String(Math.floor(x / 60)).padStart(2, '0')}:${String(x % 60).padStart(2, '0')}`; };
+export const addMin = (t, m) => { const x = (toMin(t) + m) % 1440; return `${pad(Math.floor(x / 60))}:${pad(x % 60)}`; };
 export const span = (a, b) => (toMin(b) - toMin(a) + 1440) % 1440;
 export const dur = (min) => join([Math.floor(min / 60) && `${Math.floor(min / 60)} h`, min % 60 && `${min % 60} min`], ' ');
+// Start time of every part plus the final arrival: [at, at + p0, at + p0 + p1, ...].
+export const clock = (at, parts) => parts.reduce((ts, p) => [...ts, addMin(ts.at(-1), p.min)], [at]);
 
-export const icon = (id, cls = '') => `<svg class="ic${cls && ` ${cls}`}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+/* ---------- icons & badges ---------- */
+
+export const icon = (id, mod = '') => `<svg${cls('ic', mod)} aria-hidden="true"><use href="#i-${id}"/></svg>`;
 export const arrow = () => icon('arrow', 'ic--arrow');
-export const ext = () => icon('ext');
-export const heart = (cls = '', tag = 'span') => `<${tag} class="px-heart${cls && ` ${cls}`}" aria-hidden="true"></${tag}>`;
+export const heart = (mod = '', tag = 'span') => `<${tag}${cls('px-heart', mod)} aria-hidden="true"></${tag}>`;
 
-export const badge = (carrier, sm = true) => `<span class="badge badge--${carrier.toLowerCase()}${sm ? ' badge--sm' : ''}">${carrier}</span>`;
+const badge = (carrier, sm) => `<span${cls('badge', `badge--${carrier.toLowerCase()}`, sm && 'badge--sm')}>${carrier}</span>`;
 export const train = (t, { sm = true, named = false } = {}) => {
   const label = `${t.no}${named && t.name ? ` „${t.name}”` : ''}`;
   return `${badge(t.carrier, sm)} ${sm ? label : `<b>${label}</b>`}`;
@@ -23,9 +33,11 @@ export const train = (t, { sm = true, named = false } = {}) => {
 export const chain = (legs, opts) => legs.map((l) => train(l, opts)).join(` ${arrow()} `);
 export const peron = (n, from) => `peron ${from ? `${roman(from)} ${arrow()} ` : ''}${roman(n)}`;
 
-export const extLink = (href, label, cls = '') => `<a${cls && ` class="${cls}"`} href="${href}" target="_blank" rel="noopener">${label}</a>`;
+/* ---------- links ---------- */
+
+export const extLink = (href, label, c = '') => `<a${cls(c)} href="${href}" target="_blank" rel="noopener">${label}</a>`;
 export const btn = (href, label, primary = false) =>
-  extLink(href, primary ? `${label} ${ext()}` : label, primary ? 'btn btn--primary' : 'btn');
+  primary ? extLink(href, `${label} ${icon('ext')}`, 'btn btn--primary') : extLink(href, label, 'btn');
 export const btns = (...b) => `<div class="btns">${b.join('')}</div>`;
 
 const enc = (s) => encodeURIComponent(s).replace(/%20/g, '+').replace(/%2C/g, ',');
@@ -40,11 +52,13 @@ export const maps = {
   embed: (a, b, mode) => `https://maps.google.com/maps?saddr=${enc(a)}&daddr=${enc(b)}&dirflg=${mode === 'walking' ? 'w' : 'r'}&output=embed`,
 };
 
-export const facts = (rows) => `<dl class="facts">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
-export const list = (items, cls = '') => `<ul${cls && ` class="${cls}"`}>${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+/* ---------- blocks ---------- */
+
+export const dl = (rows, c = '') => `<dl${cls(c)}>${each(rows, ([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)}</dl>`;
+export const facts = (rows) => dl(rows, 'facts');
+export const list = (items, c = '', tag = 'ul') => `<${tag}${cls(c)}>${each(items, (i) => `<li>${i}</li>`)}</${tag}>`;
 export const table = (head, rows) =>
-  `<table class="tbl"><thead><tr>${head.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows
-    .map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  `<table class="tbl"><thead><tr>${each(head, (h) => `<th>${h}</th>`)}</tr></thead><tbody>${each(rows, (r) => `<tr>${each(r, (c) => `<td>${c}</td>`)}</tr>`)}</tbody></table>`;
 
 export const unwrap = (title, body) =>
   `<details class="unwrap reveal"><summary><span>${title}</span><i></i></summary><div class="unwrap__body"><div>${body}</div></div></details>`;
@@ -52,5 +66,5 @@ export const unwrap = (title, body) =>
 export const section = ({ id, title }, body) =>
   `<section class="section" id="${id}"><header class="section__head"><h2 class="section__title reveal">${title}</h2></header>${body}</section>`;
 
-export const dialog = (text, { id, cls = '', role = 'note' } = {}) =>
-  `<div class="dialog${cls && ` ${cls}`}"${id ? ` id="${id}"` : ''} role="${role}"${role === 'status' ? ' aria-live="polite"' : ''}>${heart('dialog__heart')}<p class="dialog__text" data-type="${text}"></p></div>`;
+export const dialog = (text, { id, mod = '', role = 'note' } = {}) =>
+  `<div${cls('dialog', mod)}${attr('id', id)} role="${role}"${role === 'status' ? ' aria-live="polite"' : ''}>${heart('dialog__heart')}<p class="dialog__text" data-type="${text}"></p></div>`;

@@ -1,12 +1,36 @@
 /* ---------- Reveal defaults (JS enhances) ---------- */
-.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s var(--ease); }
-.js .reveal.is-in { opacity: 1; transform: none; }
-.hero__title .split { transition: transform 1s var(--ease); }
-.js .hero__title .split { transform: translateY(105%); }
-.js .hero__title.is-in .split { transform: none; }
-
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s var(--ease);
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+.hero__title .split {
+  transition: transform 1s var(--ease);
+}
+.js .hero__title .split {
+  transform: translateY(105%);
+}
+.js .hero__title.is-in .split {
+  transform: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  .js .reveal, .js .hero__title .split { opacity: 1; transform: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js .reveal,
+  .js .hero__title .split {
+    opacity: 1;
+    transform: none;
+  }
 }

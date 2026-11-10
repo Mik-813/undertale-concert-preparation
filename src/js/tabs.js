@@ -1,4 +1,4 @@
-import { $, $$ } from './dom.js';
+import { $, $$, store } from './dom.js';
 
 const KEY = 'utc-restaurant';
 
@@ -11,6 +11,14 @@ export function initTabs() {
 
   const place = (t) => { ink.style.width = `${t.offsetWidth}px`; ink.style.transform = `translateX(${t.offsetLeft}px)`; };
 
+  // Replays the swap animation and skips the reveal-on-scroll for a freshly shown variant.
+  const swapIn = (el) => {
+    [el, ...$$('.reveal', el)].forEach((x) => x.classList.add('is-in'));
+    el.classList.remove('is-swap');
+    void el.offsetWidth;
+    el.classList.add('is-swap');
+  };
+
   let first = true;
   const select = (key, focus = false) => {
     const tab = tabs.find((t) => t.dataset.key === key) ?? tabs[0];
@@ -19,11 +27,11 @@ export function initTabs() {
       const on = el.dataset.r === tab.dataset.key;
       if (el.hidden === !on) return;
       el.hidden = !on;
-      if (on && !first) { [el, ...$$('.reveal', el)].forEach((x) => x.classList.add('is-in')); el.classList.remove('is-swap'); void el.offsetWidth; el.classList.add('is-swap'); }
+      if (on && !first) swapIn(el);
     });
     place(tab);
     if (focus) tab.focus();
-    try { localStorage.setItem(KEY, tab.dataset.key); } catch {}
+    store.set(KEY, tab.dataset.key);
     first = false;
   };
 
@@ -38,10 +46,8 @@ export function initTabs() {
   });
   addEventListener('resize', () => place(tabs.find((t) => t.tabIndex === 0)), { passive: true });
 
-  let saved = null;
-  try { saved = localStorage.getItem(KEY); } catch {}
   // First paint without the ink sliding in from the left.
   ink.style.transition = 'none';
-  select(saved);
+  select(store.get(KEY, null));
   requestAnimationFrame(() => { ink.style.transition = ''; });
 }

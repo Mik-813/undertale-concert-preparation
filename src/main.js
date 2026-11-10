@@ -9,11 +9,4 @@ import { initPointer } from './js/pointer.js';
 
 document.documentElement.classList.add('js');
 
-initAnchors();
-initReveal();
-initCountdown();
-initUnwrap();
-initTabs();
-initChecklist();
-initScroll();
-initPointer();
+[initAnchors, initReveal, initCountdown, initUnwrap, initTabs, initChecklist, initScroll, initPointer].forEach((init) => init());

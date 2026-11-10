@@ -1,7 +1,6 @@
 :root {
   --bg-0: #07040d;
   --bg-1: #120a22;
-  --bg-2: #1d0f38;
   --violet-rgb: 124 58 237;
   --violet-2-rgb: 167 139 250;
   --violet-3-rgb: 196 181 253;
@@ -12,9 +11,8 @@
   --red: #ff2d55;
   --yellow: #facc15;
   --green: #4ade80;
-  --soul-red: #ff0000;
-  --ease: cubic-bezier(.2, .8, .2, 1);
-  --spring: cubic-bezier(.3, 1.6, .5, 1);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   --text: #ece7f7;
   --muted: #a69cbf;
   --glass: rgba(255, 255, 255, 0.045);
