@@ -234,6 +234,7 @@ main {
 .tbl th,
 .facts dt,
 .train__route small,
+.peron,
 .weather span,
 .ticket dt {
   font-family: var(--f-mono);

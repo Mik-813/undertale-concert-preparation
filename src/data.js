@@ -51,7 +51,7 @@ export const trains = {
     ],
     stops: [
       { name: 'Legnica', dep: '10:24', platform: 3 },
-      { name: 'Wrocław', arr: '10:58', dep: '11:32', platform: 2 },
+      { name: 'Wrocław', arr: '10:58', dep: '11:32', arrPlatform: 2, platform: 2 },
       { name: 'Warszawa', arr: '15:48', platform: 2 },
     ],
   },
