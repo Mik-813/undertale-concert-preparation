@@ -33,9 +33,9 @@ export const places = {
   bambino: { name: 'Bar Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
   mleczarnia: { name: 'Mleczarnia Jerozolimska', q: 'Mleczarnia Jerozolimska, Emilii Plater 47, Warszawa' },
   prasowy: { name: 'Bar Prasowy', q: 'Bar Mleczny Prasowy, Marszałkowska 10/16, Warszawa' },
-  mCentrum: { name: 'Metro Centrum', stop: 'Centrum', q: 'Stacja metra Centrum, Warszawa' },
-  mPolitechnika: { name: 'Metro Politechnika', stop: 'Politechnika', q: 'Stacja metra Politechnika, Warszawa' },
-  mImielin: { name: 'Metro Imielin', stop: 'Imielin', q: 'Stacja metra Imielin, Warszawa' },
+  mCentrum: { name: 'Metro Centrum', stop: 'Centrum', ll: [52.2314, 21.0106], q: 'Stacja metra Centrum, Warszawa' },
+  mPolitechnika: { name: 'Metro Politechnika', stop: 'Politechnika', ll: [52.2183, 21.0153], q: 'Stacja metra Politechnika, Warszawa' },
+  mImielin: { name: 'Metro Imielin', stop: 'Imielin', ll: [52.1492, 21.0464], q: 'Stacja metra Imielin, Warszawa' },
   arena: { name: 'Arena Ursynów', gen: 'Areny Ursynów', q: 'Arena Ursynów, Rotmistrza Witolda Pileckiego 122, Warszawa' },
 };
 
@@ -154,7 +154,16 @@ export const back = {
   ],
 };
 
-export const ztm = [['20-min', '3,40 zł'], ['75-min', '4,40 zł', true], ['24h', '15 zł']];
+// Metro ticket: one per ride, bought online via Jakdojade (opens the ride at its planned time).
+export const ztm = {
+  fare: '75-min', price: '4,40 zł', zone: 'Strefa 1',
+  facts: [
+    ['Potrzebne', '2× 75-min', 'tam i z powrotem'],
+    ['Aktywacja', 'W aplikacji', 'przed wejściem na peron'],
+    ['Biletomat', 'Przy wejściu', 'gotówka lub karta'],
+    ['Ulga', '−50%', 'legitymacja studencka'],
+  ],
+};
 
 export const weather = [['13:00', '5°'], ['18:00', '2°'], ['21:00', '0°'], ['noc', '−2°'], ['opady', '0%', 'dry']];
 
@@ -183,13 +192,6 @@ export const copy = {
     `Przyjazd do Warszawy: <b>${outC.arr}</b>.`,
   ],
   planB: `Obiad skrócony: <b>${lunch.short}</b> zamiast ${lunch.full}.`,
-  ztm: [
-    ['Potrzebne', '2× 75-min', 'strefa 1, tam i z powrotem'],
-    ['Zakup', 'Biletomat', 'przy wejściu do metra, gotówka lub karta'],
-    ['Kasowanie', 'Bramka', 'przed peronem'],
-    ['Aplikacje', 'mobiWAWA, Jakdojade', 'aktywacja w aplikacji'],
-    ['Ulga', '−50%', 'legitymacja studencka'],
-  ],
   weather: 'Prognoza Open-Meteo, Ursynów.',
   after: [
     `Koniec: <b>20:30</b>.`,

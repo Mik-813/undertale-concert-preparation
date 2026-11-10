@@ -1,7 +1,7 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
 import { event, sections, places, trains, restaurants, route, back, ztm, stationPhotos, weather, wear, footer, copy, checklist } from './data.js';
 import {
-  cls, join, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps,
+  cls, join, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps, jakdojade,
   dl, facts, list, table, unwrap, section, dialog,
 } from './tpl.js';
 
@@ -177,45 +177,54 @@ const stop = (n, c) => {
     <div class="stop__photos"><div>${each(photos, (ph) => shot(n, ph))}</div></div></li>`;
 };
 
+// The metro ticket: a link to the ride on Jakdojade at its planned time; details unfold on hover.
+const zt = (p, at) => `
+      ${extLink(jakdojade(p.from, p.to, date, at), `
+        <span class="zt__head"><span class="zt__badge">ZTM</span><b>Bilet ${ztm.fare}</b><span class="zt__price">${ztm.price}</span><span class="zt__go"><span>Kup</span> ${icon('ext')}</span></span>
+        <span class="zt__more"><span class="zt__body">
+          <span class="zt__ride" style="--i:0"><time>${event.day} ${event.date.slice(0, 5)} ${at}</time>${p.from.stop} ${arrow()} ${p.to.stop}<small>${ztm.zone}</small></span>
+          ${each(ztm.facts, ([k, v, note], i) => `<span class="zt__fact" style="--i:${i + 1}"><small>${k}</small><b>${v}</b><span>${note}</span></span>`)}
+        </span></span>`, 'zt')}`;
+
 // Part strategy: how each kind of part is drawn.
 // Long tails collapse to: next station, gap, terminal.
 const tail = (l) => (l.length > 2 ? [l[0], null, l.at(-1)] : l);
 const PART = {
   walk: {
     badge: () => icon('walk'),
-    map,
+    media: map,
     info: (p) => `<b>${p.from.name} ${arrow()} ${p.to.name}</b><p>${join(['Pieszo', p.dist, `${p.min} min`])}</p>${p.note ? `<p>${p.note}</p>` : ''}`,
   },
   metro: {
     badge: () => 'M',
-    map: () => '',
-    info: (p) => {
+    media: (p, at) => {
       const last = p.stations.length - 1;
       const stops = each(p.stations, (n, i) => stop(n, i === 0 || i === last ? 'on' : ''))
         + each(tail(p.beyond ?? []), (n) => (n ? stop(n, 'off') : '<li class="off gap" aria-hidden="true"></li>'));
-      return `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${last} przyst.`])}</p>
-       <ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>`;
+      return `<ol class="metro-line" aria-label="Przystanki ${p.line}">${stops}</ol>${zt(p, at)}`;
     },
+    info: (p) => `<b>${p.line} kierunek <u>${p.dir}</u></b><p>${join([`${p.min} min`, `co ${p.every} min`, `${p.stations.length - 1} przyst.`])}</p>`,
   },
 };
 
-const part = (p, at) => {
-  const s = PART[p.type];
-  return `
-    <li class="part part--${p.type} glass">${s.map(p, at)}
-      <div class="step step--${p.type}"><span class="step__icon">${s.badge()}</span><div><time>${at}</time>${s.info(p)}</div></div>
-    </li>`;
-};
+// A stage of the timeline: media, time stop, label pane. The arrival stage has no media.
+const stage = (type, at, badge, info, media = '') => `
+      <li class="stage stage--${type}">
+        ${media && `<div class="stage__media">${media}</div>`}
+        <span class="stage__time"><time>${at}</time></span>
+        <div class="stage__label step step--${type}"><span class="step__icon">${badge}</span><div>${info}</div></div>
+      </li>`;
 
 const leg = (l) => {
   const at = clock(l.at, l.parts);
+  const s = (p) => PART[p.type];
   return `
-  <div class="leg reveal"${l.id ? ` id="${l.id}"` : ''}>
-    <ol class="parts">${l.parts.map((p, i) => part(p, at[i])).join('')}</ol>
+  <div class="leg glass reveal"${l.id ? ` id="${l.id}"` : ''}>
+    <ol class="route">${l.parts.map((p, i) => stage(p.type, at[i], s(p).badge(), s(p).info(p), s(p).media(p, at[i]))).join('')}
+      ${stage('end', at.at(-1), heart(), `<b>${l.to.name}</b>`)}
+    </ol>
   </div>`;
 };
-
-const ztmRow = ([k, v, best]) => (best ? [`<b>${k}</b> ${icon('check', 'ic--ok')}`, `<b>${v}</b>`] : [k, v]);
 
 /* ---------- wear / concert / return ---------- */
 
@@ -228,7 +237,6 @@ const ubior = () => section(S.ubior, `
 
 const koncert = () => section(S.koncert, `
   ${perR((r, rt) => leg(rt.arena))}
-  ${unwrap('Bilet ZTM', table(['Bilet', 'Cena'], ztm.map(ztmRow)) + facts(copy.ztm.map(([k, v, note]) => [k, sub(v, note)])))}
   <div class="ticket tilt reveal">
     <div class="ticket__main">
       <p class="eyebrow">${event.org}</p>

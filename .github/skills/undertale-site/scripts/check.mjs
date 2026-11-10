@@ -69,7 +69,7 @@ for (const device of ['desktop', 'phone']) {
   const img = stop.locator('xpath=..').locator('img').first();
   await img.evaluate((i) => i.complete || new Promise((r) => { i.onload = i.onerror = r; }));
   ok('stop photo', (await img.isVisible()) && (await img.evaluate((i) => i.naturalWidth)) > 0);
-  if (shots) await stop.locator('xpath=ancestor::li[contains(@class,"part")]').screenshot({ path: `${shots}/${device}-metro.png` });
+  if (shots) await stop.locator('xpath=ancestor::li[contains(@class,"stage")]').screenshot({ path: `${shots}/${device}-metro.png` });
   const next = p.locator('.metro-line:visible .stop').nth(1);
   touch ? await next.tap() : await next.click();
   await p.waitForTimeout(500);

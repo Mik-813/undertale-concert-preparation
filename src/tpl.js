@@ -52,6 +52,13 @@ export const maps = {
   embed: (a, b, mode) => `https://maps.google.com/maps?saddr=${enc(a)}&daddr=${enc(b)}&dirflg=${mode === 'walking' ? 'w' : 'r'}&output=embed`,
 };
 
+// Jakdojade Warsaw route at a given date (YYYY-MM-DD) and time; the page sells the matching ZTM ticket.
+export const jakdojade = (a, b, date, time) => {
+  const [y, m, d] = date.split('-');
+  const pt = (k, p) => `${k}n=${enc(p.stop)}&${k}c=${p.ll.join(':')}&${k}t=LOCATION_TYPE_COORDINATE`;
+  return `https://jakdojade.pl/warszawa/trasa/?${pt('f', a)}&${pt('t', b)}&d=${d}.${m}.${y.slice(2)}&h=${time}`;
+};
+
 /* ---------- blocks ---------- */
 
 export const dl = (rows, c = '') => `<dl${cls(c)}>${each(rows, ([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)}</dl>`;
