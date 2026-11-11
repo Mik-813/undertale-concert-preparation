@@ -57,12 +57,28 @@ function initMouse() {
   addEventListener('scroll', release, { passive: true });
 }
 
-// Touch: no glow; the last tapped pane stays lit at the tap point.
+// Touch: fixed lighter on the left side at vertical center; lit pane updates on scroll.
 function initTouch() {
   document.querySelector('.bg__spotlight')?.remove();
-  addEventListener('pointerdown', (e) => {
-    const glass = e.target.closest?.('.glass') ?? null;
-    litUp(glass);
-    if (glass) light(glass, e.clientX, e.clientY);
-  }, { passive: true });
+  const update = () => {
+    const x = 0;
+    const y = innerHeight / 2;
+    let closest = null, min = Infinity;
+    for (const el of document.querySelectorAll('.glass')) {
+      if (el.hidden) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      const d = y < r.top ? r.top - y : y > r.bottom ? y - r.bottom : 0;
+      if (d < min) { min = d; closest = el; }
+    }
+    const target = min < 140 ? closest : null;
+    litUp(target);
+    if (target) light(target, x, y);
+  };
+
+  const kick = loop(() => { update(); return false; });
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', kick, { passive: true });
+  document.addEventListener('click', kick, { passive: true });
+  update();
 }
