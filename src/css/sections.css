@@ -507,11 +507,9 @@
   margin-top: 48px;
 }
 /* A leg is one pane. Each part: media | time with the duration rail | label; the last part also ends in the arrival.
-   Times sit centred on the label icons; phones: times on the left, label above media. */
+   Times sit centred on their label panes (subgrid rows); phones: times on the left, label above media. */
 .leg {
   --gap: 22px;
-  --pad: 14px; /* label padding */
-  --icon: 40px;
   padding: 22px;
 }
 .route {
@@ -536,10 +534,10 @@
 }
 .stage__time {
   grid-area: 1 / 2 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: var(--pad);
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  justify-items: center;
   margin-bottom: calc(-1 * var(--gap)); /* the rail runs on to the next part */
 }
 .stage--last > .stage__time {
@@ -557,18 +555,16 @@
   grid-area: 2 / 3;
   align-self: start;
 }
-/* Same face and colour as the plan times, centred on the label icon. */
+/* Same face and colour as the plan times, centred on the label pane. */
 .stage__time time {
-  display: flex;
-  align-items: center;
-  height: var(--icon);
+  align-self: center;
   padding-top: 0.08em; /* Bebas Neue sits high in its box */
   font: 32px/1 var(--f-display);
   color: var(--violet-3);
 }
 /* Duration sits on the rail between two times. */
 .stage__run {
-  flex: 1;
+  grid-row: 2 / -1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -684,7 +680,6 @@
 @media (max-width: 820px) {
   .leg {
     --gap: 24px;
-    --pad: 12px;
     padding: 14px 14px 18px 8px;
   }
   .stage {
