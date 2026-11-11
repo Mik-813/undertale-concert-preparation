@@ -7,7 +7,8 @@ import { initChecklist } from './js/checklist.js';
 import { initScroll } from './js/scroll.js';
 import { initPointer } from './js/pointer.js';
 import { initMetro } from './js/metro.js';
+import { initTimeline } from './js/timeline.js';
 
 document.documentElement.classList.add('js');
 
-[initAnchors, initReveal, initCountdown, initUnwrap, initTabs, initChecklist, initScroll, initPointer, initMetro].forEach((init) => init());
+[initAnchors, initReveal, initCountdown, initUnwrap, initTabs, initChecklist, initScroll, initPointer, initMetro, initTimeline].forEach((init) => init());
