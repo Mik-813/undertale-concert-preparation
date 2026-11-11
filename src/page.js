@@ -210,20 +210,22 @@ const PART = {
 
 // A part of the timeline: media | time with the duration rail | label. The last part also carries the arrival.
 const label = (type, badge, info) => `<div class="stage__label step step--${type}"><span class="step__icon">${badge}</span><div>${info}</div></div>`;
-const when = (at, min) => `<span class="stage__time${min ? '' : ' stage__time--end'}"><time>${at}</time>${min ? `<span class="stage__run">${dur(min)}</span>` : ''}</span>`;
+const when = (at, end) => `<span class="stage__time${end ? ' stage__time--end' : ''}"><time>${at}</time></span>`;
+const run = (min) => (min ? `<span class="stage__run">${dur(min)}</span>` : '');
 const stage = (p, at, end) => {
   const s = PART[p.type];
   return `
       <li class="stage stage--${p.type}${end ? ' stage--last' : ''}">
         <div class="stage__media">${s.media(p, at)}</div>
-        ${when(at, p.min)}
+        ${when(at)}
+        ${run(p.min)}
         ${label(p.type, s.badge(), s.info(p))}${s.aside?.(p, at) ?? ''}${end}
       </li>`;
 };
 
 const leg = (l) => {
   const at = clock(l.at, l.parts);
-  const end = `${when(at.at(-1))}${label('end', heart(), `<b>${l.to.name}</b>`)}`;
+  const end = `${when(at.at(-1), true)}${label('end', heart(), `<b>${l.to.name}</b>`)}`;
   return `
   <div class="leg glass reveal"${l.id ? ` id="${l.id}"` : ''}>
     <ol class="route">${l.parts.map((p, i) => stage(p, at[i], i === l.parts.length - 1 ? end : '')).join('')}
