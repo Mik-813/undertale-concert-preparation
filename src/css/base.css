@@ -120,7 +120,7 @@ svg {
   width: min(1100px, calc(100% - 24px));
   justify-content: space-between;
   border: 1px solid var(--stroke);
-  border-radius: 999px;
+  border-radius: var(--radius);
   background: rgba(14, 8, 26, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -135,6 +135,9 @@ svg {
   align-items: center;
   gap: 4px;
   text-decoration: none;
+}
+.nav__logo .px-heart {
+  transform: translateY(-2px);
 }
 .nav__logo b {
   font-family: var(--f-display);
