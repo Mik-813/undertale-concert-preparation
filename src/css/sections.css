@@ -441,6 +441,24 @@
 @media (max-width: 860px) {
   .food {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .food__main {
+    display: contents;
+  }
+  .food h3 {
+    order: 1;
+  }
+  .food__menu {
+    order: 2;
+  }
+  .food .facts {
+    order: 3;
+    margin-top: 0;
+  }
+  .food .btns {
+    order: 4;
+    margin-top: 0;
   }
 }
 .food--solo {
