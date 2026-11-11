@@ -1,5 +1,5 @@
 // Page composition: turns src/data.js into markup using src/tpl.js helpers.
-import { event, sections, places, trains, restaurants, route, back, ztm, stationPhotos, weather, wear, footer, copy, checklist } from './data.js';
+import { event, sections, places, trains, restaurants, route, dinner, evening, back, ztm, stationPhotos, weather, wear, footer, copy, checklist } from './data.js';
 import {
   cls, join, each, span, dur, clock, icon, arrow, heart, train, chain, peron, extLink, btn, btns, maps, jakdojade,
   dl, facts, list, table, unwrap, section, dialog,
@@ -47,7 +47,7 @@ const marquee = () => {
 /* ---------- plan ---------- */
 
 // Naming rule for every plan point: eyebrow = the action (one fixed word), title = the place, lines = structured data.
-const ACT = { dep: 'Odjazd', arr: 'Przyjazd', change: 'Przesiadka', meal: 'Obiad', metro: 'Metro', enter: 'Wejście', show: 'Koncert' };
+const ACT = { dep: 'Odjazd', arr: 'Przyjazd', change: 'Przesiadka', meal: 'Obiad', metro: 'Metro', enter: 'Wejście', show: 'Koncert', dinner: 'Kolacja' };
 
 // Chip with the target section's name; the arrow slides out on hover/focus.
 const chip = ({ nav: label }) =>
@@ -88,11 +88,13 @@ const cityPoints = (r, { meal, arena }) => {
 // Restaurant-dependent points: one <li>, one variant per restaurant inside (see perR).
 const cityItems = [0, 1, 2].map((i) => perR((r, rt) => planBody(cityPoints(r, rt)[i]), 'li', ITEM));
 const concert = { times: [event.start], act: 'show', sec: 'koncert', place: event.venue, lines: [`Rząd ${event.row}, miejsce ${event.seat}`], hot: true };
+const supper = { times: [clock(evening.at, evening.parts).at(-1)], act: 'dinner', sec: 'kolacja', place: dinner.place.name, lines: [`ul. ${dinner.street}`] };
 
 const timeline = () => [
   ...trainPoints(trains.out, 'wyjazd').map(planItem),
   ...cityItems,
   planItem(concert),
+  planItem(supper),
   ...trainPoints(trains.back, 'powrot').map(planItem),
 ].join('');
 
@@ -123,21 +125,20 @@ const wyjazd = () => section(S.wyjazd, `
 
 /* ---------- food ---------- */
 
-const restaurant = (r) => `
-  <article class="glass card tilt food${r.menu ? '' : ' food--solo'} reveal" role="tabpanel" id="food-${r.key}" aria-labelledby="tab-${r.key}">
+// One card for any meal: name, facts, Google Maps, menu. `access` = the walks that matter for that meal.
+const way = (label, { min, dist, station }) => [label, sub(`${min} min`, join([station?.name, dist]))];
+const foodCard = (r, access, attrs = '') => `
+  <article class="glass card tilt food${r.menu ? '' : ' food--solo'} reveal"${attrs}>
     <div class="food__main">
       <h3>${r.place.name}</h3>
-      ${facts([
-        ['Adres', `ul. ${r.street}`],
-        ['Sobota', r.hours],
-        ['Cena', r.price],
-        ['Z dworca', sub(`${r.walk.min} min`, r.walk.dist)],
-        ['Do metra', sub(`${r.metro.min} min`, join([r.metro.station.name, r.metro.dist]))],
-      ])}
+      ${facts([['Adres', `ul. ${r.street}`], ['Sobota', r.hours], ...access])}
       ${btns(btn(maps.search(r.place.q), 'Google Maps', true))}
     </div>
     ${r.menu ? `<div class="food__menu"><h4>Menu</h4>${list(r.menu.map(([d, c]) => `<span>${d}</span><b>${c}</b>`))}</div>` : ''}
   </article>`;
+
+const restaurant = (r) =>
+  foodCard(r, [way('Z dworca', r.walk), way('Do metra', r.metro)], ` role="tabpanel" id="food-${r.key}" aria-labelledby="tab-${r.key}"`);
 
 const tab = (r) => {
   const on = r === first;
@@ -182,8 +183,7 @@ const zt = (p, at) => `
       ${extLink(jakdojade(p.from, p.to, date, at), `
         <span class="zt__head"><span class="zt__badge">ZTM</span><b>Bilet ${ztm.fare}</b><span class="zt__price">${ztm.price}</span><span class="zt__go"><span>Kup</span> ${icon('ext')}</span></span>
         <span class="zt__more"><span class="zt__body">
-          <span class="zt__ride" style="--i:0"><time>${event.day} ${event.date.slice(0, 5)} ${at}</time>${p.from.stop} ${arrow()} ${p.to.stop}<small>${ztm.zone}</small></span>
-          ${each(ztm.facts, ([k, v, note], i) => `<span class="zt__fact" style="--i:${i + 1}"><small>${k}</small><b>${v}</b><span>${note}</span></span>`)}
+          <span class="zt__ride"><time>${event.day} ${event.date.slice(0, 5)} ${at}</time>${p.from.stop} ${arrow()} ${p.to.stop}<small>${ztm.zone}</small></span>
         </span></span>`, 'zt')}`;
 
 // Part strategy: how each kind of part is drawn.
@@ -252,8 +252,9 @@ const koncert = () => section(S.koncert, `
     <div class="ticket__stub"><span>RZĄD</span><b>${event.row}</b><span>MIEJSCE</span><b>${event.seat}</b>${heart('ticket__heart')}</div>
   </div>`);
 
-const powrot = () => section(S.powrot, `${leg(back)}${trainCard(trains.back)}
-  ${unwrap('Po koncercie', list(copy.after))}`);
+const kolacja = () => section(S.kolacja, `${foodCard(dinner, [way('Z metra', dinner.walk), way('Do dworca', dinner.back)])}${leg(evening)}`);
+
+const powrot = () => section(S.powrot, `${leg(back)}${trainCard(trains.back)}`);
 
 /* ---------- checklist ---------- */
 
@@ -268,7 +269,7 @@ const checklista = () => section(S.checklista, `
 
 export const main = () => `
   <main id="top">
-    ${[hero, marquee, plan, ubior, wyjazd, jedzenie, koncert, powrot, checklista].map((f) => f()).join('')}
+    ${[hero, marquee, plan, ubior, wyjazd, jedzenie, koncert, kolacja, powrot, checklista].map((f) => f()).join('')}
   </main>`;
 
 export const foot = () => `

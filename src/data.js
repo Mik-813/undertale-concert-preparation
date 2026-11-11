@@ -24,6 +24,7 @@ export const sections = [
   { id: 'wyjazd', title: 'Wyjazd', nav: 'Wyjazd' },
   { id: 'jedzenie', title: 'Obiad', nav: 'Obiad' },
   { id: 'koncert', title: 'Koncert', nav: 'Koncert' },
+  { id: 'kolacja', title: 'Kolacja', nav: 'Kolacja' },
   { id: 'powrot', title: 'Powrót', nav: 'Powrót' },
   { id: 'checklista', title: 'Checklista', nav: 'Checklista' },
 ];
@@ -33,6 +34,7 @@ export const places = {
   bambino: { name: 'Bar Bambino', q: 'Bar Mleczny Bambino, Hoża 19, Warszawa' },
   mleczarnia: { name: 'Mleczarnia Jerozolimska', q: 'Mleczarnia Jerozolimska, Emilii Plater 47, Warszawa' },
   prasowy: { name: 'Bar Prasowy', q: 'Bar Mleczny Prasowy, Marszałkowska 10/16, Warszawa' },
+  gosciniec: { name: 'Gościniec', q: 'Gościniec Polskie Pierogi, Nowy Świat 43, Warszawa' },
   mCentrum: { name: 'Metro Centrum', stop: 'Centrum', ll: [52.2314, 21.0106], q: 'Stacja metra Centrum, Warszawa' },
   mPolitechnika: { name: 'Metro Politechnika', stop: 'Politechnika', ll: [52.2183, 21.0153], q: 'Stacja metra Politechnika, Warszawa' },
   mImielin: { name: 'Metro Imielin', stop: 'Imielin', ll: [52.1492, 21.0464], q: 'Stacja metra Imielin, Warszawa' },
@@ -72,8 +74,8 @@ export const trains = {
   planB: { dep: '11:07', arr: '16:16', legs: [{ carrier: 'KD', no: 'Wrocław' }, { carrier: 'IC', no: '6102', name: 'Ślęża' }] },
 };
 
-// Plan times that are not train times: leave the station, leave the restaurant.
-export const schedule = { off: '15:50', leave: '17:15' };
+// Plan times that are not train times: leave the station, leave the restaurant, leave the dinner.
+export const schedule = { off: '15:50', leave: '17:15', leaveDinner: '22:45' };
 
 const M1 = ['Centrum', 'Politechnika', 'Pole Mokotowskie', 'Racławicka', 'Wierzbno', 'Wilanowska', 'Służew', 'Ursynów', 'Stokłosy', 'Imielin'];
 // Stations past the exit, up to the terminal of each direction.
@@ -105,18 +107,20 @@ const metro = (from, to, rest) => ({ type: 'metro', from, to, line: 'M1', ...res
 // Every restaurant is one record. `walk` = from the station, `metro` = its own way to the M1 (the route strategy).
 export const restaurants = [
   {
-    key: 'bambino', place: places.bambino, street: 'Hoża 19', price: '25-40 zł', hours: '09:00-18:00',
-    menu: [['Pierogi ruskie', '18,90 zł'], ['Pierogi z mięsem', '18,90 zł'], ['Schabowy, sam kotlet', '14,50 zł']],
+    key: 'bambino', place: places.bambino, street: 'Hoża 19', hours: '09:00-18:00',
+    menu: [['Pierogi z mięsem', '18,90 zł'], ['Naleśniki z serem, 2 szt.', '14,40 zł'], ['Schabowy, sam kotlet', '14,50 zł']],
     walk: { min: 17, dist: '1,3 km', note: 'Al. Jerozolimskie na wschód, potem Kruczą na południe.' },
     metro: { station: places.mCentrum, min: 8, dist: '650 m' },
   },
   {
-    key: 'mleczarnia', place: places.mleczarnia, street: 'Emilii Plater 47', price: '30 zł', hours: '08:00-20:00',
+    key: 'mleczarnia', place: places.mleczarnia, street: 'Emilii Plater 47', hours: '08:00-20:00',
+    menu: [['Pierogi ukraińskie, 7 szt.', '18,27 zł'], ['Pierogi z mięsem, 7 szt.', '20,76 zł'], ['Naleśniki z serem, 2 szt.', '12,04 zł']],
     walk: { min: 6, dist: '450 m' },
     metro: { station: places.mCentrum, min: 11, dist: '850 m' },
   },
   {
-    key: 'prasowy', place: places.prasowy, street: 'Marszałkowska 10/16', price: '25 zł', hours: '08:00-20:00',
+    key: 'prasowy', place: places.prasowy, street: 'Marszałkowska 10/16', hours: '08:00-20:00',
+    menu: [['Pierogi ukraińskie, 7 szt.', '18,27 zł'], ['Pierogi z mięsem, 7 szt.', '19,76 zł'], ['Schabowy, sam kotlet', '17,73 zł']],
     walk: { min: 29, dist: '2,2 km' },
     metro: { station: places.mPolitechnika, min: 8, dist: '600 m' },
   },
@@ -142,27 +146,33 @@ export const route = (r) => {
   };
 };
 
-export const dinner = { name: 'Gościniec', street: 'Nowy Świat 43', until: '23:00' };
+// Dinner is one restaurant record. `walk` = from the M1 (Centrum), `back` = to the station.
+export const dinner = {
+  key: 'gosciniec', place: places.gosciniec, street: 'Nowy Świat 43', hours: '11:00-23:30',
+  menu: [['Pierogi gotowane, 8 szt.', '32,99 zł'], ['Żurek w chlebie', '23,99 zł'], ['Placki ziemniaczane ze śmietaną', '33,99 zł']],
+  walk: { station: places.mCentrum, min: 12, dist: '950 m' },
+  back: { min: 21, dist: '1,5 km' },
+};
 
-// After the concert: back to the station. `at` is when the leg starts; part times follow from `min`.
-export const back = {
-  from: places.arena, to: places.centralna, at: '20:30',
+// After the concert: to the dinner. `at` is when the leg starts; part times follow from `min`.
+export const evening = {
+  id: 'leg-evening', from: places.arena, to: dinner.place, at: '20:30',
   parts: [
     walk(places.arena, places.mImielin, { min: arenaWalk.min }),
-    metro(places.mImielin, places.mCentrum, { dir: 'Młociny', min: M1_MIN, every: '7-8', stations: [...M1].reverse(), beyond: M1_NORTH }),
-    walk(places.mCentrum, places.centralna, { min: 5 }),
+    metro(places.mImielin, dinner.walk.station, { dir: 'Młociny', min: M1_MIN, every: '7-8', stations: [...M1].reverse(), beyond: M1_NORTH }),
+    walk(dinner.walk.station, dinner.place, { min: dinner.walk.min, dist: dinner.walk.dist }),
   ],
+};
+
+// After the dinner: to the station.
+export const back = {
+  from: dinner.place, to: places.centralna, at: schedule.leaveDinner,
+  parts: [walk(dinner.place, places.centralna, dinner.back)],
 };
 
 // Metro ticket: one per ride, bought online via Jakdojade (opens the ride at its planned time).
 export const ztm = {
   fare: '75-min', price: '4,40 zł', zone: 'Strefa 1',
-  facts: [
-    ['Potrzebne', '2× 75-min', 'tam i z powrotem'],
-    ['Aktywacja', 'W aplikacji', 'przed wejściem na peron'],
-    ['Biletomat', 'Przy wejściu', 'gotówka lub karta'],
-    ['Ulga', '−50%', 'legitymacja studencka'],
-  ],
 };
 
 export const weather = [['13:00', '5°'], ['18:00', '2°'], ['21:00', '0°'], ['noc', '−2°'], ['opady', '0%', 'dry']];
@@ -193,12 +203,6 @@ export const copy = {
   ],
   planB: `Obiad skrócony: <b>${lunch.short}</b> zamiast ${lunch.full}.`,
   weather: 'Prognoza Open-Meteo, Ursynów.',
-  after: [
-    `Koniec: <b>20:30</b>.`,
-    `Pociąg: <b>${trains.back.stops[0].dep}</b>.`,
-    `Kolacja: <b>${dinner.name}</b>, ul. ${dinner.street}, do ${dinner.until}.`,
-    'Hala dworca: ogrzewana, otwarta całą noc.',
-  ],
 };
 
 // A train record in place of a label renders as its ticket.

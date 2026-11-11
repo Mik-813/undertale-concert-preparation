@@ -502,8 +502,9 @@
   margin-bottom: 28px;
   scroll-margin-top: 100px;
 }
-/* Obiad: the walk from the station follows the restaurant card. */
-.swap + .swap > .leg {
+/* Obiad, Kolacja: the way there follows the restaurant card. */
+.swap + .swap > .leg,
+.food + .leg {
   margin-top: 48px;
 }
 /* A leg is one pane. Each part: media | time with the duration rail | label; the last part also ends in the arrival.
@@ -956,59 +957,41 @@
 .zt__body {
   min-height: 0;
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
   padding: 0 14px;
 }
-.zt__body > span {
+.zt__ride {
   opacity: 0;
   transform: translateY(8px);
   transition:
     opacity 0.3s,
     transform 0.4s var(--ease);
-  transition-delay: calc(var(--i) * 45ms);
-}
-.zt__ride {
-  grid-column: 1 / -1;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 4px 8px;
+  gap: 10px;
+  padding: 10px 0 12px;
+  border-top: 1px dashed rgb(var(--violet-3-rgb) / 0.3);
+  font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
 }
 .zt__ride time {
-  font: 600 13px var(--f-mono);
+  font: 500 12.5px var(--f-mono);
   color: var(--violet-3);
 }
-.zt__ride small,
-.zt__fact small {
-  font: 500 11px var(--f-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.zt__ride .ic--arrow {
+  width: 12px;
+  height: 12px;
   color: var(--muted);
 }
 .zt__ride small {
   margin-left: auto;
-}
-.zt__fact {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid var(--stroke);
-}
-.zt__fact b {
-  font-size: 14.5px;
-}
-.zt__fact span {
-  font-size: 12.5px;
-  line-height: 1.35;
-  color: var(--muted);
-}
-.zt__fact:nth-last-child(-n + 2) {
-  margin-bottom: 14px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--violet-3-rgb) / 0.4);
+  font: 500 10.5px var(--f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--violet-3);
 }
 .zt:hover,
 .zt:focus-visible {
@@ -1027,8 +1010,8 @@
 .zt:focus-visible .zt__more {
   grid-template-rows: 1fr;
 }
-.zt:hover .zt__body > span,
-.zt:focus-visible .zt__body > span {
+.zt:hover .zt__ride,
+.zt:focus-visible .zt__ride {
   opacity: 1;
   transform: none;
 }
@@ -1047,15 +1030,14 @@
     display: none;
   }
   .zt__body {
-    grid-template-columns: 1fr;
-    gap: 6px;
     padding: 0 10px;
+  }
+  .zt__ride {
+    flex-wrap: wrap;
+    row-gap: 4px;
   }
   .zt__ride time {
     flex-basis: 100%;
-  }
-  .zt__fact:nth-last-child(2) {
-    margin-bottom: 0;
   }
 }
 /* Touch: no hover, so the details are always shown. */
@@ -1063,7 +1045,7 @@
   .zt .zt__more {
     grid-template-rows: 1fr;
   }
-  .zt .zt__body > span {
+  .zt .zt__ride {
     opacity: 1;
     transform: none;
   }
